@@ -70,24 +70,22 @@ const ACT_TOOLTIP_STYLES = `
 
   .act-dismiss {
     margin-left: auto;
-    width: 24px;
-    height: 24px;
     border-radius: 9999px;
     border: none;
-    background: transparent;
-    color: #a1a1aa;
-    font-size: 16px;
+    background: #f4f4f5;
+    color: #71717a;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     transition: all 150ms ease-in-out;
     flex-shrink: 0;
+    white-space: nowrap;
   }
 
   .act-dismiss:hover {
     color: #3f3f46;
-    background: #f4f4f5;
+    background: #e4e4e7;
   }
 
   /* Primary definition */
