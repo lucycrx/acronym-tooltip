@@ -174,15 +174,23 @@ const ACT_TOOLTIP_STYLES = `
   }
 
   .act-wut-link {
-    font-size: 12px;
+    border-radius: 9999px;
+    border: none;
+    background: #f4f4f5;
     color: #71717a;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all 150ms ease-in-out;
+    flex-shrink: 0;
+    white-space: nowrap;
     text-decoration: none;
-    transition: color 200ms ease-in-out;
   }
 
   .act-wut-link:hover {
-    color: #09090b;
-    text-decoration: underline;
+    color: #3f3f46;
+    background: #e4e4e7;
   }
 
   /* Loading state */
