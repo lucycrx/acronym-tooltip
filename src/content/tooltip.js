@@ -263,7 +263,7 @@
     let html = `
       <div class="act-header">
         <span class="act-term">${escapeHtml(term)}</span>
-        <span class="act-badge ${isAI ? 'act-badge--ai' : ''}">${isAI ? 'AI' : 'WUT'}</span>
+        <span class="act-badge ${isAI ? 'act-badge--ai' : ''}">${isAI ? 'AI-generated' : 'WUT'}</span>
       </div>
     `;
 

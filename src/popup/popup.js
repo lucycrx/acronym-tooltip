@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let html = `
       <div class="result-term">
         ${escapeHtml(term)}
-        <span class="result-badge ${isAI ? 'result-badge--ai' : ''}">${isAI ? 'AI' : 'WUT'}</span>
+        <span class="result-badge ${isAI ? 'result-badge--ai' : ''}">${isAI ? 'AI-generated' : 'WUT'}</span>
       </div>
     `;
 
