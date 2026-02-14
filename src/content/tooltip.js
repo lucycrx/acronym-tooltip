@@ -142,10 +142,11 @@
     .act-footer {
       border-top: 1px solid #e4e4e7;
       margin-top: 14px;
-      padding: 12px 20px;
+      padding: 14px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 16px;
     }
     .act-wut-link {
       border-radius: 9999px;
