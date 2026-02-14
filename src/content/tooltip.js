@@ -61,18 +61,18 @@
       color: #09090b;
     }
     .act-badge {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: #71717a;
-      background: #f4f4f5;
-      padding: 2px 8px;
-      border-radius: 9999px;
+      color: #a1a1aa;
+      background: none;
+      padding: 0;
+      border-radius: 0;
     }
     .act-badge--ai {
-      color: #7c3aed;
-      background: #ede9fe;
+      color: #8b5cf6;
+      background: none;
     }
     .act-dismiss {
       margin-left: auto;
