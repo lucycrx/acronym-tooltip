@@ -77,9 +77,9 @@
     .act-dismiss {
       margin-left: auto;
       border-radius: 9999px;
-      border: 1px solid #d4d4d8;
-      background: #ffffff;
-      color: #52525b;
+      border: none;
+      background: #f4f4f5;
+      color: #71717a;
       font-family: inherit;
       font-size: 11px;
       font-weight: 500;
@@ -90,9 +90,8 @@
       white-space: nowrap;
     }
     .act-dismiss:hover {
-      color: #18181b;
-      background: #f4f4f5;
-      border-color: #a1a1aa;
+      color: #3f3f46;
+      background: #e4e4e7;
     }
 
     .act-primary-def { padding: 14px 20px 0 20px; }
@@ -142,17 +141,16 @@
     .act-footer {
       border-top: 1px solid #e4e4e7;
       margin-top: 14px;
-      padding: 14px 20px;
+      padding: 12px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
     }
     .act-wut-link {
       border-radius: 9999px;
-      border: 1px solid #d4d4d8;
-      background: #ffffff;
-      color: #52525b;
+      border: none;
+      background: #f4f4f5;
+      color: #71717a;
       font-size: 11px;
       font-weight: 500;
       padding: 4px 10px;
@@ -162,11 +160,7 @@
       white-space: nowrap;
       text-decoration: none;
     }
-    .act-wut-link:hover {
-      color: #18181b;
-      background: #f4f4f5;
-      border-color: #a1a1aa;
-    }
+    .act-wut-link:hover { color: #3f3f46; background: #e4e4e7; }
 
     .act-loading {
       padding: 24px 20px;
