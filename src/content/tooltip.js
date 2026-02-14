@@ -29,12 +29,12 @@
 
     .act-tooltip {
       pointer-events: auto;
-      background: #fafafa;
+      background: #f7f7f8;
       border: 1px solid #e4e4e7;
-      border-radius: 16px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      font-size: 13px;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 14px;
       color: #09090b;
       max-width: 380px;
       min-width: 240px;
@@ -52,16 +52,16 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 14px 16px 0 16px;
+      padding: 18px 20px 0 20px;
     }
     .act-term {
-      font-size: 14px;
-      font-weight: 700;
+      font-size: 18px;
+      font-weight: 800;
       letter-spacing: -0.025em;
       color: #09090b;
     }
     .act-badge {
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -94,8 +94,8 @@
       background: #e4e4e7;
     }
 
-    .act-primary-def { padding: 12px 16px 0 16px; }
-    .act-def-text { color: #09090b; line-height: 1.5; font-size: 13px; }
+    .act-primary-def { padding: 14px 20px 0 20px; }
+    .act-def-text { color: #09090b; line-height: 1.5; font-size: 14px; }
     .act-votes {
       display: inline-block;
       font-size: 11px;
@@ -106,10 +106,10 @@
     .act-divider {
       border: none;
       border-top: 1px solid #e4e4e7;
-      margin: 12px 16px 0 16px;
+      margin: 14px 20px 0 20px;
     }
 
-    .act-other-defs { padding: 0 16px; margin-top: 10px; }
+    .act-other-defs { padding: 0 20px; margin-top: 10px; }
     .act-other-defs summary {
       font-size: 12px;
       color: #71717a;
@@ -135,13 +135,13 @@
       transition: background-color 300ms ease-in-out;
     }
     .act-def-row:hover { background: #f4f4f5; }
-    .act-def-row p { font-size: 13px; color: #71717a; line-height: 1.4; }
+    .act-def-row p { font-size: 14px; color: #71717a; line-height: 1.4; }
     .act-def-row .act-votes { font-size: 11px; color: #a1a1aa; }
 
     .act-footer {
       border-top: 1px solid #e4e4e7;
-      margin-top: 12px;
-      padding: 10px 16px;
+      margin-top: 14px;
+      padding: 12px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -163,7 +163,7 @@
     .act-wut-link:hover { color: #3f3f46; background: #e4e4e7; }
 
     .act-loading {
-      padding: 20px 16px;
+      padding: 24px 20px;
       text-align: center;
       color: #a1a1aa;
       font-size: 12px;
@@ -181,7 +181,7 @@
     @keyframes act-spin { to { transform: rotate(360deg); } }
 
     .act-error {
-      padding: 16px;
+      padding: 20px;
       color: #71717a;
       font-size: 12px;
       text-align: center;
