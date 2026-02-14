@@ -74,6 +74,7 @@ const ACT_TOOLTIP_STYLES = `
     border: none;
     background: #f4f4f5;
     color: #71717a;
+    font-family: inherit;
     font-size: 11px;
     font-weight: 500;
     padding: 4px 10px;
