@@ -71,9 +71,9 @@ const ACT_TOOLTIP_STYLES = `
   .act-dismiss {
     margin-left: auto;
     border-radius: 9999px;
-    border: none;
-    background: #f4f4f5;
-    color: #71717a;
+    border: 1px solid #d4d4d8;
+    background: #ffffff;
+    color: #52525b;
     font-family: inherit;
     font-size: 11px;
     font-weight: 500;
@@ -85,8 +85,9 @@ const ACT_TOOLTIP_STYLES = `
   }
 
   .act-dismiss:hover {
-    color: #3f3f46;
-    background: #e4e4e7;
+    color: #18181b;
+    background: #f4f4f5;
+    border-color: #a1a1aa;
   }
 
   /* Primary definition */
@@ -176,9 +177,9 @@ const ACT_TOOLTIP_STYLES = `
 
   .act-wut-link {
     border-radius: 9999px;
-    border: none;
-    background: #f4f4f5;
-    color: #71717a;
+    border: 1px solid #d4d4d8;
+    background: #ffffff;
+    color: #52525b;
     font-size: 11px;
     font-weight: 500;
     padding: 4px 10px;
@@ -190,8 +191,9 @@ const ACT_TOOLTIP_STYLES = `
   }
 
   .act-wut-link:hover {
-    color: #3f3f46;
-    background: #e4e4e7;
+    color: #18181b;
+    background: #f4f4f5;
+    border-color: #a1a1aa;
   }
 
   /* Loading state */
