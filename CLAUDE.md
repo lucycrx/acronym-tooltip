@@ -1,5 +1,5 @@
 # How we work
-Always use `git` to incrementally commit changes as you work. Every incremental atomic change deserves its own commit; avoid bundling multiple different changes into a single commit.
+Always use `git` to incrementally commit changes as you work. Every incremental atomic change deserves its own commit; avoid bundling multiple different changes into a single commit. Always commit changes after completing each task — never leave uncommitted work.
 
 This serves two purposes:
 
