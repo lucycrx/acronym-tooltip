@@ -141,6 +141,9 @@
       border-top: 1px solid #e4e4e7;
       margin-top: 12px;
       padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
     .act-wut-link {
       font-size: 12px;
@@ -261,7 +264,6 @@
       <div class="act-header">
         <span class="act-term">${escapeHtml(term)}</span>
         <span class="act-badge ${isAI ? 'act-badge--ai' : ''}">${isAI ? 'AI' : 'WUT'}</span>
-        <button class="act-dismiss" data-term="${escapeHtml(term)}">Don&#39;t show again</button>
       </div>
     `;
 
@@ -305,7 +307,8 @@
     // Footer with WUT link
     html += `
       <div class="act-footer">
-        <a class="act-wut-link" href="https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}" target="_blank" rel="noopener">View on WUT &#8594;</a>
+        <a class="act-wut-link" href="https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}" target="_blank" rel="noopener">View on WUT</a>
+        <button class="act-dismiss" data-term="${escapeHtml(term)}">Don&#39;t show again</button>
       </div>
     `;
 
