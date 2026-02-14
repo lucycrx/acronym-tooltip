@@ -3,6 +3,7 @@
 // WUT lookups are now done in the content script (which has internalfb cookies).
 
 import { lookupAI } from './ai-api.js';
+import { lookupWut as bgLookupWut } from './wut-api.js';
 import { cacheClear } from './cache.js';
 
 // ── Message handler ─────────────────────────────────────────────────────────
@@ -14,6 +15,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       .then(sendResponse)
       .catch((err) => {
         sendResponse({ term: message.term, error: err.message || 'AI lookup failed' });
+      });
+    return true;
+  }
+
+  // WUT lookup via service worker (for non-internalfb pages like workplace.com)
+  if (message.type === 'bgWutLookup') {
+    console.log('[AcronymTooltip][SW] bgWutLookup request for:', message.term);
+    bgLookupWut(message.term)
+      .then(sendResponse)
+      .catch((err) => {
+        console.warn('[AcronymTooltip][SW] bgWutLookup failed:', err);
+        sendResponse([]);
       });
     return true;
   }

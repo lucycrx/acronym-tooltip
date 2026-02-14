@@ -1,6 +1,6 @@
 // Acronym Tooltip — WUT API (Service Worker module)
-// Fetches definitions from WUT using the intern GraphQL API.
-// Uses credentials: 'include' to authenticate with the user's internalfb session.
+// Fetches definitions from WUT by scraping the word page HTML.
+// The page embeds structured JSON objects that we extract with regex.
 
 import { cacheGet, cacheSet } from './cache.js';
 
@@ -9,125 +9,75 @@ import { cacheGet, cacheSet } from './cache.js';
  * Returns an array of { definition, upvote_count, downvote_count } or empty array.
  */
 export async function lookupWut(term) {
+  console.log('[AcronymTooltip][BG-WUT] Looking up term:', term);
+
   // Check cache first
   const cacheKey = `wut:${term}`;
   const cached = await cacheGet(cacheKey);
-  if (cached) return cached;
-
-  try {
-    // Try the detailed query first (individual definitions with vote counts)
-    let definitions = await fetchWutDetailed(term);
-
-    // Fallback to the simple query if detailed fails
-    if (definitions === null) {
-      definitions = await fetchWutSimple(term);
-    }
-
-    const result = definitions || [];
-    await cacheSet(cacheKey, result, 'wut');
-    return result;
-  } catch (e) {
-    console.warn('[AcronymTooltip] WUT lookup failed:', e);
-    return [];
+  if (cached) {
+    console.log('[AcronymTooltip][BG-WUT] Cache hit for:', term);
+    return cached;
   }
-}
-
-// ── Detailed query: wut_definitions_by_word ─────────────────────────────────
-// Returns individual definitions with vote counts, sorted by votes.
-
-async function fetchWutDetailed(term) {
-  const query = `query WutDetailedLookup($word: String!) {
-    wut_definitions_by_word(word: $word) {
-      definition
-      upvote_count
-      downvote_count
-    }
-  }`;
 
   try {
-    const data = await graphqlFetch(query, { word: term });
-    const defs = data?.wut_definitions_by_word;
-
-    if (!defs || defs.length === 0) return [];
-
-    return defs
-      .filter(d => d.definition && d.definition.length > 0)
-      .map(d => ({
-        definition: d.definition,
-        upvote_count: d.upvote_count || 0,
-        downvote_count: d.downvote_count || 0,
-      }))
-      .sort((a, b) => (b.upvote_count || 0) - (a.upvote_count || 0));
-  } catch (e) {
-    console.warn('[AcronymTooltip] Detailed WUT query failed:', e);
-    return null; // signal to try fallback
-  }
-}
-
-// ── Simple query: wut_definition ────────────────────────────────────────────
-// Returns the top definition + all definitions as strings (no vote counts).
-// Used by the Wiki hovercard — stable and lightweight.
-
-async function fetchWutSimple(term) {
-  const query = `query WutSimpleLookup($word: String!) {
-    wut_definition(word: $word) {
-      definition
-      definitions
-    }
-  }`;
-
-  try {
-    const data = await graphqlFetch(query, { word: term });
-    const result = data?.wut_definition;
-
-    if (!result) return [];
-
-    // Check for the "no definition" sentinel
-    if (result.definition === 'No definition found.' || !result.definitions?.length) {
+    const resp = await fetch(
+      `https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}`,
+      { credentials: 'include' },
+    );
+    if (!resp.ok) {
+      console.warn('[AcronymTooltip][BG-WUT] WUT page fetch failed:', resp.status);
       return [];
     }
 
-    return result.definitions
-      .filter(d => d && d.length > 0 && d !== 'No definition found.')
-      .map(d => ({
-        definition: d,
-        upvote_count: 0,
-        downvote_count: 0,
-      }));
+    const html = await resp.text();
+    const definitions = parseDefinitions(html, term);
+    console.log('[AcronymTooltip][BG-WUT] Parsed', definitions.length, 'definitions for:', term);
+
+    await cacheSet(cacheKey, definitions, 'wut');
+    return definitions;
   } catch (e) {
-    console.warn('[AcronymTooltip] Simple WUT query failed:', e);
+    console.warn('[AcronymTooltip][BG-WUT] WUT lookup failed:', e);
     return [];
   }
 }
 
-// ── GraphQL fetch helper ────────────────────────────────────────────────────
+/**
+ * Parse WUT definitions from page HTML.
+ * The page embeds JSON objects in JS calls like:
+ *   {"id":69934,"Word":"maiba","Definition":"Meta AI Business Assistant","Author":571165424,"CreatedTime":1729855936}
+ * Each definition appears twice (initShareableLink + initDelete), so we deduplicate by id.
+ */
+function parseDefinitions(html, term) {
+  const regex = /"id":(\d+),"Word":"([^"]+)","Definition":"((?:[^"\\]|\\.)*)","Author":(\d+),"CreatedTime":(\d+)/g;
+  const seen = new Set();
+  const results = [];
+  let match;
 
-async function graphqlFetch(query, variables) {
-  const resp = await fetch('https://www.internalfb.com/intern/api/graphql/', {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({
-      q: query,
-      query_params: JSON.stringify(variables),
-    }),
-  });
+  while ((match = regex.exec(html)) !== null) {
+    const [, id, word, definition] = match;
 
-  if (!resp.ok) {
-    throw new Error(`GraphQL fetch failed: ${resp.status}`);
+    // Only include definitions for the requested word (case-insensitive)
+    if (word.toLowerCase() !== term.toLowerCase()) continue;
+
+    // Deduplicate by id
+    if (seen.has(id)) continue;
+    seen.add(id);
+
+    // Unescape JSON string escapes
+    const unescaped = definition.replace(/\\(.)/g, (_, c) => {
+      if (c === '/') return '/';
+      if (c === 'n') return '\n';
+      if (c === '"') return '"';
+      if (c === '\\') return '\\';
+      return c;
+    });
+
+    results.push({
+      definition: unescaped,
+      upvote_count: 0,
+      downvote_count: 0,
+    });
   }
 
-  const text = await resp.text();
-
-  // Strip the "for (;;);" anti-hijacking prefix if present
-  const cleaned = text.replace(/^for\s*\(;;\);?\s*/, '');
-  const json = JSON.parse(cleaned);
-
-  if (json.errors && json.errors.length > 0) {
-    console.warn('[AcronymTooltip] GraphQL errors:', json.errors);
-  }
-
-  return json.data || null;
+  return results;
 }
