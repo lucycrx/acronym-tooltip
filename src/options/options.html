@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acronym Tooltip — Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="options">
+    <h1>Acronym Tooltip Settings</h1>
+
+    <!-- API Key -->
+    <section class="section">
+      <h2>AI Fallback (APE API)</h2>
+      <p class="section-desc">
+        When no WUT definition exists, the extension uses AI to generate a definition.
+        Get your API key from <a href="https://wearables-ape.io/settings/api-keys" target="_blank">wearables-ape.io</a>.
+      </p>
+      <div class="input-row">
+        <input type="password" id="api-key-input" placeholder="Paste your APE API key..." autocomplete="off">
+        <button id="save-key-btn" class="btn btn-primary">Save</button>
+      </div>
+      <div id="key-status" class="status-msg"></div>
+    </section>
+
+    <!-- Dismissed Terms -->
+    <section class="section">
+      <h2>Dismissed Terms</h2>
+      <p class="section-desc">Terms you've dismissed won't show tooltips. Click "Re-enable" to start showing them again.</p>
+      <div id="dismissed-list" class="dismissed-list">
+        <p class="empty-state">No dismissed terms.</p>
+      </div>
+    </section>
+
+    <!-- Appearance -->
+    <section class="section">
+      <h2>Appearance</h2>
+      <div class="setting-row">
+        <label for="tooltip-delay">Tooltip delay (ms)</label>
+        <input type="range" id="tooltip-delay" min="0" max="800" step="50" value="200">
+        <span id="delay-value" class="range-value">200ms</span>
+      </div>
+    </section>
+
+    <!-- Cache -->
+    <section class="section">
+      <h2>Cache</h2>
+      <p class="section-desc">Definitions are cached locally to speed up repeated lookups.</p>
+      <button id="clear-cache-btn" class="btn btn-secondary">Clear definition cache</button>
+      <div id="cache-status" class="status-msg"></div>
+    </section>
+
+    <!-- About -->
+    <section class="section section-about">
+      <p>Acronym Tooltip v1.0.0</p>
+      <p>Definitions from <a href="https://www.internalfb.com/intern/wut/" target="_blank">WUT</a> with AI fallback via <a href="https://wearables-ape.io/" target="_blank">APE API</a>.</p>
+    </section>
+  </div>
+  <script src="options.js"></script>
+</body>
+</html>

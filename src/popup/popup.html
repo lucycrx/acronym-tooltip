@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acronym Tooltip</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup">
+    <div class="popup-header">
+      <h1>Acronym Tooltip</h1>
+      <label class="toggle" title="Enable/disable on this site">
+        <input type="checkbox" id="site-toggle" checked>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="search-section">
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Look up an acronym..."
+        autocomplete="off"
+        spellcheck="false"
+      >
+    </div>
+
+    <div id="result-area" class="result-area" style="display:none;"></div>
+
+    <div class="recent-section">
+      <h2>Recent lookups</h2>
+      <div id="recent-list" class="recent-list">
+        <p class="empty-state">No recent lookups yet.</p>
+      </div>
+    </div>
+
+    <div class="popup-footer">
+      <a href="#" id="open-options">Settings</a>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

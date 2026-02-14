@@ -1,0 +1,261 @@
+/* Popup styles — follows Zinc design system */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 340px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  color: #09090b;
+  background: #fafafa;
+}
+
+.popup {
+  padding: 16px;
+}
+
+/* Header */
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.popup-header h1 {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #09090b;
+}
+
+/* Toggle switch */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: #e4e4e7;
+  border-radius: 9999px;
+  transition: background-color 300ms ease-in-out;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 2px;
+  bottom: 2px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 300ms ease-in-out;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.toggle input:checked + .toggle-slider {
+  background: #09090b;
+}
+
+.toggle input:checked + .toggle-slider::before {
+  transform: translateX(16px);
+}
+
+/* Search */
+.search-section {
+  margin-bottom: 16px;
+}
+
+#search-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e4e4e7;
+  border-radius: 12px;
+  font-size: 13px;
+  color: #09090b;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 200ms ease-in-out, box-shadow 200ms ease-in-out;
+}
+
+#search-input:focus {
+  border-color: #a1a1aa;
+  box-shadow: 0 0 0 3px rgba(161,161,170,0.15);
+}
+
+#search-input::placeholder {
+  color: #a1a1aa;
+}
+
+/* Result area */
+.result-area {
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.result-term {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.result-badge {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #71717a;
+  background: #f4f4f5;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+.result-badge--ai {
+  color: #7c3aed;
+  background: #ede9fe;
+}
+
+.result-def {
+  color: #09090b;
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+.result-votes {
+  font-size: 11px;
+  color: #a1a1aa;
+  margin-top: 4px;
+}
+
+.result-other {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e4e4e7;
+}
+
+.result-other-title {
+  font-size: 12px;
+  color: #71717a;
+  margin-bottom: 6px;
+}
+
+.result-other-def {
+  font-size: 12px;
+  color: #71717a;
+  padding: 6px 8px;
+  border-radius: 8px;
+  margin-top: 4px;
+  transition: background-color 300ms ease-in-out;
+}
+
+.result-other-def:hover {
+  background: #f4f4f5;
+}
+
+.result-link {
+  display: block;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e4e4e7;
+  font-size: 12px;
+  color: #71717a;
+  text-decoration: none;
+  transition: color 200ms ease-in-out;
+}
+
+.result-link:hover {
+  color: #09090b;
+  text-decoration: underline;
+}
+
+.result-loading {
+  text-align: center;
+  color: #a1a1aa;
+  padding: 8px 0;
+}
+
+.result-error {
+  color: #71717a;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* Recent lookups */
+.recent-section h2 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #71717a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.recent-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.recent-chip {
+  font-size: 12px;
+  color: #3f3f46;
+  background: #f4f4f5;
+  border: 1px solid #e4e4e7;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+  text-decoration: none;
+}
+
+.recent-chip:hover {
+  background: #e4e4e7;
+  color: #09090b;
+}
+
+.empty-state {
+  font-size: 12px;
+  color: #a1a1aa;
+}
+
+/* Footer */
+.popup-footer {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #e4e4e7;
+  text-align: center;
+}
+
+.popup-footer a {
+  font-size: 12px;
+  color: #71717a;
+  text-decoration: none;
+  transition: color 200ms ease-in-out;
+}
+
+.popup-footer a:hover {
+  color: #09090b;
+}
