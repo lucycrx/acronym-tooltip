@@ -1,20 +1,27 @@
 // Acronym Tooltip — Service Worker (Background Script)
-// Routes messages from content scripts, orchestrates WUT + AI lookups.
+// Handles AI lookups, recent tracking, cache clearing, and manual popup lookups.
+// WUT lookups are now done in the content script (which has internalfb cookies).
 
-import { lookupWut } from './wut-api.js';
 import { lookupAI } from './ai-api.js';
 import { cacheClear } from './cache.js';
 
 // ── Message handler ─────────────────────────────────────────────────────────
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'lookup') {
-    handleLookup(message.term, message.context || {})
+  // AI-only lookup (WUT already attempted in content script)
+  if (message.type === 'aiLookup') {
+    handleAILookup(message.term, message.context || {})
       .then(sendResponse)
       .catch((err) => {
-        sendResponse({ term: message.term, error: err.message || 'Lookup failed' });
+        sendResponse({ term: message.term, error: err.message || 'AI lookup failed' });
       });
-    return true; // async response
+    return true;
+  }
+
+  // Track a recent lookup (fire-and-forget from content script)
+  if (message.type === 'trackRecent') {
+    addToRecent(message.term);
+    return false;
   }
 
   if (message.type === 'clearCache') {
@@ -22,8 +29,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
+  // Manual lookup from popup — delegates WUT fetch to the active tab's
+  // content script, then falls back to AI in the service worker.
   if (message.type === 'manualLookup') {
-    handleLookup(message.term, {})
+    handleManualLookup(message.term)
+      .then(sendResponse)
+      .catch((err) => {
+        sendResponse({ term: message.term, error: err.message || 'Lookup failed' });
+      });
+    return true;
+  }
+
+  // Legacy: keep the old 'lookup' handler for backwards compat
+  if (message.type === 'lookup') {
+    handleAILookup(message.term, message.context || {})
       .then(sendResponse)
       .catch((err) => {
         sendResponse({ term: message.term, error: err.message || 'Lookup failed' });
@@ -32,31 +51,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-// ── Lookup orchestration ────────────────────────────────────────────────────
+// ── AI-only lookup ──────────────────────────────────────────────────────────
 
-/**
- * Two-tier lookup: WUT first, then AI fallback.
- * @param {string} term
- * @param {{ surroundingText: string, pageSource: string }} context
- * @returns {Promise<object>} Result object for the tooltip
- */
-async function handleLookup(term, context) {
-  // Tier 1: WUT
-  const wutDefs = await lookupWut(term);
-
-  if (wutDefs && wutDefs.length > 0) {
-    // Track recent lookups
-    await addToRecent(term);
-
-    return {
-      term,
-      source: 'wut',
-      definitions: wutDefs,
-      aiDefinition: null,
-    };
-  }
-
-  // Tier 2: AI fallback
+async function handleAILookup(term, context) {
   const aiDef = await lookupAI(term, context);
 
   await addToRecent(term);
@@ -67,6 +64,37 @@ async function handleLookup(term, context) {
     definitions: [],
     aiDefinition: aiDef,
   };
+}
+
+// ── Manual lookup from popup ────────────────────────────────────────────────
+// The popup doesn't have internalfb cookies, so we ask the active tab's
+// content script to do the WUT lookup via message passing.
+
+async function handleManualLookup(term) {
+  // Try to delegate WUT lookup to the active tab's content script
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tab && tab.id) {
+      const wutResult = await chrome.tabs.sendMessage(tab.id, {
+        type: 'wutLookup',
+        term,
+      });
+      if (wutResult && wutResult.length > 0) {
+        await addToRecent(term);
+        return {
+          term,
+          source: 'wut',
+          definitions: wutResult,
+          aiDefinition: null,
+        };
+      }
+    }
+  } catch (e) {
+    // Content script may not be available — fall through to AI
+  }
+
+  // Fallback to AI
+  return handleAILookup(term, {});
 }
 
 // ── Recent lookups tracking ─────────────────────────────────────────────────

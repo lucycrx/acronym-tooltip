@@ -339,6 +339,43 @@
     `;
   }
 
+  // ── Two-tier lookup: WUT (content script) then AI (service worker) ──────
+
+  async function lookupTerm(term, context) {
+    // Tier 1: WUT lookup from content script (has internalfb cookies)
+    if (window.__ACT.lookupWut) {
+      try {
+        const wutDefs = await window.__ACT.lookupWut(term);
+        if (wutDefs && wutDefs.length > 0) {
+          // Track the lookup in the service worker
+          chrome.runtime.sendMessage({ type: 'trackRecent', term });
+          return {
+            term,
+            source: 'wut',
+            definitions: wutDefs,
+            aiDefinition: null,
+          };
+        }
+      } catch (e) {
+        console.warn('[AcronymTooltip] Content-script WUT lookup failed:', e);
+      }
+    }
+
+    // Tier 2: AI fallback via service worker (needs APE API key from storage)
+    return new Promise((resolve, reject) => {
+      chrome.runtime.sendMessage(
+        { type: 'aiLookup', term, context },
+        (response) => {
+          if (chrome.runtime.lastError) {
+            reject(new Error('Extension error'));
+            return;
+          }
+          resolve(response);
+        }
+      );
+    });
+  }
+
   // ── Show / Hide ───────────────────────────────────────────────────────────
 
   function showTooltip(anchorSpan) {
@@ -357,30 +394,28 @@
       tooltipEl.classList.add('act-visible');
     });
 
-    // Get context and send lookup request
+    // Try WUT lookup directly from content script (has cookies),
+    // then fall back to service worker for AI if no WUT result.
     const context = window.__ACT.extractContext
       ? window.__ACT.extractContext(anchorSpan)
       : { surroundingText: '', pageSource: '' };
 
-    chrome.runtime.sendMessage(
-      { type: 'lookup', term, context },
-      (response) => {
-        if (chrome.runtime.lastError) {
-          renderError(term, 'Extension error.');
-          return;
-        }
-        if (currentTerm !== term) return; // stale response
-        if (response && response.error) {
-          renderError(term, response.error);
-        } else if (response) {
-          renderDefinition(response);
-        } else {
-          renderError(term, 'No response from extension.');
-        }
-        // Re-position after content changes
-        positionTooltip(anchorSpan);
+    lookupTerm(term, context).then((response) => {
+      if (currentTerm !== term) return; // stale response
+      if (response && response.error) {
+        renderError(term, response.error);
+      } else if (response) {
+        renderDefinition(response);
+      } else {
+        renderError(term, 'No response from extension.');
       }
-    );
+      // Re-position after content changes
+      positionTooltip(anchorSpan);
+    }).catch(() => {
+      if (currentTerm !== term) return;
+      renderError(term, 'Lookup failed.');
+      positionTooltip(anchorSpan);
+    });
   }
 
   function hideTooltip() {

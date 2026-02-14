@@ -32,6 +32,7 @@
         "content/detector.js",
         "content/context.js",
         "content/dismiss.js",
+        "content/wut-lookup.js",
         "content/tooltip.js"
       ],
       "run_at": "document_idle"
