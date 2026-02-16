@@ -160,8 +160,12 @@
       flex-shrink: 0;
       white-space: nowrap;
       text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
     .act-wut-link:hover { color: #3f3f46; background: #e4e4e7; }
+    .act-wut-link svg { flex-shrink: 0; }
 
     .act-loading {
       padding: 20px 16px;
@@ -317,7 +321,7 @@
     // Footer with WUT link
     html += `
       <div class="act-footer">
-        <a class="act-wut-link" href="https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}" target="_blank" rel="noopener">${isAI ? 'Define on WUT' : 'View on WUT'}</a>
+        <a class="act-wut-link" href="https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}" target="_blank" rel="noopener">${isAI ? 'Define on WUT' : 'View on WUT'} ${externalLinkIcon()}</a>
         <button class="act-dismiss" data-term="${escapeHtml(term)}">Don&#39;t show again</button>
       </div>
     `;
@@ -345,7 +349,7 @@
       </div>
       <div class="act-error">${escapeHtml(message || 'Failed to load definition.')}</div>
       <div class="act-footer">
-        <a class="act-wut-link" href="https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}" target="_blank" rel="noopener">Try on WUT &#8594;</a>
+        <a class="act-wut-link" href="https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}" target="_blank" rel="noopener">Try on WUT ${externalLinkIcon()}</a>
       </div>
     `;
   }
@@ -472,5 +476,9 @@
 
   function upvoteIcon() {
     return '&#9650;'; // ▲
+  }
+
+  function externalLinkIcon() {
+    return '<svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 1.5L5.5 6.5"/><path d="M7 1.5H10.5V5"/><path d="M10.5 7.5V10A1 1 0 0 1 9.5 11H2A1 1 0 0 1 1 10V2.5A1 1 0 0 1 2 1.5H4.5"/></svg>';
   }
 })();
