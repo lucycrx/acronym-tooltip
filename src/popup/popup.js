@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       html += '<div class="result-error">No definitions found.</div>';
     }
 
-    html += `<a class="result-link" href="https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}" target="_blank">View on WUT &#8594;</a>`;
+    html += `<a class="result-link" href="https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}" target="_blank">${isAI ? 'Define it &#8594;' : 'View on WUT &#8594;'}</a>`;
 
     resultArea.innerHTML = html;
   }

@@ -316,7 +316,7 @@
     // Footer with WUT link
     html += `
       <div class="act-footer">
-        <a class="act-wut-link" href="https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}" target="_blank" rel="noopener">View on WUT</a>
+        <a class="act-wut-link" href="https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}" target="_blank" rel="noopener">${isAI ? 'Define it' : 'View on WUT'}</a>
         <button class="act-dismiss" data-term="${escapeHtml(term)}">Don&#39;t show again</button>
       </div>
     `;
