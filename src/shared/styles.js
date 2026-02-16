@@ -71,13 +71,13 @@ const ACT_TOOLTIP_STYLES = `
   .act-dismiss {
     margin-left: auto;
     border-radius: 9999px;
-    border: none;
-    background: #f4f4f5;
+    border: 1px solid #d4d4d8;
+    background: transparent;
     color: #71717a;
     font-family: inherit;
     font-size: 11px;
     font-weight: 500;
-    padding: 4px 10px;
+    padding: 3px 9px;
     cursor: pointer;
     transition: all 150ms ease-in-out;
     flex-shrink: 0;
@@ -86,7 +86,8 @@ const ACT_TOOLTIP_STYLES = `
 
   .act-dismiss:hover {
     color: #3f3f46;
-    background: #e4e4e7;
+    border-color: #a1a1aa;
+    background: transparent;
   }
 
   /* Primary definition */
@@ -177,8 +178,8 @@ const ACT_TOOLTIP_STYLES = `
   .act-wut-link {
     border-radius: 9999px;
     border: none;
-    background: #f4f4f5;
-    color: #71717a;
+    background: #18181b;
+    color: #fafafa;
     font-size: 11px;
     font-weight: 500;
     padding: 4px 10px;
@@ -190,8 +191,8 @@ const ACT_TOOLTIP_STYLES = `
   }
 
   .act-wut-link:hover {
-    color: #3f3f46;
-    background: #e4e4e7;
+    color: #fafafa;
+    background: #3f3f46;
   }
 
   /* Loading state */
