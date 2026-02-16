@@ -75,15 +75,14 @@
       background: none;
     }
     .act-dismiss {
-      margin-left: auto;
       border-radius: 9999px;
       border: none;
       background: #f4f4f5;
       color: #71717a;
       font-family: inherit;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 500;
-      padding: 4px 10px;
+      padding: 4px 8px;
       cursor: pointer;
       transition: all 150ms ease-in-out;
       flex-shrink: 0;
@@ -144,7 +143,7 @@
       padding: 10px 16px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       gap: 8px;
     }
     .act-wut-link {
@@ -152,9 +151,9 @@
       border: none;
       background: #f4f4f5;
       color: #71717a;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 500;
-      padding: 4px 10px;
+      padding: 4px 8px;
       cursor: pointer;
       transition: all 150ms ease-in-out;
       flex-shrink: 0;
@@ -162,7 +161,7 @@
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
     }
     .act-wut-link:hover { color: #3f3f46; background: #e4e4e7; }
     .act-wut-link svg { flex-shrink: 0; }
