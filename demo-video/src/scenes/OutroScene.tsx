@@ -1,5 +1,5 @@
 import React from 'react';
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from 'remotion';
+import { AbsoluteFill, Img, useCurrentFrame, useVideoConfig, spring, interpolate, staticFile } from 'remotion';
 import { tokens } from '../styles/tokens';
 import { fontFamily } from '../styles/fonts';
 import { FeaturePill } from '../components/FeaturePill';
@@ -49,30 +49,15 @@ export const OutroScene: React.FC = () => {
       }}
     >
       {/* Icon */}
-      <div
+      <Img
+        src={staticFile('icon128.png')}
         style={{
           width: 64,
           height: 64,
-          borderRadius: '50%',
-          background: tokens.zinc950,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           transform: `scale(${iconScale})`,
           marginBottom: 20,
         }}
-      >
-        <span
-          style={{
-            color: tokens.zinc50,
-            fontSize: 22,
-            fontWeight: 700,
-            letterSpacing: '-0.05em',
-          }}
-        >
-          AT
-        </span>
-      </div>
+      />
 
       {/* Title */}
       <div

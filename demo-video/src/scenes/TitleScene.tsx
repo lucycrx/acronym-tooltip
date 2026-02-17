@@ -1,5 +1,5 @@
 import React from 'react';
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from 'remotion';
+import { AbsoluteFill, Img, useCurrentFrame, useVideoConfig, spring, interpolate, staticFile } from 'remotion';
 import { tokens } from '../styles/tokens';
 import { fontFamily } from '../styles/fonts';
 
@@ -47,31 +47,16 @@ export const TitleScene: React.FC = () => {
         fontFamily,
       }}
     >
-      {/* Extension icon - dark circle with "AT" text */}
-      <div
+      {/* Extension icon */}
+      <Img
+        src={staticFile('icon128.png')}
         style={{
           width: 80,
           height: 80,
-          borderRadius: '50%',
-          background: tokens.zinc950,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           transform: `scale(${iconScale})`,
           marginBottom: 24,
         }}
-      >
-        <span
-          style={{
-            color: tokens.zinc50,
-            fontSize: 28,
-            fontWeight: 700,
-            letterSpacing: '-0.05em',
-          }}
-        >
-          AT
-        </span>
-      </div>
+      />
 
       {/* Title */}
       <div
