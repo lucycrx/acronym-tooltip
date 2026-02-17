@@ -8,7 +8,7 @@ export const AnimatedBackground: React.FC = () => {
   return (
     <AbsoluteFill
       style={{
-        background: `linear-gradient(${angle}deg, #f0eef5, #eef3fa, #fafafa, #faf5ee)`,
+        background: `linear-gradient(${angle}deg, #e4e0f0, #dde9f7, #f5f5f5, #f5ebdd)`,
         zIndex: 0,
       }}
     />
