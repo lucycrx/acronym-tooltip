@@ -22,7 +22,7 @@ const CARD_X = 360;
 const CARD_Y = 280;
 const CARD_W = 1200;
 
-const ACRONYM_SCREEN_X = CARD_X + 500;
+const ACRONYM_SCREEN_X = CARD_X + 580;
 const ACRONYM_SCREEN_Y = CARD_Y + 85;
 
 const AI_DEFINITION =
