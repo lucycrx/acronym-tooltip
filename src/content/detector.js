@@ -141,6 +141,7 @@
     style.id = 'act-host-styles';
     style.textContent = `
       .act-acronym {
+        color: inherit !important;
         border-bottom: 1px dotted #a1a1aa;
         cursor: help;
         transition: border-color 200ms ease-in-out;
@@ -204,6 +205,13 @@
     }
 
     if (window.__ACT.disabledSites.has(hostname)) return;
+
+    // Skip Google Slides — wrapping text in spans breaks Slides' CSS rendering,
+    // causing acronyms to become invisible. Slide text is SVG (already skipped)
+    // and notes are contenteditable (also skipped), so there's minimal value here.
+    if (hostname === 'docs.google.com' && /^\/presentation\b/.test(window.location.pathname)) {
+      return;
+    }
 
     injectHostStyles();
 

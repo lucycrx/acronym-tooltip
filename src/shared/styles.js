@@ -232,6 +232,7 @@ const ACT_TOOLTIP_STYLES = `
 // CSS for the acronym spans injected into the host page
 const ACT_HOST_STYLES = `
   .act-acronym {
+    color: inherit !important;
     border-bottom: 1px dotted #a1a1aa;
     cursor: help;
     transition: border-color 200ms ease-in-out;
