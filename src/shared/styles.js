@@ -178,8 +178,8 @@ const ACT_TOOLTIP_STYLES = `
   .act-wut-link {
     border-radius: 9999px;
     border: none;
-    background: #18181b;
-    color: #fafafa;
+    background: #0082FB;
+    color: #ffffff;
     font-size: 11px;
     font-weight: 500;
     padding: 4px 10px;
@@ -191,8 +191,8 @@ const ACT_TOOLTIP_STYLES = `
   }
 
   .act-wut-link:hover {
-    color: #fafafa;
-    background: #3f3f46;
+    color: #ffffff;
+    background: #006ad4;
   }
 
   /* Loading state */

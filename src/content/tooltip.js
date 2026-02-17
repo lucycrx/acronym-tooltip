@@ -150,8 +150,8 @@
     .act-wut-link {
       border-radius: 9999px;
       border: none;
-      background: #18181b;
-      color: #fafafa;
+      background: #0082FB;
+      color: #ffffff;
       font-size: 10px;
       font-weight: 500;
       padding: 4px 8px;
@@ -164,7 +164,7 @@
       align-items: center;
       gap: 3px;
     }
-    .act-wut-link:hover { color: #fafafa; background: #3f3f46; }
+    .act-wut-link:hover { color: #ffffff; background: #006ad4; }
     .act-wut-link svg { flex-shrink: 0; }
 
     .act-loading {
