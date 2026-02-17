@@ -24,8 +24,8 @@ const CARD_Y = 340;
 const CARD_W = 1600;
 
 // Acronym position on screen (approximate for PARA in the card)
-// "Bumped into some Google Drive unmounting issues when trying out " = 64 chars, ~14px each at 30px Inter
-const ACRONYM_SCREEN_X = CARD_X + 955;
+// "Bumped into some Google Drive unmounting issues when trying out " = 64 chars, ~14.7px avg at 30px Inter
+const ACRONYM_SCREEN_X = CARD_X + 1000;
 const ACRONYM_SCREEN_Y = CARD_Y + 140;
 
 const AI_DEFINITION =
