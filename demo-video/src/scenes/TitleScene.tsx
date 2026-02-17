@@ -1,18 +1,19 @@
 import React from 'react';
-import { AbsoluteFill, Img, useCurrentFrame, useVideoConfig, spring, interpolate, staticFile } from 'remotion';
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from 'remotion';
 import { tokens } from '../styles/tokens';
 import { fontFamily } from '../styles/fonts';
 import { AnimatedBackground } from '../components/AnimatedBackground';
+import { AppIcon } from '../components/AppIcon';
 
 export const TitleScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Icon bounce in
-  const iconScale = spring({
+  // Speech bubble bounce in (the dark background is always visible)
+  const bubbleScale = spring({
     frame,
     fps,
-    config: { damping: 12, stiffness: 200 },
+    config: { damping: 8, stiffness: 180, mass: 1.4 },
   });
 
   // Title fade up
@@ -49,16 +50,15 @@ export const TitleScene: React.FC = () => {
     >
       <AnimatedBackground />
 
-      {/* Extension icon */}
-      <Img
-        src={staticFile('icon128.png')}
-        style={{
-          width: 200,
-          height: 200,
-          transform: `scale(${iconScale})`,
-          marginBottom: 36,
-        }}
-      />
+      {/* Extension icon — bubble bounces in over static background */}
+      <div style={{ marginBottom: 36 }}>
+        <AppIcon
+          size={200}
+          bubbleStyle={{
+            transform: `scale(${bubbleScale})`,
+          }}
+        />
+      </div>
 
       {/* Title */}
       <div
