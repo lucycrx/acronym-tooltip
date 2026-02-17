@@ -7,6 +7,7 @@ import {
   interpolate,
   Easing,
 } from 'remotion';
+import { useTransitionProgress } from '@remotion/transitions';
 import { tokens } from '../styles/tokens';
 import { fontFamily } from '../styles/fonts';
 import { AnimatedBackground } from '../components/AnimatedBackground';
@@ -36,7 +37,8 @@ export const DetectionScene: React.FC = () => {
   // Delay all animations so content appears after the incoming transition settles
   const SCENE_DELAY = 30;
   const frame = useCurrentFrame() - SCENE_DELAY;
-  const { fps } = useVideoConfig();
+  const { fps, height } = useVideoConfig();
+  const { exiting } = useTransitionProgress();
 
   // Scene timing (210 total frames = 7s for scenes 2+3 combined)
   // 0-15: Card appears
@@ -88,8 +90,8 @@ export const DetectionScene: React.FC = () => {
           left: 0,
           right: 0,
           textAlign: 'center' as const,
-          opacity: titleOpacity,
-          transform: `translateY(${titleY}px)`,
+          opacity: titleOpacity * (1 - exiting),
+          transform: `translateY(${titleY + exiting * height}px)`,
         }}
       >
         <p

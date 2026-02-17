@@ -3,10 +3,8 @@ import {
   AbsoluteFill,
   useCurrentFrame,
   useVideoConfig,
-  spring,
-  interpolate,
-  Easing,
 } from 'remotion';
+import { useTransitionProgress } from '@remotion/transitions';
 import { tokens } from '../styles/tokens';
 import { fontFamily } from '../styles/fonts';
 import { AnimatedBackground } from '../components/AnimatedBackground';
@@ -37,7 +35,8 @@ export const AiFallbackScene: React.FC = () => {
   // Delay all animations so content appears after the incoming transition settles
   const SCENE_DELAY = 30;
   const frame = useCurrentFrame() - SCENE_DELAY;
-  const { fps } = useVideoConfig();
+  const { height } = useVideoConfig();
+  const { entering } = useTransitionProgress();
 
   // Timing (210 frames = 7s)
   // 0-15: Card appears
@@ -46,25 +45,6 @@ export const AiFallbackScene: React.FC = () => {
   // 68-74: Tooltip appears with loading
   // 74-100: Loading
   // 100+: AI definition shown
-
-  // Scroll deceleration — feed scrolls upward and stops
-  const scrollY = interpolate(frame, [0, 25], [500, 0], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-    easing: Easing.out(Easing.cubic),
-  });
-
-  // Scene title fade
-  const titleProgress = spring({
-    frame,
-    fps,
-    config: { damping: 15, stiffness: 120 },
-  });
-  const titleOpacity = interpolate(titleProgress, [0, 1], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
-  const titleY = interpolate(titleProgress, [0, 1], [15, 0]);
 
   const cursorKeyframes: [number, number, number][] = [
     [25, CARD_X + CARD_W - 100, CARD_Y + 250],
@@ -87,8 +67,8 @@ export const AiFallbackScene: React.FC = () => {
           left: 0,
           right: 0,
           textAlign: 'center' as const,
-          opacity: titleOpacity,
-          transform: `translateY(${titleY}px)`,
+          opacity: entering,
+          transform: `translateY(${-(1 - entering) * height}px)`,
         }}
       >
         <p
@@ -113,7 +93,6 @@ export const AiFallbackScene: React.FC = () => {
           left: CARD_X,
           top: CARD_Y - 250,
           width: CARD_W,
-          transform: `translateY(${scrollY}px)`,
         }}
       >
         <PlaceholderPost width={CARD_W} lines={2} />
@@ -126,7 +105,6 @@ export const AiFallbackScene: React.FC = () => {
           left: CARD_X,
           top: CARD_Y,
           width: CARD_W,
-          transform: `translateY(${scrollY}px)`,
         }}
       >
         <div
@@ -196,7 +174,6 @@ export const AiFallbackScene: React.FC = () => {
           left: CARD_X,
           top: CARD_Y + 400,
           width: CARD_W,
-          transform: `translateY(${scrollY}px)`,
         }}
       >
         <PlaceholderPost width={CARD_W} lines={4} />
