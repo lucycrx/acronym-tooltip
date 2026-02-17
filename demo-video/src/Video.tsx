@@ -1,7 +1,6 @@
 import React from 'react';
 import { TransitionSeries, linearTiming } from '@remotion/transitions';
 import { fade } from '@remotion/transitions/fade';
-import { wipe } from '@remotion/transitions/wipe';
 import { TitleScene } from './scenes/TitleScene';
 import { DetectionScene } from './scenes/DetectionScene';
 import { AiFallbackScene } from './scenes/AiFallbackScene';
@@ -15,7 +14,6 @@ const OUTRO_DURATION = 180; // 6s (includes 1s post-transition hold)
 
 // Transition durations
 const FADE_DURATION = 15;
-const WIPE_DURATION = 15;
 
 export const Video: React.FC = () => {
   return (
@@ -36,10 +34,10 @@ export const Video: React.FC = () => {
         <DetectionScene />
       </TransitionSeries.Sequence>
 
-      {/* Wipe: Detection -> AI Fallback */}
+      {/* Fade: Detection -> AI Fallback */}
       <TransitionSeries.Transition
-        presentation={wipe({ direction: 'from-left' })}
-        timing={linearTiming({ durationInFrames: WIPE_DURATION })}
+        presentation={fade()}
+        timing={linearTiming({ durationInFrames: FADE_DURATION })}
       />
 
       {/* Scene 4: AI Fallback */}
