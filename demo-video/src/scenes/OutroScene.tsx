@@ -3,7 +3,6 @@ import { AbsoluteFill, Img, useCurrentFrame, useVideoConfig, spring, interpolate
 import { tokens } from '../styles/tokens';
 import { fontFamily } from '../styles/fonts';
 import { AnimatedBackground } from '../components/AnimatedBackground';
-import { FeaturePill } from '../components/FeaturePill';
 
 export const OutroScene: React.FC = () => {
   // Delay all animations so content appears after the incoming transition settles
@@ -30,17 +29,17 @@ export const OutroScene: React.FC = () => {
   });
   const titleY = interpolate(titleProgress, [0, 1], [20, 0]);
 
-  // CTA fade
-  const ctaProgress = spring({
-    frame: frame - 60,
+  // Subtitle fade up (slightly delayed)
+  const subtitleProgress = spring({
+    frame: frame - 30,
     fps,
     config: { damping: 15, stiffness: 120 },
   });
-  const ctaOpacity = interpolate(ctaProgress, [0, 1], [0, 1], {
+  const subtitleOpacity = interpolate(subtitleProgress, [0, 1], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
-  const ctaY = interpolate(ctaProgress, [0, 1], [15, 0]);
+  const subtitleY = interpolate(subtitleProgress, [0, 1], [15, 0]);
 
   return (
     <AbsoluteFill
@@ -68,7 +67,6 @@ export const OutroScene: React.FC = () => {
         style={{
           opacity: titleOpacity,
           transform: `translateY(${titleY}px)`,
-          marginBottom: 40,
         }}
       >
         <h1
@@ -85,43 +83,24 @@ export const OutroScene: React.FC = () => {
         </h1>
       </div>
 
-      {/* Feature pills */}
+      {/* Subtitle */}
       <div
         style={{
-          display: 'flex',
-          gap: 24,
-          marginBottom: 48,
+          opacity: subtitleOpacity,
+          transform: `translateY(${subtitleY}px)`,
+          marginTop: 20,
         }}
       >
-        <FeaturePill label="WUT Definitions" showAt={60} />
-        <FeaturePill
-          label="AI Fallback"
-          showAt={75}
-          bgColor="#f5f3ff"
-          color={tokens.purple}
-        />
-      </div>
-
-      {/* CTA */}
-      <div
-        style={{
-          opacity: ctaOpacity,
-          transform: `translateY(${ctaY}px)`,
-        }}
-      >
-        <div
+        <p
           style={{
-            background: tokens.zinc950,
-            color: tokens.zinc50,
-            padding: '18px 48px',
-            borderRadius: tokens.radiusFull,
-            fontSize: 28,
-            fontWeight: 600,
-            letterSpacing: '-0.01em',
+            fontSize: 32,
+            color: tokens.zinc500,
+            margin: 0,
+            textAlign: 'center' as const,
           }}
         >
           Install it today
-        </div>
+        </p>
       </div>
     </AbsoluteFill>
   );
