@@ -97,7 +97,7 @@ export const DetectionScene: React.FC = () => {
       >
         <p
           style={{
-            fontSize: 88,
+            fontSize: 72,
             fontWeight: 600,
             color: tokens.zinc950,
             letterSpacing: '-0.025em',
