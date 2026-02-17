@@ -1,7 +1,7 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from 'remotion';
 import { tokens } from '../styles/tokens';
-import { fontFamily, handwritingFontFamily } from '../styles/fonts';
+import { fontFamily } from '../styles/fonts';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import { AppIcon } from '../components/AppIcon';
 
@@ -93,8 +93,6 @@ export const TitleScene: React.FC = () => {
         <p
           style={{
             fontSize: 44,
-            fontFamily: handwritingFontFamily,
-            fontWeight: 700,
             color: tokens.zinc500,
             margin: 0,
             textAlign: 'center' as const,
