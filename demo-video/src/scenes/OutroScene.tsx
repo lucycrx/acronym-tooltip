@@ -31,7 +31,7 @@ export const OutroScene: React.FC = () => {
 
   // CTA fade
   const ctaProgress = spring({
-    frame: frame - 80,
+    frame: frame - 105,
     fps,
     config: { damping: 20, stiffness: 80, mass: 1.2 },
   });
@@ -91,10 +91,10 @@ export const OutroScene: React.FC = () => {
           marginBottom: 48,
         }}
       >
-        <FeaturePill label="WUT Definitions" showAt={30} />
+        <FeaturePill label="WUT Definitions" showAt={70} />
         <FeaturePill
           label="AI Fallback"
-          showAt={50}
+          showAt={100}
           bgColor="#f5f3ff"
           color={tokens.purple}
         />
