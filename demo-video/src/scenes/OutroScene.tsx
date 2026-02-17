@@ -1,8 +1,9 @@
 import React from 'react';
-import { AbsoluteFill, Img, useCurrentFrame, useVideoConfig, spring, interpolate, staticFile } from 'remotion';
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from 'remotion';
 import { tokens } from '../styles/tokens';
 import { fontFamily } from '../styles/fonts';
 import { AnimatedBackground } from '../components/AnimatedBackground';
+import { AppIcon } from '../components/AppIcon';
 
 export const OutroScene: React.FC = () => {
   // Delay all animations so content appears after the incoming transition settles
@@ -10,12 +11,13 @@ export const OutroScene: React.FC = () => {
   const frame = useCurrentFrame() - SCENE_DELAY;
   const { fps } = useVideoConfig();
 
-  // Icon entrance
-  const iconScale = spring({
+  // Speech bubble pops up from below within the icon
+  const bubbleProgress = spring({
     frame,
     fps,
-    config: { damping: 12, stiffness: 200 },
+    config: { damping: 12, stiffness: 180 },
   });
+  const bubbleY = interpolate(bubbleProgress, [0, 1], [100, 0]);
 
   // Title fade
   const titleProgress = spring({
@@ -51,16 +53,16 @@ export const OutroScene: React.FC = () => {
     >
       <AnimatedBackground />
 
-      {/* Icon */}
-      <Img
-        src={staticFile('icon128.png')}
-        style={{
-          width: 200,
-          height: 200,
-          transform: `scale(${iconScale})`,
-          marginBottom: 32,
-        }}
-      />
+      {/* Extension icon — bubble bounces in over static background */}
+      <div style={{ marginBottom: 36 }}>
+        <AppIcon
+          size={200}
+          frame={frame}
+          bubbleStyle={{
+            transform: `translateY(${bubbleY}%)`,
+          }}
+        />
+      </div>
 
       {/* Title */}
       <div
