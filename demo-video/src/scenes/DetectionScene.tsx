@@ -177,9 +177,9 @@ export const DetectionScene: React.FC = () => {
       <Callout
         label="WUT link"
         x={ACRONYM_SCREEN_X + 350}
-        y={ACRONYM_SCREEN_Y - 60}
-        targetX={ACRONYM_SCREEN_X + 180}
-        targetY={ACRONYM_SCREEN_Y - 25}
+        y={ACRONYM_SCREEN_Y - 100}
+        targetX={ACRONYM_SCREEN_X + 75}
+        targetY={ACRONYM_SCREEN_Y - 80}
         showAt={150}
         color={tokens.blue}
       />
