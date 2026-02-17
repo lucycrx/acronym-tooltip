@@ -66,15 +66,16 @@ export const Callout: React.FC<CalloutProps> = ({
       <div
         style={{
           position: 'absolute',
-          left: x - 110,
-          top: y - 32,
-          width: 220,
+          left: x,
+          top: y - 38,
           textAlign: 'center' as const,
           fontFamily,
-          fontSize: 16,
+          fontSize: 22,
           fontWeight: 600,
           color,
-          transform: `scale(${progress})`,
+          whiteSpace: 'nowrap' as const,
+          transform: `translateX(-50%) scale(${progress})`,
+          transformOrigin: 'center bottom',
         }}
       >
         {label}
