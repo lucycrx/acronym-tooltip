@@ -55,8 +55,8 @@ export const OutroScene: React.FC = () => {
       <Img
         src={staticFile('icon128.png')}
         style={{
-          width: 120,
-          height: 120,
+          width: 200,
+          height: 200,
           transform: `scale(${iconScale})`,
           marginBottom: 32,
         }}
@@ -71,7 +71,7 @@ export const OutroScene: React.FC = () => {
       >
         <h1
           style={{
-            fontSize: 64,
+            fontSize: 96,
             fontWeight: 700,
             color: tokens.zinc950,
             letterSpacing: '-0.025em',
@@ -93,7 +93,7 @@ export const OutroScene: React.FC = () => {
       >
         <p
           style={{
-            fontSize: 32,
+            fontSize: 44,
             color: tokens.zinc500,
             margin: 0,
             textAlign: 'center' as const,

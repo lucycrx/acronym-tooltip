@@ -53,8 +53,8 @@ export const TitleScene: React.FC = () => {
       <Img
         src={staticFile('icon128.png')}
         style={{
-          width: 140,
-          height: 140,
+          width: 200,
+          height: 200,
           transform: `scale(${iconScale})`,
           marginBottom: 36,
         }}
@@ -69,7 +69,7 @@ export const TitleScene: React.FC = () => {
       >
         <h1
           style={{
-            fontSize: 72,
+            fontSize: 96,
             fontWeight: 700,
             color: tokens.zinc950,
             letterSpacing: '-0.025em',
@@ -91,7 +91,7 @@ export const TitleScene: React.FC = () => {
       >
         <p
           style={{
-            fontSize: 32,
+            fontSize: 44,
             color: tokens.zinc500,
             margin: 0,
             textAlign: 'center' as const,
