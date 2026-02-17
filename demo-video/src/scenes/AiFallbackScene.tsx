@@ -12,7 +12,6 @@ import { AnimatedBackground } from '../components/AnimatedBackground';
 import { AcronymText } from '../components/AcronymText';
 import { Cursor } from '../components/Cursor';
 import { Tooltip } from '../components/Tooltip';
-import { Callout } from '../components/Callout';
 
 const POST_TEXT =
   'Bumped into some Google Drive unmounting issues when trying out PARA Workspace and got the fix from Amanda. Several posts going around also pointing to the issue.';
@@ -45,7 +44,6 @@ export const AiFallbackScene: React.FC = () => {
   // 68-74: Tooltip appears with loading
   // 74-100: Loading
   // 100+: AI definition shown
-  // 145+: Callout
 
   const cardProgress = spring({
     frame,
@@ -57,6 +55,18 @@ export const AiFallbackScene: React.FC = () => {
     extrapolateRight: 'clamp',
   });
   const cardScale = interpolate(cardProgress, [0, 1], [0.97, 1]);
+
+  // Scene title fade
+  const titleProgress = spring({
+    frame,
+    fps,
+    config: { damping: 15, stiffness: 120 },
+  });
+  const titleOpacity = interpolate(titleProgress, [0, 1], [0, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  const titleY = interpolate(titleProgress, [0, 1], [15, 0]);
 
   const cursorKeyframes: [number, number, number][] = [
     [25, CARD_X + CARD_W - 100, CARD_Y + 250],
@@ -70,6 +80,32 @@ export const AiFallbackScene: React.FC = () => {
       }}
     >
       <AnimatedBackground />
+
+      {/* Scene title */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 80,
+          left: 0,
+          right: 0,
+          textAlign: 'center' as const,
+          opacity: titleOpacity,
+          transform: `translateY(${titleY}px)`,
+        }}
+      >
+        <p
+          style={{
+            fontSize: 36,
+            fontWeight: 600,
+            color: tokens.zinc950,
+            letterSpacing: '-0.02em',
+            margin: 0,
+          }}
+        >
+          When a definition does not exist, AI uses the page context to generate
+          one for you
+        </p>
+      </div>
 
       {/* Floating card */}
       <div
@@ -158,17 +194,6 @@ export const AiFallbackScene: React.FC = () => {
         showAt={68}
         showLoading={true}
         loadingDuration={30}
-      />
-
-      {/* Callout */}
-      <Callout
-        label="No WUT entry? AI fills the gap"
-        x={ACRONYM_SCREEN_X + 340}
-        y={ACRONYM_SCREEN_Y - 410}
-        targetX={ACRONYM_SCREEN_X + 60}
-        targetY={ACRONYM_SCREEN_Y - 380}
-        showAt={145}
-        color={tokens.purple}
       />
     </AbsoluteFill>
   );

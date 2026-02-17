@@ -5,7 +5,6 @@ import {
   useVideoConfig,
   spring,
   interpolate,
-  Easing,
 } from 'remotion';
 import { tokens } from '../styles/tokens';
 import { fontFamily } from '../styles/fonts';
@@ -13,7 +12,6 @@ import { AnimatedBackground } from '../components/AnimatedBackground';
 import { AcronymText } from '../components/AcronymText';
 import { Cursor } from '../components/Cursor';
 import { Tooltip } from '../components/Tooltip';
-import { Callout } from '../components/Callout';
 
 const POST_TEXT =
   'A couple of bugs on MAISA Help Center. When I first send a message to MAISA from the Help Center it will take me to the message thread. However after several seconds it will then reload the thread.';
@@ -45,7 +43,7 @@ export const DetectionScene: React.FC = () => {
   // 70-78: Underline darkens (hover)
   // 78-84: Tooltip appears
   // 84-104: Loading spinner
-  // 104+: Definition shown with callouts
+  // 104+: Definition shown
 
   // Card entrance
   const cardProgress = spring({
@@ -58,6 +56,18 @@ export const DetectionScene: React.FC = () => {
     extrapolateRight: 'clamp',
   });
   const cardScale = interpolate(cardProgress, [0, 1], [0.97, 1]);
+
+  // Scene title fade
+  const titleProgress = spring({
+    frame,
+    fps,
+    config: { damping: 15, stiffness: 120 },
+  });
+  const titleOpacity = interpolate(titleProgress, [0, 1], [0, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  const titleY = interpolate(titleProgress, [0, 1], [15, 0]);
 
   // Cursor keyframes: enter from bottom-right, then move to MAISA
   const cursorKeyframes: [number, number, number][] = [
@@ -72,6 +82,31 @@ export const DetectionScene: React.FC = () => {
       }}
     >
       <AnimatedBackground />
+
+      {/* Scene title */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 80,
+          left: 0,
+          right: 0,
+          textAlign: 'center' as const,
+          opacity: titleOpacity,
+          transform: `translateY(${titleY}px)`,
+        }}
+      >
+        <p
+          style={{
+            fontSize: 36,
+            fontWeight: 600,
+            color: tokens.zinc950,
+            letterSpacing: '-0.02em',
+            margin: 0,
+          }}
+        >
+          The tooltip detects acronyms and looks up definitions from WUT
+        </p>
+      </div>
 
       {/* Floating card */}
       <div
@@ -166,26 +201,6 @@ export const DetectionScene: React.FC = () => {
         showAt={78}
         showLoading={true}
         loadingDuration={26}
-      />
-
-      {/* Callouts - appear after definition loads */}
-      <Callout
-        label="Source badge"
-        x={ACRONYM_SCREEN_X + 340}
-        y={ACRONYM_SCREEN_Y - 290}
-        targetX={ACRONYM_SCREEN_X + 115}
-        targetY={ACRONYM_SCREEN_Y - 260}
-        showAt={130}
-        color={tokens.zinc500}
-      />
-      <Callout
-        label="WUT link"
-        x={ACRONYM_SCREEN_X + 350}
-        y={ACRONYM_SCREEN_Y - 100}
-        targetX={ACRONYM_SCREEN_X + 85}
-        targetY={ACRONYM_SCREEN_Y - 80}
-        showAt={150}
-        color={tokens.blue}
       />
     </AbsoluteFill>
   );
