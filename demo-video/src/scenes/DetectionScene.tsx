@@ -23,7 +23,7 @@ const MAISA_POS_2 = POST_TEXT.indexOf('MAISA', MAISA_POS_1 + 1);
 
 // Card position constants — large card, centered
 const CARD_X = 160;
-const CARD_Y = 340;
+const CARD_Y = 420;
 const CARD_W = 1600;
 
 // Acronym position on screen (approximate for MAISA #1 in the card)

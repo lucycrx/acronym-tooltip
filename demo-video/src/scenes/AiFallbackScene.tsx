@@ -20,7 +20,7 @@ const PARA_POS = POST_TEXT.indexOf('PARA');
 
 // Card position constants — large card, centered
 const CARD_X = 160;
-const CARD_Y = 340;
+const CARD_Y = 420;
 const CARD_W = 1600;
 
 // Acronym position on screen (approximate for PARA in the card)
