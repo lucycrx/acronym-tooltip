@@ -58,6 +58,11 @@ export const Cursor: React.FC<CursorProps> = ({ keyframes }) => {
     extrapolateLeft: 'clamp',
   });
 
+  // Pulsing ring animation (loops every 30 frames = 1s)
+  const pulseProgress = (frame % 30) / 30;
+  const ringScale = interpolate(pulseProgress, [0, 1], [0.7, 1.3]);
+  const ringOpacity = interpolate(pulseProgress, [0, 0.5, 1], [0.5, 0.25, 0]);
+
   return (
     <div
       style={{
@@ -69,9 +74,23 @@ export const Cursor: React.FC<CursorProps> = ({ keyframes }) => {
         pointerEvents: 'none' as const,
       }}
     >
+      {/* Pulsing ring behind cursor tip */}
+      <div
+        style={{
+          position: 'absolute',
+          left: -18,
+          top: -18,
+          width: 36,
+          height: 36,
+          borderRadius: '50%',
+          background: 'rgba(99, 102, 241, 0.3)',
+          transform: `scale(${ringScale})`,
+          opacity: ringOpacity,
+        }}
+      />
       <svg
-        width="20"
-        height="24"
+        width="36"
+        height="44"
         viewBox="0 0 20 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
