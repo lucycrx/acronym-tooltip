@@ -1,0 +1,17 @@
+export const tokens = {
+  zinc50: '#fafafa',
+  zinc100: '#f4f4f5',
+  zinc200: '#e4e4e7',
+  zinc300: '#d4d4d8',
+  zinc400: '#a1a1aa',
+  zinc500: '#71717a',
+  zinc700: '#3f3f46',
+  zinc950: '#09090b',
+  white: '#ffffff',
+  blue: '#0082FB',
+  purple: '#8b5cf6',
+  shadow: '0 4px 24px rgba(0,0,0,0.08)',
+  radius: 16,
+  radiusFull: 9999,
+  fontFamily: 'Inter, sans-serif',
+};
