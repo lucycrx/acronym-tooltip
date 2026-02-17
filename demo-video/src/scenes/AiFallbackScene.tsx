@@ -18,12 +18,15 @@ const POST_TEXT =
 
 const PARA_POS = POST_TEXT.indexOf('PARA');
 
-const CARD_X = 360;
-const CARD_Y = 280;
-const CARD_W = 1200;
+// Card position constants — larger card, more centered
+const CARD_X = 210;
+const CARD_Y = 230;
+const CARD_W = 1500;
 
-const ACRONYM_SCREEN_X = CARD_X + 580;
-const ACRONYM_SCREEN_Y = CARD_Y + 85;
+// Acronym position on screen (approximate for PARA in the card)
+// "Bumped into some Google Drive unmounting issues when trying out " = 64 chars, ~10.5px each at 22px Inter
+const ACRONYM_SCREEN_X = CARD_X + 720;
+const ACRONYM_SCREEN_Y = CARD_Y + 110;
 
 const AI_DEFINITION =
   'Projects, Areas, Resources, Archives. A digital organization system developed by Tiago Forte that categorizes information based on actionability rather than topic.';
@@ -32,14 +35,14 @@ export const AiFallbackScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Timing (180 frames = 6s)
+  // Timing (210 frames = 7s)
   // 0-15: Card appears
-  // 15-30: PARA gets underline
-  // 25-50: Cursor moves to PARA
-  // 55-61: Tooltip appears with loading
-  // 61-82: Loading
-  // 82+: AI definition shown
-  // 120+: Callout
+  // 15-35: PARA gets underline
+  // 30-65: Cursor moves to PARA
+  // 68-74: Tooltip appears with loading
+  // 74-100: Loading
+  // 100+: AI definition shown
+  // 145+: Callout
 
   const cardProgress = spring({
     frame,
@@ -53,8 +56,8 @@ export const AiFallbackScene: React.FC = () => {
   const cardScale = interpolate(cardProgress, [0, 1], [0.97, 1]);
 
   const cursorKeyframes: [number, number, number][] = [
-    [20, CARD_X + CARD_W - 100, CARD_Y + 180],
-    [48, ACRONYM_SCREEN_X + 15, ACRONYM_SCREEN_Y + 8],
+    [25, CARD_X + CARD_W - 100, CARD_Y + 250],
+    [60, ACRONYM_SCREEN_X + 15, ACRONYM_SCREEN_Y + 8],
   ];
 
   return (
@@ -82,7 +85,7 @@ export const AiFallbackScene: React.FC = () => {
             borderRadius: tokens.radius,
             border: `1px solid ${tokens.zinc200}`,
             boxShadow: tokens.shadow,
-            padding: '32px 40px',
+            padding: '36px 48px',
           }}
         >
           {/* Post header */}
@@ -90,14 +93,14 @@ export const AiFallbackScene: React.FC = () => {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 12,
-              marginBottom: 16,
+              gap: 14,
+              marginBottom: 20,
             }}
           >
             <div
               style={{
-                width: 36,
-                height: 36,
+                width: 44,
+                height: 44,
                 borderRadius: '50%',
                 background: tokens.zinc200,
               }}
@@ -105,29 +108,29 @@ export const AiFallbackScene: React.FC = () => {
             <div>
               <div
                 style={{
-                  fontSize: 13,
+                  fontSize: 16,
                   fontWeight: 600,
                   color: tokens.zinc950,
                 }}
               >
                 Claude Code Community
               </div>
-              <div style={{ fontSize: 11, color: tokens.zinc400 }}>
+              <div style={{ fontSize: 13, color: tokens.zinc400 }}>
                 Workplace · 5h ago
               </div>
             </div>
           </div>
 
           {/* Post text */}
-          <div style={{ fontSize: 18, lineHeight: 1.65, color: tokens.zinc950 }}>
+          <div style={{ fontSize: 22, lineHeight: 1.65, color: tokens.zinc950 }}>
             <AcronymText
               text={POST_TEXT}
               acronyms={[
                 {
                   word: 'PARA',
                   startIndex: PARA_POS,
-                  underlineAt: 15,
-                  hoverAt: 45,
+                  underlineAt: 20,
+                  hoverAt: 58,
                 },
               ]}
             />
@@ -136,7 +139,7 @@ export const AiFallbackScene: React.FC = () => {
       </div>
 
       {/* Cursor */}
-      {frame >= 20 && (
+      {frame >= 25 && (
         <Cursor keyframes={cursorKeyframes} />
       )}
 
@@ -147,9 +150,9 @@ export const AiFallbackScene: React.FC = () => {
         source="ai"
         x={ACRONYM_SCREEN_X - 80}
         y={ACRONYM_SCREEN_Y - 185}
-        showAt={55}
+        showAt={68}
         showLoading={true}
-        loadingDuration={27}
+        loadingDuration={30}
       />
 
       {/* Callout */}
@@ -159,7 +162,7 @@ export const AiFallbackScene: React.FC = () => {
         y={ACRONYM_SCREEN_Y - 190}
         targetX={ACRONYM_SCREEN_X + 50}
         targetY={ACRONYM_SCREEN_Y - 170}
-        showAt={120}
+        showAt={145}
         color={tokens.purple}
       />
     </AbsoluteFill>

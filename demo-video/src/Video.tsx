@@ -9,8 +9,8 @@ import { OutroScene } from './scenes/OutroScene';
 
 // Scene durations (in frames at 30fps)
 const TITLE_DURATION = 90; // 3s
-const DETECTION_DURATION = 180; // 6s (scenes 2+3 combined)
-const AI_FALLBACK_DURATION = 180; // 6s
+const DETECTION_DURATION = 210; // 7s (scenes 2+3 combined)
+const AI_FALLBACK_DURATION = 210; // 7s
 const OUTRO_DURATION = 150; // 5s
 
 // Transition durations

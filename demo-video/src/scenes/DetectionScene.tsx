@@ -21,27 +21,28 @@ const POST_TEXT =
 const MAISA_POS_1 = POST_TEXT.indexOf('MAISA');
 const MAISA_POS_2 = POST_TEXT.indexOf('MAISA', MAISA_POS_1 + 1);
 
-// Card position constants
-const CARD_X = 360;
-const CARD_Y = 280;
-const CARD_W = 1200;
+// Card position constants — larger card, more centered
+const CARD_X = 210;
+const CARD_Y = 230;
+const CARD_W = 1500;
 
 // Acronym position on screen (approximate for MAISA #1 in the card)
-const ACRONYM_SCREEN_X = CARD_X + 210;
-const ACRONYM_SCREEN_Y = CARD_Y + 85;
+// "A couple of bugs on " = 20 chars before MAISA, ~10.5px each at 22px Inter
+const ACRONYM_SCREEN_X = CARD_X + 260;
+const ACRONYM_SCREEN_Y = CARD_Y + 110;
 
 export const DetectionScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Scene timing (180 total frames = 6s for scenes 2+3 combined)
+  // Scene timing (210 total frames = 7s for scenes 2+3 combined)
   // 0-15: Card appears
-  // 15-35: Acronyms get underlines progressively
-  // 35-55: Cursor moves to MAISA
-  // 55-60: Underline darkens (hover)
-  // 60-66: Tooltip appears
-  // 66-82: Loading spinner
-  // 82+: Definition shown with callouts
+  // 15-40: Acronyms get underlines progressively
+  // 40-70: Cursor moves to MAISA
+  // 70-78: Underline darkens (hover)
+  // 78-84: Tooltip appears
+  // 84-104: Loading spinner
+  // 104+: Definition shown with callouts
 
   // Card entrance
   const cardProgress = spring({
@@ -57,8 +58,8 @@ export const DetectionScene: React.FC = () => {
 
   // Cursor keyframes: enter from bottom-right, then move to MAISA
   const cursorKeyframes: [number, number, number][] = [
-    [25, CARD_X + CARD_W - 100, CARD_Y + 250],
-    [50, ACRONYM_SCREEN_X + 20, ACRONYM_SCREEN_Y + 8],
+    [30, CARD_X + CARD_W - 100, CARD_Y + 300],
+    [65, ACRONYM_SCREEN_X + 20, ACRONYM_SCREEN_Y + 8],
   ];
 
   return (
@@ -86,7 +87,7 @@ export const DetectionScene: React.FC = () => {
             borderRadius: tokens.radius,
             border: `1px solid ${tokens.zinc200}`,
             boxShadow: tokens.shadow,
-            padding: '32px 40px',
+            padding: '36px 48px',
           }}
         >
           {/* Post header */}
@@ -94,14 +95,14 @@ export const DetectionScene: React.FC = () => {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 12,
-              marginBottom: 16,
+              gap: 14,
+              marginBottom: 20,
             }}
           >
             <div
               style={{
-                width: 36,
-                height: 36,
+                width: 44,
+                height: 44,
                 borderRadius: '50%',
                 background: tokens.zinc200,
               }}
@@ -109,34 +110,34 @@ export const DetectionScene: React.FC = () => {
             <div>
               <div
                 style={{
-                  fontSize: 13,
+                  fontSize: 16,
                   fontWeight: 600,
                   color: tokens.zinc950,
                 }}
               >
                 Bug Report
               </div>
-              <div style={{ fontSize: 11, color: tokens.zinc400 }}>
+              <div style={{ fontSize: 13, color: tokens.zinc400 }}>
                 Workplace · 2h ago
               </div>
             </div>
           </div>
 
           {/* Post text with acronym highlights */}
-          <div style={{ fontSize: 18, lineHeight: 1.65, color: tokens.zinc950 }}>
+          <div style={{ fontSize: 22, lineHeight: 1.65, color: tokens.zinc950 }}>
             <AcronymText
               text={POST_TEXT}
               acronyms={[
                 {
                   word: 'MAISA',
                   startIndex: MAISA_POS_1,
-                  underlineAt: 15,
-                  hoverAt: 55,
+                  underlineAt: 20,
+                  hoverAt: 72,
                 },
                 {
                   word: 'MAISA',
                   startIndex: MAISA_POS_2,
-                  underlineAt: 25,
+                  underlineAt: 35,
                 },
               ]}
             />
@@ -145,7 +146,7 @@ export const DetectionScene: React.FC = () => {
       </div>
 
       {/* Cursor */}
-      {frame >= 25 && (
+      {frame >= 30 && (
         <Cursor keyframes={cursorKeyframes} />
       )}
 
@@ -157,28 +158,28 @@ export const DetectionScene: React.FC = () => {
         upvotes={42}
         x={ACRONYM_SCREEN_X - 30}
         y={ACRONYM_SCREEN_Y - 155}
-        showAt={60}
+        showAt={78}
         showLoading={true}
-        loadingDuration={22}
+        loadingDuration={26}
       />
 
       {/* Callouts - appear after definition loads */}
       <Callout
         label="Source badge"
-        x={ACRONYM_SCREEN_X + 260}
+        x={ACRONYM_SCREEN_X + 280}
         y={ACRONYM_SCREEN_Y - 170}
         targetX={ACRONYM_SCREEN_X + 70}
         targetY={ACRONYM_SCREEN_Y - 140}
-        showAt={100}
+        showAt={130}
         color={tokens.zinc500}
       />
       <Callout
         label="WUT link"
-        x={ACRONYM_SCREEN_X + 270}
+        x={ACRONYM_SCREEN_X + 290}
         y={ACRONYM_SCREEN_Y - 40}
         targetX={ACRONYM_SCREEN_X + 130}
         targetY={ACRONYM_SCREEN_Y - 18}
-        showAt={120}
+        showAt={150}
         color={tokens.blue}
       />
     </AbsoluteFill>
