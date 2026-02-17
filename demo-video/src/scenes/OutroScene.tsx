@@ -52,10 +52,10 @@ export const OutroScene: React.FC = () => {
       <Img
         src={staticFile('icon128.png')}
         style={{
-          width: 64,
-          height: 64,
+          width: 120,
+          height: 120,
           transform: `scale(${iconScale})`,
-          marginBottom: 20,
+          marginBottom: 32,
         }}
       />
 
@@ -64,12 +64,12 @@ export const OutroScene: React.FC = () => {
         style={{
           opacity: titleOpacity,
           transform: `translateY(${titleY}px)`,
-          marginBottom: 32,
+          marginBottom: 40,
         }}
       >
         <h1
           style={{
-            fontSize: 36,
+            fontSize: 64,
             fontWeight: 700,
             color: tokens.zinc950,
             letterSpacing: '-0.025em',
@@ -85,8 +85,8 @@ export const OutroScene: React.FC = () => {
       <div
         style={{
           display: 'flex',
-          gap: 16,
-          marginBottom: 40,
+          gap: 24,
+          marginBottom: 48,
         }}
       >
         <FeaturePill label="WUT Definitions" showAt={25} />
@@ -109,9 +109,9 @@ export const OutroScene: React.FC = () => {
           style={{
             background: tokens.zinc950,
             color: tokens.zinc50,
-            padding: '14px 36px',
+            padding: '18px 48px',
             borderRadius: tokens.radiusFull,
-            fontSize: 18,
+            fontSize: 28,
             fontWeight: 600,
             letterSpacing: '-0.01em',
           }}
