@@ -5,6 +5,7 @@ import {
   useVideoConfig,
   spring,
   interpolate,
+  Easing,
 } from 'remotion';
 import { tokens } from '../styles/tokens';
 import { fontFamily } from '../styles/fonts';
@@ -12,6 +13,7 @@ import { AnimatedBackground } from '../components/AnimatedBackground';
 import { AcronymText } from '../components/AcronymText';
 import { Cursor } from '../components/Cursor';
 import { Tooltip } from '../components/Tooltip';
+import { PlaceholderPost } from '../components/PlaceholderPost';
 
 const POST_TEXT =
   'A couple of bugs on MAISA Help Center. When I first send a message to MAISA from the Help Center it will take me to the message thread. However after several seconds it will then reload the thread.';
@@ -45,17 +47,12 @@ export const DetectionScene: React.FC = () => {
   // 84-104: Loading spinner
   // 104+: Definition shown
 
-  // Card entrance
-  const cardProgress = spring({
-    frame,
-    fps,
-    config: { damping: 15, stiffness: 120 },
-  });
-  const cardOpacity = interpolate(cardProgress, [0, 1], [0, 1], {
+  // Scroll deceleration — feed scrolls upward and stops
+  const scrollY = interpolate(frame, [0, 25], [500, 0], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
+    easing: Easing.out(Easing.cubic),
   });
-  const cardScale = interpolate(cardProgress, [0, 1], [0.97, 1]);
 
   // Scene title fade
   const titleProgress = spring({
@@ -110,6 +107,19 @@ export const DetectionScene: React.FC = () => {
         </p>
       </div>
 
+      {/* Placeholder post above */}
+      <div
+        style={{
+          position: 'absolute',
+          left: CARD_X,
+          top: CARD_Y - 250,
+          width: CARD_W,
+          transform: `translateY(${scrollY}px)`,
+        }}
+      >
+        <PlaceholderPost width={CARD_W} lines={2} />
+      </div>
+
       {/* Floating card */}
       <div
         style={{
@@ -117,9 +127,7 @@ export const DetectionScene: React.FC = () => {
           left: CARD_X,
           top: CARD_Y,
           width: CARD_W,
-          opacity: cardOpacity,
-          transform: `scale(${cardScale})`,
-          transformOrigin: 'center',
+          transform: `translateY(${scrollY}px)`,
         }}
       >
         <div
@@ -185,6 +193,19 @@ export const DetectionScene: React.FC = () => {
             />
           </div>
         </div>
+      </div>
+
+      {/* Placeholder post below */}
+      <div
+        style={{
+          position: 'absolute',
+          left: CARD_X,
+          top: CARD_Y + 400,
+          width: CARD_W,
+          transform: `translateY(${scrollY}px)`,
+        }}
+      >
+        <PlaceholderPost width={CARD_W} lines={4} />
       </div>
 
       {/* Cursor */}
