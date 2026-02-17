@@ -20,7 +20,7 @@ const PARA_POS = POST_TEXT.indexOf('PARA');
 
 // Card position constants — large card, centered
 const CARD_X = 160;
-const CARD_Y = 520;
+const CARD_Y = 600;
 const CARD_W = 1600;
 
 // Acronym position on screen (approximate for PARA in the card)
@@ -95,15 +95,16 @@ export const AiFallbackScene: React.FC = () => {
       >
         <p
           style={{
-            fontSize: 44,
+            fontSize: 88,
             fontWeight: 600,
             color: tokens.zinc950,
-            letterSpacing: '-0.02em',
+            letterSpacing: '-0.025em',
             margin: 0,
           }}
         >
-          When a definition does not exist, AI uses the page context to generate
-          one for you
+          When a definition does not exist,
+          <br />
+          AI generates one with page context
         </p>
       </div>
 
