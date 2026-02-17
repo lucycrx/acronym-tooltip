@@ -32,14 +32,14 @@ export const AiFallbackScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Timing (210 frames = 7s)
-  // 0-20: Card appears
-  // 20-40: PARA gets underline
-  // 40-80: Cursor moves to PARA
-  // 80-86: Tooltip appears with loading
-  // 86-110: Loading
-  // 110+: AI definition shown
-  // 140+: Callout
+  // Timing (180 frames = 6s)
+  // 0-15: Card appears
+  // 15-30: PARA gets underline
+  // 25-50: Cursor moves to PARA
+  // 55-61: Tooltip appears with loading
+  // 61-82: Loading
+  // 82+: AI definition shown
+  // 120+: Callout
 
   const cardProgress = spring({
     frame,
@@ -53,8 +53,8 @@ export const AiFallbackScene: React.FC = () => {
   const cardScale = interpolate(cardProgress, [0, 1], [0.97, 1]);
 
   const cursorKeyframes: [number, number, number][] = [
-    [30, CARD_X + CARD_W - 100, CARD_Y + 180],
-    [70, ACRONYM_SCREEN_X + 15, ACRONYM_SCREEN_Y + 8],
+    [20, CARD_X + CARD_W - 100, CARD_Y + 180],
+    [48, ACRONYM_SCREEN_X + 15, ACRONYM_SCREEN_Y + 8],
   ];
 
   return (
@@ -126,8 +126,8 @@ export const AiFallbackScene: React.FC = () => {
                 {
                   word: 'PARA',
                   startIndex: PARA_POS,
-                  underlineAt: 20,
-                  hoverAt: 65,
+                  underlineAt: 15,
+                  hoverAt: 45,
                 },
               ]}
             />
@@ -136,7 +136,7 @@ export const AiFallbackScene: React.FC = () => {
       </div>
 
       {/* Cursor */}
-      {frame >= 30 && (
+      {frame >= 20 && (
         <Cursor keyframes={cursorKeyframes} />
       )}
 
@@ -147,9 +147,9 @@ export const AiFallbackScene: React.FC = () => {
         source="ai"
         x={ACRONYM_SCREEN_X - 80}
         y={ACRONYM_SCREEN_Y - 185}
-        showAt={80}
+        showAt={55}
         showLoading={true}
-        loadingDuration={30}
+        loadingDuration={27}
       />
 
       {/* Callout */}
@@ -159,7 +159,7 @@ export const AiFallbackScene: React.FC = () => {
         y={ACRONYM_SCREEN_Y - 190}
         targetX={ACRONYM_SCREEN_X + 50}
         targetY={ACRONYM_SCREEN_Y - 170}
-        showAt={140}
+        showAt={120}
         color={tokens.purple}
       />
     </AbsoluteFill>

@@ -34,14 +34,14 @@ export const DetectionScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Scene timing (450 total frames = 15s for scenes 2+3 combined)
-  // 0-30: Card appears
-  // 30-90: Acronyms get underlines progressively
-  // 90-130: Cursor moves to MAISA
-  // 130-140: Underline darkens (hover)
-  // 140-146: Tooltip appears
-  // 146-166: Loading spinner
-  // 166+: Definition shown with callouts
+  // Scene timing (180 total frames = 6s for scenes 2+3 combined)
+  // 0-15: Card appears
+  // 15-35: Acronyms get underlines progressively
+  // 35-55: Cursor moves to MAISA
+  // 55-60: Underline darkens (hover)
+  // 60-66: Tooltip appears
+  // 66-82: Loading spinner
+  // 82+: Definition shown with callouts
 
   // Card entrance
   const cardProgress = spring({
@@ -57,8 +57,8 @@ export const DetectionScene: React.FC = () => {
 
   // Cursor keyframes: enter from bottom-right, then move to MAISA
   const cursorKeyframes: [number, number, number][] = [
-    [60, CARD_X + CARD_W - 100, CARD_Y + 250],
-    [110, ACRONYM_SCREEN_X + 20, ACRONYM_SCREEN_Y + 8],
+    [25, CARD_X + CARD_W - 100, CARD_Y + 250],
+    [50, ACRONYM_SCREEN_X + 20, ACRONYM_SCREEN_Y + 8],
   ];
 
   return (
@@ -130,13 +130,13 @@ export const DetectionScene: React.FC = () => {
                 {
                   word: 'MAISA',
                   startIndex: MAISA_POS_1,
-                  underlineAt: 30,
-                  hoverAt: 125,
+                  underlineAt: 15,
+                  hoverAt: 55,
                 },
                 {
                   word: 'MAISA',
                   startIndex: MAISA_POS_2,
-                  underlineAt: 50,
+                  underlineAt: 25,
                 },
               ]}
             />
@@ -145,7 +145,7 @@ export const DetectionScene: React.FC = () => {
       </div>
 
       {/* Cursor */}
-      {frame >= 60 && (
+      {frame >= 25 && (
         <Cursor keyframes={cursorKeyframes} />
       )}
 
@@ -157,9 +157,9 @@ export const DetectionScene: React.FC = () => {
         upvotes={42}
         x={ACRONYM_SCREEN_X - 30}
         y={ACRONYM_SCREEN_Y - 155}
-        showAt={140}
+        showAt={60}
         showLoading={true}
-        loadingDuration={26}
+        loadingDuration={22}
       />
 
       {/* Callouts - appear after definition loads */}
@@ -169,7 +169,7 @@ export const DetectionScene: React.FC = () => {
         y={ACRONYM_SCREEN_Y - 170}
         targetX={ACRONYM_SCREEN_X + 70}
         targetY={ACRONYM_SCREEN_Y - 140}
-        showAt={190}
+        showAt={100}
         color={tokens.zinc500}
       />
       <Callout
@@ -178,7 +178,7 @@ export const DetectionScene: React.FC = () => {
         y={ACRONYM_SCREEN_Y - 40}
         targetX={ACRONYM_SCREEN_X + 130}
         targetY={ACRONYM_SCREEN_Y - 18}
-        showAt={210}
+        showAt={120}
         color={tokens.blue}
       />
     </AbsoluteFill>
