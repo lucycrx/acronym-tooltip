@@ -20,7 +20,7 @@ const PARA_POS = POST_TEXT.indexOf('PARA');
 
 // Card position constants — large card, centered
 const CARD_X = 160;
-const CARD_Y = 600;
+const CARD_Y = 660;
 const CARD_W = 1600;
 
 // Acronym position on screen (approximate for PARA in the card)
@@ -95,7 +95,7 @@ export const AiFallbackScene: React.FC = () => {
       >
         <p
           style={{
-            fontSize: 88,
+            fontSize: 72,
             fontWeight: 600,
             color: tokens.zinc950,
             letterSpacing: '-0.025em',
