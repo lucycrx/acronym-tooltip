@@ -104,7 +104,9 @@ export const DetectionScene: React.FC = () => {
             margin: 0,
           }}
         >
-          The tooltip detects acronyms and looks up definitions from WUT
+          The tooltip detects acronyms
+          <br />
+          and looks up definitions from WUT on hover
         </p>
       </div>
 
