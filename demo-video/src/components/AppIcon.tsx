@@ -1,6 +1,12 @@
 import React from 'react';
 import { fontFamily } from '../styles/fonts';
 
+const DOT_CX = [38, 50, 62, 74, 86];
+const DOT_CY = 78;
+const BOUNCE_AMP = 3; // max vertical displacement in SVG units
+const WAVE_SPEED = 0.15; // radians per frame
+const DOT_PHASE_OFFSET = 0.8; // radians between each dot
+
 /**
  * Recreates icon128.png as a React component so the speech bubble
  * can be animated independently of the background.
@@ -8,7 +14,8 @@ import { fontFamily } from '../styles/fonts';
 export const AppIcon: React.FC<{
   size?: number;
   bubbleStyle?: React.CSSProperties;
-}> = ({ size = 200, bubbleStyle }) => {
+  frame?: number;
+}> = ({ size = 200, bubbleStyle, frame = 0 }) => {
   // Scale factor relative to a 128×128 design grid
   const s = size / 128;
 
@@ -59,10 +66,20 @@ export const AppIcon: React.FC<{
             Aa
           </text>
 
-          {/* Blue dots row */}
-          {[38, 50, 62, 74, 86].map((cx) => (
-            <circle key={cx} cx={cx} cy="78" r="2.5" fill="#0082FB" />
-          ))}
+          {/* Blue dots — wave bounce */}
+          {DOT_CX.map((cx, i) => {
+            const dy =
+              Math.sin(frame * WAVE_SPEED - i * DOT_PHASE_OFFSET) * BOUNCE_AMP;
+            return (
+              <circle
+                key={cx}
+                cx={cx}
+                cy={DOT_CY + dy}
+                r="2.5"
+                fill="#0082FB"
+              />
+            );
+          })}
         </svg>
       </div>
     </div>

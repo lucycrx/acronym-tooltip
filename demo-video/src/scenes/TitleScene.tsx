@@ -55,6 +55,7 @@ export const TitleScene: React.FC = () => {
       <div style={{ marginBottom: 36 }}>
         <AppIcon
           size={200}
+          frame={frame}
           bubbleStyle={{
             transform: `translateY(${bubbleY}%)`,
           }}
