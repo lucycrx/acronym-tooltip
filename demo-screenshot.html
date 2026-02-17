@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acronym Tooltip — Demo Screenshot</title>
+<style>
+  /* ── Reset & page ─────────────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #f0f2f5;
+    color: #1c1e21;
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+    min-height: 100vh;
+  }
+
+  /* ── Mock feed container ──────────────────────────────────────────────── */
+  .feed {
+    width: 680px;
+  }
+
+  /* ── Mock post card ───────────────────────────────────────────────────── */
+  .post {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    padding: 20px;
+    position: relative;
+  }
+
+  .post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0082FB 0%, #00c6ff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .author-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: #1c1e21;
+  }
+
+  .post-meta {
+    font-size: 12px;
+    color: #65676b;
+  }
+
+  .post-body {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #1c1e21;
+  }
+
+  .post-body p {
+    margin-bottom: 12px;
+  }
+
+  .post-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── Acronym highlight (matches real extension) ───────────────────────── */
+  .act-acronym {
+    border-bottom: 1px dotted #a1a1aa;
+    cursor: help;
+    transition: border-color 200ms ease-in-out;
+  }
+  .act-acronym:hover {
+    border-bottom-color: #3f3f46;
+  }
+
+  /* ── Tooltip (exact replica of the real tooltip.js styles) ─────────── */
+  .tooltip-anchor {
+    position: relative;
+    display: inline;
+  }
+
+  .act-tooltip {
+    position: absolute;
+    z-index: 100;
+    background: #fafafa;
+    border: 1px solid #e4e4e7;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    color: #09090b;
+    max-width: 380px;
+    min-width: 240px;
+    overflow: hidden;
+    /* Position above the acronym */
+    bottom: calc(100% + 8px);
+    left: 0;
+  }
+
+  .act-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 16px 0 16px;
+  }
+  .act-term {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: #09090b;
+  }
+  .act-badge {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #a1a1aa;
+  }
+
+  .act-primary-def {
+    padding: 12px 16px 0 16px;
+  }
+  .act-def-text {
+    color: #09090b;
+    line-height: 1.5;
+    font-size: 13px;
+  }
+  .act-votes {
+    display: inline-block;
+    font-size: 11px;
+    color: #a1a1aa;
+    margin-top: 4px;
+  }
+
+  .act-divider {
+    border: none;
+    border-top: 1px solid #e4e4e7;
+    margin: 12px 16px 0 16px;
+  }
+
+  .act-other-defs {
+    padding: 0 16px;
+    margin-top: 10px;
+  }
+  .act-other-defs summary {
+    font-size: 12px;
+    color: #71717a;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+  }
+  .act-other-defs summary::-webkit-details-marker { display: none; }
+  .act-other-defs summary::after {
+    content: '\25BE';
+    font-size: 10px;
+  }
+
+  .act-footer {
+    border-top: 1px solid #e4e4e7;
+    margin-top: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  .act-wut-link {
+    border-radius: 9999px;
+    border: none;
+    background: #0082FB;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 4px 8px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    white-space: nowrap;
+  }
+  .act-dismiss {
+    border-radius: 9999px;
+    border: 1px solid #d4d4d8;
+    background: transparent;
+    color: #71717a;
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 7px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* ── Mock engagement bar ──────────────────────────────────────────────── */
+  .post-actions {
+    display: flex;
+    gap: 4px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #e4e4e7;
+  }
+  .post-action-btn {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #65676b;
+    border: none;
+    background: none;
+    border-radius: 8px;
+    cursor: default;
+  }
+</style>
+</head>
+<body>
+
+<div class="feed">
+  <div class="post">
+    <div class="post-header">
+      <div class="avatar">AK</div>
+      <div class="author-info">
+        <span class="author-name">Alex Kim</span>
+        <span class="post-meta">Product Engineering &middot; 2h</span>
+      </div>
+    </div>
+
+    <div class="post-body">
+      <p>Hey team! Quick update on Project Aurora. We just finished the <span class="act-acronym">MVP</span> and the <span class="tooltip-anchor"><span class="act-acronym" style="border-bottom-color: #3f3f46;">XFN</span><!-- Tooltip attached to XFN -->
+        <div class="act-tooltip">
+          <div class="act-header">
+            <span class="act-term">XFN</span>
+            <span class="act-badge">WUT</span>
+          </div>
+          <div class="act-primary-def">
+            <p class="act-def-text">Cross-Functional. Refers to teams or projects that span multiple disciplines (engineering, design, data science, product, etc.).</p>
+            <span class="act-votes">&#9650; 142</span>
+          </div>
+          <hr class="act-divider">
+          <details class="act-other-defs">
+            <summary>Other definitions (2)</summary>
+          </details>
+          <div class="act-footer">
+            <a class="act-wut-link" href="#">View on WUT <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 1.5L5.5 6.5"/><path d="M7 1.5H10.5V5"/><path d="M10.5 7.5V10A1 1 0 0 1 9.5 11H2A1 1 0 0 1 1 10V2.5A1 1 0 0 1 2 1.5H4.5"/></svg></a>
+            <button class="act-dismiss">Don't show again</button>
+          </div>
+        </div>
+      </span> review went great. The <span class="act-acronym">PM</span> signed off on the spec and we're now waiting for <span class="act-acronym">LM</span> approval before we start the <span class="act-acronym">SEV</span> readiness checklist.</p>
+
+      <p>Next steps: schedule a <span class="act-acronym">PSC</span> with the infra team to finalize the rollout plan. If anyone has concerns about the <span class="act-acronym">SLA</span> targets, please flag them in the task before <span class="act-acronym">EOW</span>.</p>
+    </div>
+
+    <div class="post-actions">
+      <button class="post-action-btn">&#x1F44D; Like</button>
+      <button class="post-action-btn">&#x1F4AC; Comment</button>
+      <button class="post-action-btn">&#x21A9; Share</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
