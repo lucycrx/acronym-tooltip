@@ -60,8 +60,8 @@ export const Cursor: React.FC<CursorProps> = ({ keyframes }) => {
 
   // Pulsing ring animation (loops every 30 frames = 1s)
   const pulseProgress = (frame % 30) / 30;
-  const ringScale = interpolate(pulseProgress, [0, 1], [0.7, 1.3]);
-  const ringOpacity = interpolate(pulseProgress, [0, 0.5, 1], [0.5, 0.25, 0]);
+  const ringScale = interpolate(pulseProgress, [0, 1], [0.8, 1.6]);
+  const ringOpacity = interpolate(pulseProgress, [0, 0.5, 1], [0.6, 0.3, 0]);
 
   return (
     <div
@@ -78,10 +78,10 @@ export const Cursor: React.FC<CursorProps> = ({ keyframes }) => {
       <div
         style={{
           position: 'absolute',
-          left: -18,
-          top: -18,
-          width: 36,
-          height: 36,
+          left: -36,
+          top: -36,
+          width: 72,
+          height: 72,
           borderRadius: '50%',
           background: 'rgba(99, 102, 241, 0.3)',
           transform: `scale(${ringScale})`,
