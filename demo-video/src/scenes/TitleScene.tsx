@@ -49,7 +49,7 @@ export const TitleScene: React.FC = () => {
         fontFamily,
       }}
     >
-      <AnimatedBackground />
+      <AnimatedBackground vibrant />
 
       {/* Extension icon — bubble bounces in over static background */}
       <div style={{ marginBottom: 36 }}>
