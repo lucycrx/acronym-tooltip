@@ -24,23 +24,23 @@ export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
   const b4x = 28 + Math.sin(t * 0.9 + 2.5) * 14;
   const b4y = 78 + Math.cos(t * 0.8 + 3.5) * 10;
 
-  // Earthy palette inspired by reference images:
-  // sage green, dusty blue, warm sand/peach, soft mauve
+  // Palette matched to reference screenshot:
+  // warm peach sweep, soft sage green, faint lavender/mauve
   const blob1 = vibrant
-    ? 'rgba(148, 170, 132, 0.80)' // sage green
+    ? 'rgba(232, 198, 158, 0.50)' // warm peach/apricot
     : 'rgba(180, 200, 170, 0.35)';
   const blob2 = vibrant
-    ? 'rgba(130, 158, 182, 0.75)' // dusty steel blue
+    ? 'rgba(168, 194, 162, 0.45)' // sage green
     : 'rgba(180, 200, 218, 0.30)';
   const blob3 = vibrant
-    ? 'rgba(210, 178, 140, 0.75)' // warm sand
+    ? 'rgba(200, 178, 200, 0.35)' // soft lavender/mauve
     : 'rgba(228, 212, 194, 0.30)';
   const blob4 = vibrant
-    ? 'rgba(184, 148, 162, 0.65)' // soft mauve
+    ? 'rgba(220, 200, 165, 0.30)' // light warm gold
     : 'rgba(210, 198, 204, 0.25)';
 
   const base = vibrant
-    ? '#b8b8a8' // warm grey-sage base
+    ? '#eeeae4' // near-white warm tint
     : '#ede9e4'; // light warm neutral
 
   const background = [
