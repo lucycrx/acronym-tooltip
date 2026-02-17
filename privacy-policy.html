@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Acronym Tooltip</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    color: #09090b;
+    line-height: 1.7;
+    background: #fafafa;
+  }
+  h1 { font-size: 24px; margin-bottom: 8px; }
+  h2 { font-size: 18px; margin-top: 32px; margin-bottom: 8px; }
+  p, ul { margin-bottom: 16px; }
+  ul { padding-left: 24px; }
+  .updated { color: #71717a; font-size: 13px; margin-bottom: 32px; }
+</style>
+</head>
+<body>
+
+<h1>Privacy Policy</h1>
+<p class="updated">Last updated: February 16, 2026</p>
+
+<p>Acronym Tooltip ("the Extension") is a Chrome browser extension that displays definitions for workplace acronyms on Meta internal sites. This policy explains what data the Extension accesses, how it is used, and what is stored.</p>
+
+<h2>Scope</h2>
+<p>The Extension activates only on the following domains:</p>
+<ul>
+  <li>*.workplace.com</li>
+  <li>*.internalfb.com</li>
+  <li>*.facebook.com</li>
+  <li>*.meta.com</li>
+  <li>docs.google.com</li>
+</ul>
+<p>It does not run on any other websites.</p>
+
+<h2>Data Collected</h2>
+<p>The Extension does not collect, transmit, or store any personal data. Specifically:</p>
+<ul>
+  <li><strong>Page content:</strong> The Extension reads text on the current page solely to identify acronyms and provide surrounding context for AI-generated definitions. This text is processed locally or sent to Meta-internal APIs only. It is never sent to third-party services.</li>
+  <li><strong>Acronym lookups:</strong> When you hover over an acronym, the Extension queries Meta's internal WUT API to retrieve definitions. If no WUT definition exists and AI fallback is enabled, it sends the acronym and a short surrounding text snippet to a Meta-internal AI service.</li>
+  <li><strong>User preferences:</strong> Settings such as dismissed acronyms, scan frequency, and feature toggles are stored locally in your browser using Chrome's <code>chrome.storage</code> API. This data never leaves your device.</li>
+</ul>
+
+<h2>Data Sharing</h2>
+<p>The Extension does not share data with any third parties. All network requests are made exclusively to Meta-internal endpoints.</p>
+
+<h2>Data Storage</h2>
+<p>All user preferences and dismissed-acronym lists are stored locally in your browser via <code>chrome.storage.local</code>. No data is stored on external servers by the Extension.</p>
+
+<h2>Permissions</h2>
+<p>The Extension requests the following browser permissions:</p>
+<ul>
+  <li><strong>storage:</strong> To save your preferences (dismissed terms, settings) locally.</li>
+  <li><strong>activeTab:</strong> To access the content of the current tab for acronym detection.</li>
+  <li><strong>Host permissions:</strong> To make API requests to Meta-internal services (WUT, AI fallback) and to run content scripts on supported domains.</li>
+</ul>
+
+<h2>Changes to This Policy</h2>
+<p>If this policy is updated, the "Last updated" date above will be revised. Continued use of the Extension after changes constitutes acceptance of the updated policy.</p>
+
+<h2>Contact</h2>
+<p>For questions about this privacy policy or the Extension, please file an issue on the project's repository or reach out to the extension maintainer.</p>
+
+</body>
+</html>
