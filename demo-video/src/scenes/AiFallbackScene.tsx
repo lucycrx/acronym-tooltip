@@ -8,6 +8,7 @@ import {
 } from 'remotion';
 import { tokens } from '../styles/tokens';
 import { fontFamily } from '../styles/fonts';
+import { AnimatedBackground } from '../components/AnimatedBackground';
 import { AcronymText } from '../components/AcronymText';
 import { Cursor } from '../components/Cursor';
 import { Tooltip } from '../components/Tooltip';
@@ -65,10 +66,11 @@ export const AiFallbackScene: React.FC = () => {
   return (
     <AbsoluteFill
       style={{
-        background: tokens.zinc50,
         fontFamily,
       }}
     >
+      <AnimatedBackground />
+
       {/* Floating card */}
       <div
         style={{

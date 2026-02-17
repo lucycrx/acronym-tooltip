@@ -2,6 +2,7 @@ import React from 'react';
 import { AbsoluteFill, Img, useCurrentFrame, useVideoConfig, spring, interpolate, staticFile } from 'remotion';
 import { tokens } from '../styles/tokens';
 import { fontFamily } from '../styles/fonts';
+import { AnimatedBackground } from '../components/AnimatedBackground';
 
 export const TitleScene: React.FC = () => {
   const frame = useCurrentFrame();
@@ -41,12 +42,13 @@ export const TitleScene: React.FC = () => {
   return (
     <AbsoluteFill
       style={{
-        background: tokens.zinc50,
         justifyContent: 'center',
         alignItems: 'center',
         fontFamily,
       }}
     >
+      <AnimatedBackground />
+
       {/* Extension icon */}
       <Img
         src={staticFile('icon128.png')}

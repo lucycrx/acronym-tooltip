@@ -2,6 +2,7 @@ import React from 'react';
 import { AbsoluteFill, Img, useCurrentFrame, useVideoConfig, spring, interpolate, staticFile } from 'remotion';
 import { tokens } from '../styles/tokens';
 import { fontFamily } from '../styles/fonts';
+import { AnimatedBackground } from '../components/AnimatedBackground';
 import { FeaturePill } from '../components/FeaturePill';
 
 export const OutroScene: React.FC = () => {
@@ -44,12 +45,13 @@ export const OutroScene: React.FC = () => {
   return (
     <AbsoluteFill
       style={{
-        background: tokens.zinc50,
         justifyContent: 'center',
         alignItems: 'center',
         fontFamily,
       }}
     >
+      <AnimatedBackground />
+
       {/* Icon */}
       <Img
         src={staticFile('icon128.png')}
