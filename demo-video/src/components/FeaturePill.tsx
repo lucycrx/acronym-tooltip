@@ -25,7 +25,7 @@ export const FeaturePill: React.FC<FeaturePillProps> = ({
   const progress = spring({
     frame: relFrame,
     fps,
-    config: { damping: 20, stiffness: 80, mass: 1.2 },
+    config: { damping: 15, stiffness: 120 },
   });
 
   const opacity = interpolate(progress, [0, 0.6], [0, 1], {

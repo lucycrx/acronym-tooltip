@@ -14,32 +14,32 @@ export const OutroScene: React.FC = () => {
   const iconScale = spring({
     frame,
     fps,
-    config: { damping: 18, stiffness: 120 },
+    config: { damping: 12, stiffness: 200 },
   });
 
   // Title fade
   const titleProgress = spring({
-    frame: frame - 12,
+    frame: frame - 15,
     fps,
-    config: { damping: 18, stiffness: 80, mass: 1.2 },
+    config: { damping: 15, stiffness: 120 },
   });
   const titleOpacity = interpolate(titleProgress, [0, 1], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
-  const titleY = interpolate(titleProgress, [0, 1], [15, 0]);
+  const titleY = interpolate(titleProgress, [0, 1], [20, 0]);
 
   // CTA fade
   const ctaProgress = spring({
-    frame: frame - 105,
+    frame: frame - 60,
     fps,
-    config: { damping: 20, stiffness: 80, mass: 1.2 },
+    config: { damping: 15, stiffness: 120 },
   });
   const ctaOpacity = interpolate(ctaProgress, [0, 1], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
-  const ctaY = interpolate(ctaProgress, [0, 1], [12, 0]);
+  const ctaY = interpolate(ctaProgress, [0, 1], [15, 0]);
 
   return (
     <AbsoluteFill
@@ -91,10 +91,10 @@ export const OutroScene: React.FC = () => {
           marginBottom: 48,
         }}
       >
-        <FeaturePill label="WUT Definitions" showAt={70} />
+        <FeaturePill label="WUT Definitions" showAt={60} />
         <FeaturePill
           label="AI Fallback"
-          showAt={100}
+          showAt={75}
           bgColor="#f5f3ff"
           color={tokens.purple}
         />
