@@ -22,11 +22,17 @@ export const FeaturePill: React.FC<FeaturePillProps> = ({
   const relFrame = frame - showAt;
   if (relFrame < 0) return null;
 
-  const scale = spring({
+  const progress = spring({
     frame: relFrame,
     fps,
-    config: { damping: 12, stiffness: 200 },
+    config: { damping: 20, stiffness: 80, mass: 1.2 },
   });
+
+  const opacity = interpolate(progress, [0, 0.6], [0, 1], {
+    extrapolateRight: 'clamp',
+    extrapolateLeft: 'clamp',
+  });
+  const translateY = interpolate(progress, [0, 1], [12, 0]);
 
   return (
     <div
@@ -41,7 +47,8 @@ export const FeaturePill: React.FC<FeaturePillProps> = ({
         fontSize: 24,
         fontWeight: 600,
         color,
-        transform: `scale(${scale})`,
+        opacity,
+        transform: `translateY(${translateY}px)`,
         transformOrigin: 'center',
       }}
     >
