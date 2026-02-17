@@ -26,4 +26,11 @@ cp -r "$SCRIPT_DIR/src/shared" "$DIST_DIR/shared"
 # Copy icons
 cp -r "$SCRIPT_DIR/icons" "$DIST_DIR/icons"
 
-echo "Build complete. Load '$DIST_DIR' as an unpacked extension in chrome://extensions"
+# Package for Chrome Web Store
+ZIP_FILE="$SCRIPT_DIR/acronym-tooltip.zip"
+rm -f "$ZIP_FILE"
+(cd "$DIST_DIR" && zip -r "$ZIP_FILE" .)
+
+echo "Build complete."
+echo "  Unpacked: $DIST_DIR"
+echo "  Packaged: $ZIP_FILE"
