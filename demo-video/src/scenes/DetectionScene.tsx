@@ -87,7 +87,7 @@ export const DetectionScene: React.FC = () => {
       <div
         style={{
           position: 'absolute',
-          top: 80,
+          top: 140,
           left: 0,
           right: 0,
           textAlign: 'center' as const,
