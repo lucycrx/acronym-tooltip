@@ -3,9 +3,9 @@ import { fontFamily } from '../styles/fonts';
 
 const DOT_CX = [38, 50, 62, 74, 86];
 const DOT_CY = 78;
-const BOUNCE_AMP = 3; // max vertical displacement in SVG units
-const WAVE_SPEED = 0.15; // radians per frame
-const DOT_PHASE_OFFSET = 0.8; // radians between each dot
+const DOT_DRIFT = 4; // upward drift in SVG units
+const DOT_STAGGER = 4; // frames between each dot appearing
+const DOT_FADE_DURATION = 8; // frames for each dot to fully fade in
 
 /**
  * Recreates icon128.png as a React component so the speech bubble
@@ -66,10 +66,11 @@ export const AppIcon: React.FC<{
             Aa
           </text>
 
-          {/* Blue dots — wave bounce */}
+          {/* Blue dots — fade cascade */}
           {DOT_CX.map((cx, i) => {
-            const dy =
-              Math.sin(frame * WAVE_SPEED - i * DOT_PHASE_OFFSET) * BOUNCE_AMP;
+            const t = Math.max(0, Math.min(1, (frame - i * DOT_STAGGER) / DOT_FADE_DURATION));
+            const opacity = t;
+            const dy = (1 - t) * DOT_DRIFT;
             return (
               <circle
                 key={cx}
@@ -77,6 +78,7 @@ export const AppIcon: React.FC<{
                 cy={DOT_CY + dy}
                 r="2.5"
                 fill="#0082FB"
+                opacity={opacity}
               />
             );
           })}
