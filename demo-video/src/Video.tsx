@@ -8,10 +8,10 @@ import { AiFallbackScene } from './scenes/AiFallbackScene';
 import { OutroScene } from './scenes/OutroScene';
 
 // Scene durations (in frames at 30fps)
-const TITLE_DURATION = 90; // 3s
-const DETECTION_DURATION = 210; // 7s (scenes 2+3 combined)
-const AI_FALLBACK_DURATION = 210; // 7s
-const OUTRO_DURATION = 150; // 5s
+const TITLE_DURATION = 100; // ~3.3s (extra hold before first transition)
+const DETECTION_DURATION = 240; // 8s (includes 1s post-transition hold)
+const AI_FALLBACK_DURATION = 240; // 8s (includes 1s post-transition hold)
+const OUTRO_DURATION = 180; // 6s (includes 1s post-transition hold)
 
 // Transition durations
 const FADE_DURATION = 15;

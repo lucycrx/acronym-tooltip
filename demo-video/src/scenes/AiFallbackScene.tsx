@@ -32,7 +32,9 @@ const AI_DEFINITION =
   'Projects, Areas, Resources, Archives. A digital organization system developed by Tiago Forte that categorizes information based on actionability rather than topic.';
 
 export const AiFallbackScene: React.FC = () => {
-  const frame = useCurrentFrame();
+  // Delay all animations so content appears after the incoming transition settles
+  const SCENE_DELAY = 30;
+  const frame = useCurrentFrame() - SCENE_DELAY;
   const { fps } = useVideoConfig();
 
   // Timing (210 frames = 7s)

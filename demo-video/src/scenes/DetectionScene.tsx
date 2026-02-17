@@ -32,7 +32,9 @@ const ACRONYM_SCREEN_X = CARD_X + 340;
 const ACRONYM_SCREEN_Y = CARD_Y + 140;
 
 export const DetectionScene: React.FC = () => {
-  const frame = useCurrentFrame();
+  // Delay all animations so content appears after the incoming transition settles
+  const SCENE_DELAY = 30;
+  const frame = useCurrentFrame() - SCENE_DELAY;
   const { fps } = useVideoConfig();
 
   // Scene timing (210 total frames = 7s for scenes 2+3 combined)

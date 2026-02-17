@@ -5,7 +5,9 @@ import { fontFamily } from '../styles/fonts';
 import { FeaturePill } from '../components/FeaturePill';
 
 export const OutroScene: React.FC = () => {
-  const frame = useCurrentFrame();
+  // Delay all animations so content appears after the incoming transition settles
+  const SCENE_DELAY = 30;
+  const frame = useCurrentFrame() - SCENE_DELAY;
   const { fps } = useVideoConfig();
 
   // Icon entrance
