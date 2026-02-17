@@ -12,19 +12,8 @@ export const TitleScene: React.FC = () => {
   const iconScale = spring({
     frame,
     fps,
-    config: { damping: 8, stiffness: 180, mass: 1.4 },
+    config: { damping: 12, stiffness: 200 },
   });
-
-  // Icon rotation (slight overshoot twist)
-  const iconRotation = interpolate(
-    spring({
-      frame,
-      fps,
-      config: { damping: 10, stiffness: 160, mass: 1.2 },
-    }),
-    [0, 1],
-    [-15, 0],
-  );
 
   // Title fade up
   const titleProgress = spring({
@@ -66,7 +55,7 @@ export const TitleScene: React.FC = () => {
         style={{
           width: 200,
           height: 200,
-          transform: `scale(${iconScale}) rotate(${iconRotation}deg)`,
+          transform: `scale(${iconScale})`,
           marginBottom: 36,
         }}
       />
