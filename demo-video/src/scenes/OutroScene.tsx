@@ -49,7 +49,7 @@ export const OutroScene: React.FC = () => {
         fontFamily,
       }}
     >
-      <AnimatedBackground vibrant />
+      <AnimatedBackground />
 
       {/* Icon */}
       <Img
