@@ -1,7 +1,7 @@
 import React from 'react';
 import { AbsoluteFill, Img, useCurrentFrame, useVideoConfig, spring, interpolate, staticFile } from 'remotion';
 import { tokens } from '../styles/tokens';
-import { fontFamily } from '../styles/fonts';
+import { fontFamily, handwritingFontFamily } from '../styles/fonts';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 
 export const OutroScene: React.FC = () => {
@@ -94,6 +94,8 @@ export const OutroScene: React.FC = () => {
         <p
           style={{
             fontSize: 44,
+            fontFamily: handwritingFontFamily,
+            fontWeight: 700,
             color: tokens.zinc500,
             margin: 0,
             textAlign: 'center' as const,
