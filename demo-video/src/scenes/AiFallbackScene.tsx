@@ -18,15 +18,15 @@ const POST_TEXT =
 
 const PARA_POS = POST_TEXT.indexOf('PARA');
 
-// Card position constants — larger card, more centered
-const CARD_X = 210;
-const CARD_Y = 230;
-const CARD_W = 1500;
+// Card position constants — large card, centered
+const CARD_X = 160;
+const CARD_Y = 340;
+const CARD_W = 1600;
 
 // Acronym position on screen (approximate for PARA in the card)
-// "Bumped into some Google Drive unmounting issues when trying out " = 64 chars, ~10.5px each at 22px Inter
-const ACRONYM_SCREEN_X = CARD_X + 720;
-const ACRONYM_SCREEN_Y = CARD_Y + 110;
+// "Bumped into some Google Drive unmounting issues when trying out " = 64 chars, ~14px each at 30px Inter
+const ACRONYM_SCREEN_X = CARD_X + 955;
+const ACRONYM_SCREEN_Y = CARD_Y + 140;
 
 const AI_DEFINITION =
   'Projects, Areas, Resources, Archives. A digital organization system developed by Tiago Forte that categorizes information based on actionability rather than topic.';
@@ -57,7 +57,7 @@ export const AiFallbackScene: React.FC = () => {
 
   const cursorKeyframes: [number, number, number][] = [
     [25, CARD_X + CARD_W - 100, CARD_Y + 250],
-    [60, ACRONYM_SCREEN_X + 15, ACRONYM_SCREEN_Y + 8],
+    [60, ACRONYM_SCREEN_X + 20, ACRONYM_SCREEN_Y + 10],
   ];
 
   return (
@@ -82,10 +82,10 @@ export const AiFallbackScene: React.FC = () => {
         <div
           style={{
             background: tokens.white,
-            borderRadius: tokens.radius,
+            borderRadius: 20,
             border: `1px solid ${tokens.zinc200}`,
             boxShadow: tokens.shadow,
-            padding: '36px 48px',
+            padding: '44px 56px',
           }}
         >
           {/* Post header */}
@@ -93,36 +93,37 @@ export const AiFallbackScene: React.FC = () => {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 14,
-              marginBottom: 20,
+              gap: 16,
+              marginBottom: 24,
             }}
           >
             <div
               style={{
-                width: 44,
-                height: 44,
+                width: 56,
+                height: 56,
                 borderRadius: '50%',
                 background: tokens.zinc200,
+                flexShrink: 0,
               }}
             />
             <div>
               <div
                 style={{
-                  fontSize: 16,
+                  fontSize: 22,
                   fontWeight: 600,
                   color: tokens.zinc950,
                 }}
               >
                 Claude Code Community
               </div>
-              <div style={{ fontSize: 13, color: tokens.zinc400 }}>
+              <div style={{ fontSize: 17, color: tokens.zinc400 }}>
                 Workplace · 5h ago
               </div>
             </div>
           </div>
 
           {/* Post text */}
-          <div style={{ fontSize: 22, lineHeight: 1.65, color: tokens.zinc950 }}>
+          <div style={{ fontSize: 30, lineHeight: 1.65, color: tokens.zinc950 }}>
             <AcronymText
               text={POST_TEXT}
               acronyms={[
@@ -148,8 +149,8 @@ export const AiFallbackScene: React.FC = () => {
         term="PARA"
         definition={AI_DEFINITION}
         source="ai"
-        x={ACRONYM_SCREEN_X - 80}
-        y={ACRONYM_SCREEN_Y - 185}
+        x={ACRONYM_SCREEN_X - 100}
+        y={ACRONYM_SCREEN_Y - 290}
         showAt={68}
         showLoading={true}
         loadingDuration={30}
@@ -158,10 +159,10 @@ export const AiFallbackScene: React.FC = () => {
       {/* Callout */}
       <Callout
         label="No WUT entry? AI fills the gap"
-        x={ACRONYM_SCREEN_X + 310}
-        y={ACRONYM_SCREEN_Y - 190}
-        targetX={ACRONYM_SCREEN_X + 50}
-        targetY={ACRONYM_SCREEN_Y - 170}
+        x={ACRONYM_SCREEN_X + 340}
+        y={ACRONYM_SCREEN_Y - 300}
+        targetX={ACRONYM_SCREEN_X + 60}
+        targetY={ACRONYM_SCREEN_Y - 270}
         showAt={145}
         color={tokens.purple}
       />

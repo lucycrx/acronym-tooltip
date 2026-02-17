@@ -21,15 +21,15 @@ const POST_TEXT =
 const MAISA_POS_1 = POST_TEXT.indexOf('MAISA');
 const MAISA_POS_2 = POST_TEXT.indexOf('MAISA', MAISA_POS_1 + 1);
 
-// Card position constants — larger card, more centered
-const CARD_X = 210;
-const CARD_Y = 230;
-const CARD_W = 1500;
+// Card position constants — large card, centered
+const CARD_X = 160;
+const CARD_Y = 340;
+const CARD_W = 1600;
 
 // Acronym position on screen (approximate for MAISA #1 in the card)
-// "A couple of bugs on " = 20 chars before MAISA, ~10.5px each at 22px Inter
-const ACRONYM_SCREEN_X = CARD_X + 260;
-const ACRONYM_SCREEN_Y = CARD_Y + 110;
+// "A couple of bugs on " = 20 chars before MAISA, ~14px each at 30px Inter
+const ACRONYM_SCREEN_X = CARD_X + 340;
+const ACRONYM_SCREEN_Y = CARD_Y + 140;
 
 export const DetectionScene: React.FC = () => {
   const frame = useCurrentFrame();
@@ -59,7 +59,7 @@ export const DetectionScene: React.FC = () => {
   // Cursor keyframes: enter from bottom-right, then move to MAISA
   const cursorKeyframes: [number, number, number][] = [
     [30, CARD_X + CARD_W - 100, CARD_Y + 300],
-    [65, ACRONYM_SCREEN_X + 20, ACRONYM_SCREEN_Y + 8],
+    [65, ACRONYM_SCREEN_X + 25, ACRONYM_SCREEN_Y + 10],
   ];
 
   return (
@@ -84,10 +84,10 @@ export const DetectionScene: React.FC = () => {
         <div
           style={{
             background: tokens.white,
-            borderRadius: tokens.radius,
+            borderRadius: 20,
             border: `1px solid ${tokens.zinc200}`,
             boxShadow: tokens.shadow,
-            padding: '36px 48px',
+            padding: '44px 56px',
           }}
         >
           {/* Post header */}
@@ -95,36 +95,37 @@ export const DetectionScene: React.FC = () => {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 14,
-              marginBottom: 20,
+              gap: 16,
+              marginBottom: 24,
             }}
           >
             <div
               style={{
-                width: 44,
-                height: 44,
+                width: 56,
+                height: 56,
                 borderRadius: '50%',
                 background: tokens.zinc200,
+                flexShrink: 0,
               }}
             />
             <div>
               <div
                 style={{
-                  fontSize: 16,
+                  fontSize: 22,
                   fontWeight: 600,
                   color: tokens.zinc950,
                 }}
               >
                 Bug Report
               </div>
-              <div style={{ fontSize: 13, color: tokens.zinc400 }}>
+              <div style={{ fontSize: 17, color: tokens.zinc400 }}>
                 Workplace · 2h ago
               </div>
             </div>
           </div>
 
           {/* Post text with acronym highlights */}
-          <div style={{ fontSize: 22, lineHeight: 1.65, color: tokens.zinc950 }}>
+          <div style={{ fontSize: 30, lineHeight: 1.65, color: tokens.zinc950 }}>
             <AcronymText
               text={POST_TEXT}
               acronyms={[
@@ -157,7 +158,7 @@ export const DetectionScene: React.FC = () => {
         source="wut"
         upvotes={42}
         x={ACRONYM_SCREEN_X - 30}
-        y={ACRONYM_SCREEN_Y - 155}
+        y={ACRONYM_SCREEN_Y - 240}
         showAt={78}
         showLoading={true}
         loadingDuration={26}
@@ -166,19 +167,19 @@ export const DetectionScene: React.FC = () => {
       {/* Callouts - appear after definition loads */}
       <Callout
         label="Source badge"
-        x={ACRONYM_SCREEN_X + 280}
-        y={ACRONYM_SCREEN_Y - 170}
-        targetX={ACRONYM_SCREEN_X + 70}
-        targetY={ACRONYM_SCREEN_Y - 140}
+        x={ACRONYM_SCREEN_X + 340}
+        y={ACRONYM_SCREEN_Y - 260}
+        targetX={ACRONYM_SCREEN_X + 100}
+        targetY={ACRONYM_SCREEN_Y - 225}
         showAt={130}
         color={tokens.zinc500}
       />
       <Callout
         label="WUT link"
-        x={ACRONYM_SCREEN_X + 290}
-        y={ACRONYM_SCREEN_Y - 40}
-        targetX={ACRONYM_SCREEN_X + 130}
-        targetY={ACRONYM_SCREEN_Y - 18}
+        x={ACRONYM_SCREEN_X + 350}
+        y={ACRONYM_SCREEN_Y - 60}
+        targetX={ACRONYM_SCREEN_X + 180}
+        targetY={ACRONYM_SCREEN_Y - 25}
         showAt={150}
         color={tokens.blue}
       />

@@ -55,23 +55,23 @@ export const Callout: React.FC<CalloutProps> = ({
           x2={lineEndX}
           y2={lineEndY}
           stroke={color}
-          strokeWidth="1.5"
-          strokeDasharray="4 3"
+          strokeWidth="2"
+          strokeDasharray="5 4"
         />
         {/* Small dot at target end */}
-        <circle cx={lineEndX} cy={lineEndY} r="3" fill={color} />
+        <circle cx={lineEndX} cy={lineEndY} r="4" fill={color} />
       </svg>
 
       {/* Label */}
       <div
         style={{
           position: 'absolute',
-          left: x - 80,
-          top: y - 28,
-          width: 160,
+          left: x - 110,
+          top: y - 32,
+          width: 220,
           textAlign: 'center' as const,
           fontFamily,
-          fontSize: 11,
+          fontSize: 16,
           fontWeight: 600,
           color,
           transform: `scale(${progress})`,
