@@ -9,12 +9,13 @@ export const TitleScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Speech bubble bounce in (the dark background is always visible)
-  const bubbleScale = spring({
+  // Speech bubble pops up from below within the icon
+  const bubbleProgress = spring({
     frame,
     fps,
-    config: { damping: 8, stiffness: 180, mass: 1.4 },
+    config: { damping: 12, stiffness: 180 },
   });
+  const bubbleY = interpolate(bubbleProgress, [0, 1], [100, 0]);
 
   // Title fade up
   const titleProgress = spring({
@@ -55,7 +56,7 @@ export const TitleScene: React.FC = () => {
         <AppIcon
           size={200}
           bubbleStyle={{
-            transform: `scale(${bubbleScale})`,
+            transform: `translateY(${bubbleY}%)`,
           }}
         />
       </div>
