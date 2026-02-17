@@ -1,8 +1,8 @@
 import { Composition } from 'remotion';
 import { Video } from './Video';
 
-// Total duration: 100 + 240 + 240 + 180 - 15 - 15 - 15 = 715 frames (~23.8s)
-const TOTAL_DURATION = 715;
+// Total duration: 100 + 240 + 240 + 180 - 15 - 25 - 15 = 705 frames (~23.5s)
+const TOTAL_DURATION = 705;
 
 export const RemotionRoot = () => {
   return (

@@ -1,6 +1,8 @@
 import React from 'react';
+import { Easing } from 'remotion';
 import { TransitionSeries, linearTiming } from '@remotion/transitions';
 import { fade } from '@remotion/transitions/fade';
+import { slide } from '@remotion/transitions/slide';
 import { TitleScene } from './scenes/TitleScene';
 import { DetectionScene } from './scenes/DetectionScene';
 import { AiFallbackScene } from './scenes/AiFallbackScene';
@@ -14,6 +16,7 @@ const OUTRO_DURATION = 180; // 6s (includes 1s post-transition hold)
 
 // Transition durations
 const FADE_DURATION = 15;
+const SCROLL_DURATION = 25; // ~0.83s vertical push between Detection and AI Fallback
 
 export const Video: React.FC = () => {
   return (
@@ -34,10 +37,13 @@ export const Video: React.FC = () => {
         <DetectionScene />
       </TransitionSeries.Sequence>
 
-      {/* Fade: Detection -> AI Fallback */}
+      {/* Scroll: Detection -> AI Fallback (vertical push) */}
       <TransitionSeries.Transition
-        presentation={fade()}
-        timing={linearTiming({ durationInFrames: FADE_DURATION })}
+        presentation={slide({ direction: 'from-bottom' })}
+        timing={linearTiming({
+          durationInFrames: SCROLL_DURATION,
+          easing: Easing.inOut(Easing.cubic),
+        })}
       />
 
       {/* Scene 4: AI Fallback */}
