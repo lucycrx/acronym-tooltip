@@ -74,10 +74,10 @@ export const Tooltip: React.FC<TooltipProps> = ({
           border: `1px solid ${tokens.zinc200}`,
           borderRadius: 20,
           boxShadow: tokens.shadow,
-          fontSize: 19,
+          fontSize: 24,
           color: tokens.zinc950,
-          maxWidth: 520,
-          minWidth: 340,
+          maxWidth: 640,
+          minWidth: 420,
           overflow: 'hidden',
         }}
       >
@@ -86,13 +86,13 @@ export const Tooltip: React.FC<TooltipProps> = ({
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 10,
-            padding: '20px 22px 0 22px',
+            gap: 12,
+            padding: '24px 28px 0 28px',
           }}
         >
           <span
             style={{
-              fontSize: 21,
+              fontSize: 27,
               fontWeight: 700,
               letterSpacing: '-0.025em',
               color: tokens.zinc950,
@@ -102,7 +102,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           </span>
           <span
             style={{
-              fontSize: 13,
+              fontSize: 17,
               fontWeight: 600,
               textTransform: 'uppercase' as const,
               letterSpacing: '0.05em',
@@ -117,22 +117,22 @@ export const Tooltip: React.FC<TooltipProps> = ({
         {!showContent && (
           <div
             style={{
-              padding: '28px 22px',
+              padding: '34px 28px',
               textAlign: 'center' as const,
               color: tokens.zinc400,
-              fontSize: 17,
+              fontSize: 22,
             }}
           >
             <div
               style={{
                 display: 'inline-block',
-                width: 24,
-                height: 24,
+                width: 30,
+                height: 30,
                 border: `3px solid ${tokens.zinc200}`,
                 borderTopColor: tokens.zinc500,
                 borderRadius: '50%',
                 transform: `rotate(${spinnerRotation}deg)`,
-                marginBottom: 8,
+                marginBottom: 10,
               }}
             />
             <div>Looking up...</div>
@@ -142,17 +142,17 @@ export const Tooltip: React.FC<TooltipProps> = ({
         {/* Definition */}
         {showContent && (
           <div style={{ opacity: contentOpacity }}>
-            <div style={{ padding: '16px 22px 0 22px' }}>
-              <p style={{ color: tokens.zinc950, lineHeight: 1.5, fontSize: 19, margin: 0 }}>
+            <div style={{ padding: '20px 28px 0 28px' }}>
+              <p style={{ color: tokens.zinc950, lineHeight: 1.5, fontSize: 24, margin: 0 }}>
                 {definition}
               </p>
               {source === 'wut' && (
                 <span
                   style={{
                     display: 'inline-block',
-                    fontSize: 16,
+                    fontSize: 20,
                     color: tokens.zinc400,
-                    marginTop: 6,
+                    marginTop: 8,
                   }}
                 >
                   ▲ {upvotes}
@@ -164,12 +164,12 @@ export const Tooltip: React.FC<TooltipProps> = ({
             <div
               style={{
                 borderTop: `1px solid ${tokens.zinc200}`,
-                marginTop: 16,
-                padding: '14px 22px',
+                marginTop: 20,
+                padding: '18px 28px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'flex-end',
-                gap: 10,
+                gap: 14,
               }}
             >
               <a
@@ -178,20 +178,20 @@ export const Tooltip: React.FC<TooltipProps> = ({
                   border: 'none',
                   background: tokens.blue,
                   color: tokens.white,
-                  fontSize: 15,
+                  fontSize: 19,
                   fontWeight: 500,
-                  padding: '6px 12px',
+                  padding: '8px 16px',
                   textDecoration: 'none',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: 4,
+                  gap: 6,
                   fontFamily,
                 }}
               >
                 {isAI ? 'Define on WUT' : 'View on WUT'}
                 <svg
-                  width="14"
-                  height="14"
+                  width="18"
+                  height="18"
                   viewBox="0 0 12 12"
                   fill="none"
                   stroke="currentColor"
@@ -211,9 +211,9 @@ export const Tooltip: React.FC<TooltipProps> = ({
                   background: 'transparent',
                   color: tokens.zinc500,
                   fontFamily,
-                  fontSize: 15,
+                  fontSize: 19,
                   fontWeight: 500,
-                  padding: '5px 10px',
+                  padding: '7px 14px',
                   whiteSpace: 'nowrap' as const,
                 }}
               >

@@ -150,7 +150,7 @@ export const AiFallbackScene: React.FC = () => {
         definition={AI_DEFINITION}
         source="ai"
         x={ACRONYM_SCREEN_X - 100}
-        y={ACRONYM_SCREEN_Y - 290}
+        y={ACRONYM_SCREEN_Y - 400}
         showAt={68}
         showLoading={true}
         loadingDuration={30}
@@ -160,9 +160,9 @@ export const AiFallbackScene: React.FC = () => {
       <Callout
         label="No WUT entry? AI fills the gap"
         x={ACRONYM_SCREEN_X + 340}
-        y={ACRONYM_SCREEN_Y - 300}
+        y={ACRONYM_SCREEN_Y - 410}
         targetX={ACRONYM_SCREEN_X + 60}
-        targetY={ACRONYM_SCREEN_Y - 270}
+        targetY={ACRONYM_SCREEN_Y - 380}
         showAt={145}
         color={tokens.purple}
       />

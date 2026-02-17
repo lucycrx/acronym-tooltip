@@ -158,7 +158,7 @@ export const DetectionScene: React.FC = () => {
         source="wut"
         upvotes={42}
         x={ACRONYM_SCREEN_X - 30}
-        y={ACRONYM_SCREEN_Y - 240}
+        y={ACRONYM_SCREEN_Y - 280}
         showAt={78}
         showLoading={true}
         loadingDuration={26}
@@ -168,9 +168,9 @@ export const DetectionScene: React.FC = () => {
       <Callout
         label="Source badge"
         x={ACRONYM_SCREEN_X + 340}
-        y={ACRONYM_SCREEN_Y - 260}
-        targetX={ACRONYM_SCREEN_X + 100}
-        targetY={ACRONYM_SCREEN_Y - 225}
+        y={ACRONYM_SCREEN_Y - 290}
+        targetX={ACRONYM_SCREEN_X + 115}
+        targetY={ACRONYM_SCREEN_Y - 260}
         showAt={130}
         color={tokens.zinc500}
       />
@@ -178,7 +178,7 @@ export const DetectionScene: React.FC = () => {
         label="WUT link"
         x={ACRONYM_SCREEN_X + 350}
         y={ACRONYM_SCREEN_Y - 100}
-        targetX={ACRONYM_SCREEN_X + 75}
+        targetX={ACRONYM_SCREEN_X + 85}
         targetY={ACRONYM_SCREEN_Y - 80}
         showAt={150}
         color={tokens.blue}
