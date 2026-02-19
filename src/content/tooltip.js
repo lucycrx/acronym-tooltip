@@ -293,7 +293,7 @@
       if (others.length > 0) {
         html += `<hr class="act-divider">`;
         html += `<details class="act-other-defs">`;
-        html += `<summary>Other definitions (${others.length})</summary>`;
+        html += `<summary>Not right? See more definitions</summary>`;
         for (const def of others) {
           html += `
             <div class="act-def-row">
