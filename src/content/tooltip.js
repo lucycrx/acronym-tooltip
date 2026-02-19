@@ -104,24 +104,14 @@
 
     .act-other-defs { padding: 0 16px; margin-top: 10px; }
     .act-other-defs summary {
-      font-size: 11px;
-      font-weight: 500;
-      color: #52525b;
+      font-size: 12px;
+      color: #71717a;
       cursor: pointer;
       list-style: none;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 4px;
       user-select: none;
-      background: #f4f4f5;
-      border: 1px solid #e4e4e7;
-      border-radius: 9999px;
-      padding: 4px 10px;
-      transition: all 150ms ease-in-out;
-    }
-    .act-other-defs summary:hover {
-      background: #e4e4e7;
-      color: #3f3f46;
     }
     .act-other-defs summary::-webkit-details-marker { display: none; }
     .act-other-defs summary::after {
