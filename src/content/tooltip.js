@@ -116,7 +116,7 @@
     .act-other-defs summary::-webkit-details-marker { display: none; }
     .act-other-defs summary::after {
       content: '\\25BE';
-      font-size: 10px;
+      font-size: 14px;
       transition: transform 300ms ease-in-out;
     }
     .act-other-defs[open] summary::after { transform: rotate(180deg); }
