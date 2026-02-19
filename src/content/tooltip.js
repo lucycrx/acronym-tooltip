@@ -96,13 +96,6 @@
 
     .act-primary-def { padding: 12px 16px 0 16px; }
     .act-def-text { color: #09090b; line-height: 1.5; font-size: 13px; }
-    .act-votes {
-      display: inline-block;
-      font-size: 11px;
-      color: #a1a1aa;
-      margin-top: 4px;
-    }
-
     .act-divider {
       border: none;
       border-top: 1px solid #e4e4e7;
@@ -136,7 +129,7 @@
     }
     .act-def-row:hover { background: #f4f4f5; }
     .act-def-row p { font-size: 13px; color: #71717a; line-height: 1.4; }
-    .act-def-row .act-votes { font-size: 11px; color: #a1a1aa; }
+
 
     .act-footer {
       border-top: 1px solid #e4e4e7;
@@ -292,7 +285,6 @@
       html += `
         <div class="act-primary-def">
           <p class="act-def-text">${escapeHtml(primary.definition)}</p>
-          <span class="act-votes">${upvoteIcon()} ${primary.upvote_count || 0}</span>
         </div>
       `;
 
@@ -306,7 +298,6 @@
           html += `
             <div class="act-def-row">
               <p>${escapeHtml(def.definition)}</p>
-              <span class="act-votes">${upvoteIcon()} ${def.upvote_count || 0}</span>
             </div>
           `;
         }
@@ -472,10 +463,6 @@
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
-  }
-
-  function upvoteIcon() {
-    return '&#9650;'; // ▲
   }
 
   function externalLinkIcon() {
