@@ -12,7 +12,6 @@ import { AnimatedBackground } from '../components/AnimatedBackground';
 import { BrowserChrome } from '../components/BrowserChrome';
 import { AcronymText } from '../components/AcronymText';
 import { Tooltip } from '../components/Tooltip';
-import { NoDefinitionTooltip } from '../components/NoDefinitionTooltip';
 import { FeaturePill } from '../components/FeaturePill';
 
 const SCENE_DELAY = 30;
@@ -26,10 +25,9 @@ const AI_DEFINITION =
   'Technical Execution Approval — an internal process for reviewing and approving significant engineering changes or migrations.';
 
 // Layout constants
-const COL_LEFT_X = 80;
-const COL_RIGHT_X = 980;
-const COL_W = 840;
-const COL_Y = 380;
+const BROWSER_X = 260;
+const BROWSER_Y = 340;
+const BROWSER_W = 1400;
 
 export const Feature2Scene: React.FC = () => {
   const frame = useCurrentFrame() - SCENE_DELAY;
@@ -58,29 +56,17 @@ export const Feature2Scene: React.FC = () => {
   });
   const descY = interpolate(descProgress, [0, 1], [12, 0]);
 
-  // ── Left column spring ──
-  const leftProgress = spring({
+  // ── Browser card spring ──
+  const browserProgress = spring({
     frame: frame - 20,
     fps,
     config: { damping: 15, stiffness: 120 },
   });
-  const leftOpacity = interpolate(leftProgress, [0, 0.6], [0, 1], {
+  const browserOpacity = interpolate(browserProgress, [0, 0.6], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
-  const leftY = interpolate(leftProgress, [0, 1], [30, 0]);
-
-  // ── Right column spring (staggered) ──
-  const rightProgress = spring({
-    frame: frame - 28,
-    fps,
-    config: { damping: 15, stiffness: 120 },
-  });
-  const rightOpacity = interpolate(rightProgress, [0, 0.6], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
-  const rightY = interpolate(rightProgress, [0, 1], [30, 0]);
+  const browserY = interpolate(browserProgress, [0, 1], [30, 0]);
 
   return (
     <AbsoluteFill style={{ fontFamily }}>
@@ -153,47 +139,15 @@ export const Feature2Scene: React.FC = () => {
         </p>
       </div>
 
-      {/* Column labels */}
+      {/* Browser chrome with AI tooltip */}
       <div
         style={{
           position: 'absolute',
-          top: COL_Y - 40,
-          left: COL_LEFT_X,
-          fontSize: 18,
-          fontWeight: 700,
-          textTransform: 'uppercase' as const,
-          letterSpacing: '0.06em',
-          color: tokens.zinc400,
-          opacity: leftOpacity,
-        }}
-      >
-        With API key configured
-      </div>
-      <div
-        style={{
-          position: 'absolute',
-          top: COL_Y - 40,
-          left: COL_RIGHT_X,
-          fontSize: 18,
-          fontWeight: 700,
-          textTransform: 'uppercase' as const,
-          letterSpacing: '0.06em',
-          color: tokens.zinc400,
-          opacity: rightOpacity,
-        }}
-      >
-        Without API key
-      </div>
-
-      {/* Left column — AI tooltip */}
-      <div
-        style={{
-          position: 'absolute',
-          left: COL_LEFT_X,
-          top: COL_Y,
-          width: COL_W,
-          opacity: leftOpacity,
-          transform: `translateY(${leftY}px)`,
+          left: BROWSER_X,
+          top: BROWSER_Y,
+          width: BROWSER_W,
+          opacity: browserOpacity,
+          transform: `translateY(${browserY}px)`,
         }}
       >
         <BrowserChrome url="internalfb.com/wiki/eng-team">
@@ -223,38 +177,6 @@ export const Feature2Scene: React.FC = () => {
             showLoading={true}
             loadingDuration={30}
           />
-        </BrowserChrome>
-      </div>
-
-      {/* Right column — No definition tooltip */}
-      <div
-        style={{
-          position: 'absolute',
-          left: COL_RIGHT_X,
-          top: COL_Y,
-          width: COL_W,
-          opacity: rightOpacity,
-          transform: `translateY(${rightY}px)`,
-        }}
-      >
-        <BrowserChrome url="internalfb.com/wiki/eng-team">
-          <div
-            style={{
-              fontSize: 20,
-              color: tokens.zinc700,
-              lineHeight: 1.7,
-            }}
-          >
-            <AcronymText
-              text={POST_TEXT}
-              acronyms={[
-                { word: 'TEA', startIndex: TEA_POS, underlineAt: 50, hoverAt: 76 },
-              ]}
-            />
-          </div>
-
-          {/* No definition tooltip within browser */}
-          <NoDefinitionTooltip term="TEA" x={120} y={60} showAt={80} />
         </BrowserChrome>
       </div>
     </AbsoluteFill>
