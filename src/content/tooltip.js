@@ -308,7 +308,7 @@
     } else {
       if (noApiKey) {
         html += `
-          <div class="act-error">No definitions found.<br>Add an API key in extension settings for AI-generated definitions.</div>
+          <div class="act-error">No definitions found.<br>Add an API key in extension options for AI-generated definitions.</div>
         `;
       } else {
         html += `
