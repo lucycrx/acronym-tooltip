@@ -2,6 +2,7 @@ import React from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from 'remotion';
 import { tokens } from '../styles/tokens';
 import { fontFamily } from '../styles/fonts';
+import { AnimatedBackground } from '../components/AnimatedBackground';
 import { AppIcon } from '../components/AppIcon';
 
 export const ShowcaseHeroScene: React.FC = () => {
@@ -46,9 +47,9 @@ export const ShowcaseHeroScene: React.FC = () => {
         justifyContent: 'center',
         alignItems: 'center',
         fontFamily,
-        background: tokens.zinc950,
       }}
     >
+      <AnimatedBackground />
       {/* Extension icon — bubble bounces in */}
       <div style={{ marginBottom: 36 }}>
         <AppIcon
@@ -71,7 +72,7 @@ export const ShowcaseHeroScene: React.FC = () => {
           style={{
             fontSize: 96,
             fontWeight: 700,
-            color: tokens.white,
+            color: tokens.zinc950,
             letterSpacing: '-0.025em',
             margin: 0,
             textAlign: 'center' as const,
