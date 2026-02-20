@@ -28,7 +28,7 @@ const OKR_POS = POST_TEXT.indexOf('OKR');
 
 // Layout constants
 const BROWSER_X = 120;
-const BROWSER_Y = 290;
+const BROWSER_Y = 350;
 const BROWSER_W = 1680;
 
 // Approximate XFN position on screen
