@@ -19,7 +19,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   term,
   definition,
   source,
-  upvotes = 42,
+  upvotes,
   x,
   y,
   showAt,
@@ -146,7 +146,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
               <p style={{ color: tokens.zinc950, lineHeight: 1.5, fontSize: 24, margin: 0 }}>
                 {definition}
               </p>
-              {source === 'wut' && (
+              {source === 'wut' && upvotes != null && (
                 <span
                   style={{
                     display: 'inline-block',

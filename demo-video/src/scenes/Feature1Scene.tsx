@@ -28,7 +28,7 @@ const OKR_POS = POST_TEXT.indexOf('OKR');
 
 // Layout constants
 const BROWSER_X = 120;
-const BROWSER_Y = 440;
+const BROWSER_Y = 480;
 const BROWSER_W = 1680;
 
 // Approximate XFN position on screen
@@ -95,7 +95,7 @@ export const Feature1Scene: React.FC = () => {
           justifyContent: 'center',
         }}
       >
-        <FeaturePill label="FEATURE 1" showAt={0} />
+        <FeaturePill label="FEATURE 1" showAt={0} color={tokens.white} bgColor={tokens.blue} />
       </div>
 
       {/* Title */}
@@ -229,7 +229,6 @@ export const Feature1Scene: React.FC = () => {
         term="XFN"
         definition="Cross-functional — referring to collaboration between different teams or disciplines."
         source="wut"
-        upvotes={38}
         x={XFN_SCREEN_X - 20}
         y={XFN_SCREEN_Y - 280}
         showAt={80}
