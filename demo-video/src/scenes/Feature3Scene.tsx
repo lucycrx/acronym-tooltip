@@ -12,7 +12,6 @@ import { AnimatedBackground } from '../components/AnimatedBackground';
 import { ExtensionDetailsCard } from '../components/ExtensionDetailsCard';
 import { SettingsCard } from '../components/SettingsCard';
 import { FeaturePill } from '../components/FeaturePill';
-import { Callout } from '../components/Callout';
 
 const SCENE_DELAY = 30;
 
@@ -203,17 +202,6 @@ export const Feature3Scene: React.FC = () => {
       >
         <SettingsCard typewriterAt={70} savedAt={100} />
       </div>
-
-      {/* Callout */}
-      <Callout
-        label="Paste your APE API key and click Save"
-        x={1500}
-        y={950}
-        targetX={COL_RIGHT_X + 400}
-        targetY={COL_Y + 300}
-        showAt={120}
-        color={tokens.blue}
-      />
     </AbsoluteFill>
   );
 };

@@ -14,7 +14,6 @@ import { AcronymText } from '../components/AcronymText';
 import { Tooltip } from '../components/Tooltip';
 import { NoDefinitionTooltip } from '../components/NoDefinitionTooltip';
 import { FeaturePill } from '../components/FeaturePill';
-import { Callout } from '../components/Callout';
 
 const SCENE_DELAY = 30;
 
@@ -258,17 +257,6 @@ export const Feature2Scene: React.FC = () => {
           <NoDefinitionTooltip term="TEA" x={120} y={60} showAt={80} />
         </BrowserChrome>
       </div>
-
-      {/* Callout */}
-      <Callout
-        label='AI shows purple "AI-generated" badge'
-        x={480}
-        y={950}
-        targetX={COL_LEFT_X + 350}
-        targetY={COL_Y + 180}
-        showAt={140}
-        color={tokens.purple}
-      />
     </AbsoluteFill>
   );
 };

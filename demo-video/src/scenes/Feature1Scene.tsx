@@ -14,7 +14,6 @@ import { AcronymText } from '../components/AcronymText';
 import { Cursor } from '../components/Cursor';
 import { Tooltip } from '../components/Tooltip';
 import { FeaturePill } from '../components/FeaturePill';
-import { Callout } from '../components/Callout';
 
 const SCENE_DELAY = 30;
 
@@ -236,16 +235,6 @@ export const Feature1Scene: React.FC = () => {
         showAt={80}
         showLoading={true}
         loadingDuration={26}
-      />
-
-      {/* Callout */}
-      <Callout
-        label="Acronyms detected & underlined automatically"
-        x={1500}
-        y={850}
-        targetX={BROWSER_X + 200}
-        targetY={BROWSER_Y + 300}
-        showAt={130}
       />
     </AbsoluteFill>
   );
