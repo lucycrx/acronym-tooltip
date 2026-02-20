@@ -11,6 +11,7 @@ import { fontFamily } from '../styles/fonts';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import { BrowserChrome } from '../components/BrowserChrome';
 import { AcronymText } from '../components/AcronymText';
+import { Cursor } from '../components/Cursor';
 import { Tooltip } from '../components/Tooltip';
 import { FeaturePill } from '../components/FeaturePill';
 
@@ -28,6 +29,10 @@ const AI_DEFINITION =
 const BROWSER_X = 120;
 const BROWSER_Y = 290;
 const BROWSER_W = 1680;
+
+// Approximate TEA position on screen
+const TEA_SCREEN_X = BROWSER_X + 400;
+const TEA_SCREEN_Y = BROWSER_Y + 120;
 
 export const Feature2Scene: React.FC = () => {
   const frame = useCurrentFrame() - SCENE_DELAY;
@@ -67,6 +72,12 @@ export const Feature2Scene: React.FC = () => {
     extrapolateRight: 'clamp',
   });
   const browserY = interpolate(browserProgress, [0, 1], [30, 0]);
+
+  // Cursor keyframes: enter from bottom-right, then move to TEA
+  const cursorKeyframes: [number, number, number][] = [
+    [45, BROWSER_X + BROWSER_W - 80, BROWSER_Y + 250],
+    [68, TEA_SCREEN_X + 20, TEA_SCREEN_Y + 8],
+  ];
 
   return (
     <AbsoluteFill style={{ fontFamily }}>
@@ -179,6 +190,9 @@ export const Feature2Scene: React.FC = () => {
           />
         </BrowserChrome>
       </div>
+
+      {/* Cursor */}
+      {frame >= 45 && <Cursor keyframes={cursorKeyframes} />}
     </AbsoluteFill>
   );
 };
