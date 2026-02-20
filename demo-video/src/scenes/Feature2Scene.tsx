@@ -27,7 +27,7 @@ const AI_DEFINITION =
 
 // Layout constants
 const BROWSER_X = 120;
-const BROWSER_Y = 290;
+const BROWSER_Y = 440;
 const BROWSER_W = 1680;
 
 // Approximate TEA position on screen
@@ -87,7 +87,7 @@ export const Feature2Scene: React.FC = () => {
       <div
         style={{
           position: 'absolute',
-          top: 60,
+          top: 150,
           left: 0,
           right: 0,
           display: 'flex',
@@ -106,7 +106,7 @@ export const Feature2Scene: React.FC = () => {
       <div
         style={{
           position: 'absolute',
-          top: 130,
+          top: 240,
           left: 0,
           right: 0,
           textAlign: 'center' as const,
@@ -131,7 +131,7 @@ export const Feature2Scene: React.FC = () => {
       <div
         style={{
           position: 'absolute',
-          top: 205,
+          top: 330,
           left: 0,
           right: 0,
           textAlign: 'center' as const,
