@@ -92,6 +92,27 @@
     return false;
   }
 
+  /**
+   * Returns true if a short all-caps word (2–3 chars) appears to be a person's
+   * name initials rather than an acronym. Detected via adjacent title-case words:
+   *   "JD Smith"  → initials + last name  → skip
+   *   "Sarah JD"  → first name + initials → skip
+   *   "the API docs" → lowercase neighbors  → keep
+   */
+  function isLikelyName(text, matchStart, matchEnd) {
+    if (matchEnd - matchStart > 3) return false;
+
+    // Forward: "JD Smith" — initials followed by a title-case word
+    if (/^\s[A-Z][a-z]{2,}/.test(text.slice(matchEnd, matchEnd + 20))) return true;
+
+    // Backward: "Sarah JD" — title-case word preceding the initials
+    const before = text.slice(Math.max(0, matchStart - 20), matchStart);
+    const prev = /([A-Z][a-z]{2,})\s$/.exec(before);
+    if (prev && !STOPWORDS.has(prev[1].toUpperCase())) return true;
+
+    return false;
+  }
+
   function shouldSkipNode(node) {
     if (!node || !node.parentElement) return true;
     let el = node.parentElement;
@@ -157,7 +178,8 @@
         isAcronym(match[0]) &&
         !window.__ACT.dismissedTerms.has(match[0]) &&
         !hasAdjacentCapsWord(text, match.index, match.index + match[0].length) &&
-        !isPartOfTLDR(text, match.index, match.index + match[0].length)
+        !isPartOfTLDR(text, match.index, match.index + match[0].length) &&
+        !isLikelyName(text, match.index, match.index + match[0].length)
       ) {
         matches.push({ word: match[0], index: match.index });
       }
