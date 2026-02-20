@@ -3,7 +3,6 @@ import {
   AbsoluteFill,
   useCurrentFrame,
   useVideoConfig,
-  spring,
   interpolate,
   Easing,
 } from 'remotion';
@@ -33,11 +32,18 @@ const CARD_W = 1600;
 const ACRONYM_SCREEN_X = CARD_X + 340;
 const ACRONYM_SCREEN_Y = CARD_Y + 140;
 
+// Title typewriter constants
+const TITLE_LINE_1 = 'The tooltip detects acronyms';
+const TITLE_LINE_2 = 'and looks up definitions from WUT on hover';
+const TITLE_CHAR_FRAMES = 1;
+const TITLE_LINE_PAUSE = 5;
+const CURSOR_BLINK_FRAMES = 16;
+
 export const DetectionScene: React.FC = () => {
   // Delay all animations so content appears after the incoming transition settles
   const SCENE_DELAY = 30;
   const frame = useCurrentFrame() - SCENE_DELAY;
-  const { fps, height } = useVideoConfig();
+  const { height } = useVideoConfig();
   const { exiting } = useTransitionProgress();
 
   // Scene timing (210 total frames = 7s for scenes 2+3 combined)
@@ -56,17 +62,38 @@ export const DetectionScene: React.FC = () => {
     easing: Easing.out(Easing.cubic),
   });
 
-  // Scene title fade
-  const titleProgress = spring({
-    frame,
-    fps,
-    config: { damping: 15, stiffness: 120 },
-  });
-  const titleOpacity = interpolate(titleProgress, [0, 1], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
-  const titleY = interpolate(titleProgress, [0, 1], [15, 0]);
+  // Scene title typewriter
+  const totalTitleChars = TITLE_LINE_1.length + TITLE_LINE_2.length;
+  let typedChars: number;
+  if (frame < 0) {
+    typedChars = 0;
+  } else if (frame < TITLE_LINE_1.length * TITLE_CHAR_FRAMES) {
+    typedChars = Math.floor(frame / TITLE_CHAR_FRAMES);
+  } else if (frame < TITLE_LINE_1.length * TITLE_CHAR_FRAMES + TITLE_LINE_PAUSE) {
+    typedChars = TITLE_LINE_1.length;
+  } else {
+    const postPause =
+      frame - TITLE_LINE_1.length * TITLE_CHAR_FRAMES - TITLE_LINE_PAUSE;
+    typedChars = Math.min(
+      totalTitleChars,
+      TITLE_LINE_1.length + Math.floor(postPause / TITLE_CHAR_FRAMES),
+    );
+  }
+  const titleLine1 = TITLE_LINE_1.slice(
+    0,
+    Math.min(typedChars, TITLE_LINE_1.length),
+  );
+  const titleLine2Chars = Math.max(0, typedChars - TITLE_LINE_1.length);
+  const titleLine2 = TITLE_LINE_2.slice(0, titleLine2Chars);
+  const isTitleTyping = typedChars < totalTitleChars && frame >= 0;
+  const cursorOpacity = isTitleTyping
+    ? interpolate(
+        frame % CURSOR_BLINK_FRAMES,
+        [0, CURSOR_BLINK_FRAMES / 2, CURSOR_BLINK_FRAMES],
+        [1, 0, 1],
+        { extrapolateRight: 'clamp' },
+      )
+    : 0;
 
   // Cursor keyframes: enter from bottom-right, then move to MAISA
   const cursorKeyframes: [number, number, number][] = [
@@ -90,8 +117,8 @@ export const DetectionScene: React.FC = () => {
           left: 0,
           right: 0,
           textAlign: 'center' as const,
-          opacity: titleOpacity * (1 - exiting),
-          transform: `translateY(${titleY + exiting * height}px)`,
+          opacity: 1 - exiting,
+          transform: `translateY(${exiting * height}px)`,
         }}
       >
         <p
@@ -103,9 +130,19 @@ export const DetectionScene: React.FC = () => {
             margin: 0,
           }}
         >
-          The tooltip detects acronyms
-          <br />
-          and looks up definitions from WUT on hover
+          <span>{titleLine1}</span>
+          {isTitleTyping && typedChars <= TITLE_LINE_1.length && (
+            <span style={{ opacity: cursorOpacity }}>▌</span>
+          )}
+          {typedChars > TITLE_LINE_1.length && (
+            <>
+              <br />
+              <span>{titleLine2}</span>
+              {isTitleTyping && (
+                <span style={{ opacity: cursorOpacity }}>▌</span>
+              )}
+            </>
+          )}
         </p>
       </div>
 
