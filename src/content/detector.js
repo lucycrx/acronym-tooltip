@@ -6,7 +6,7 @@
 
   // ── Constants (inlined to avoid module issues in content scripts) ──────────
 
-  const ACRONYM_REGEX = /\b[A-Z]{2,8}\b/g;
+  const ACRONYM_REGEX = /\b[A-Z]{2,6}\b/g;
   const OBSERVER_DEBOUNCE_MS = 100;
 
   const SKIP_TAGS = new Set([
@@ -77,7 +77,7 @@
   // ── Utility ───────────────────────────────────────────────────────────────
 
   function isAcronym(word) {
-    if (word.length < 2 || word.length > 8 || !/^[A-Z]+$/.test(word)) return false;
+    if (word.length < 2 || word.length > 6 || !/^[A-Z]+$/.test(word)) return false;
     if (STOPWORDS.has(word)) return false;
     // Words ending in common English suffixes are regular words, not acronyms
     if (word.length >= 5 && ENGLISH_SUFFIXES.some(s => word.endsWith(s))) return false;
@@ -118,6 +118,20 @@
     return upper / total > 0.7;
   }
 
+  /**
+   * Returns true if the matched word has an adjacent all-caps word (2+ letters).
+   * Two or more consecutive all-caps words indicate a heading or emphasis block,
+   * not standalone acronyms. Real acronyms appear as isolated uppercase words
+   * within mixed-case text, like "The NASA program launched today."
+   */
+  function hasAdjacentCapsWord(text, matchStart, matchEnd) {
+    const before = text.slice(0, matchStart);
+    if (/\b[A-Z]{2,}\b\s*$/.test(before)) return true;
+    const after = text.slice(matchEnd);
+    if (/^\s*\b[A-Z]{2,}\b/.test(after)) return true;
+    return false;
+  }
+
   function processTextNode(textNode) {
     if (shouldSkipNode(textNode)) return;
 
@@ -131,7 +145,11 @@
     const matches = [];
     let match;
     while ((match = ACRONYM_REGEX.exec(text)) !== null) {
-      if (isAcronym(match[0]) && !window.__ACT.dismissedTerms.has(match[0])) {
+      if (
+        isAcronym(match[0]) &&
+        !window.__ACT.dismissedTerms.has(match[0]) &&
+        !hasAdjacentCapsWord(text, match.index, match.index + match[0].length)
+      ) {
         matches.push({ word: match[0], index: match.index });
       }
     }
