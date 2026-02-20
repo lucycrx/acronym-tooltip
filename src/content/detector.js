@@ -43,7 +43,30 @@
     'AM', 'AN', 'AS', 'AT', 'BE', 'BY', 'DO', 'GO', 'HE', 'IF', 'IN',
     'IS', 'IT', 'ME', 'MY', 'NO', 'OF', 'OK', 'ON', 'OR', 'SO', 'TO',
     'UP', 'US', 'WE',
+    // UI actions and labels commonly found as button/link text
+    'EDIT', 'VIEW', 'CLICK', 'CLOSE', 'SHARE', 'APPLY', 'DRAFT',
+    'LEARN', 'REPLY', 'PRINT', 'RESET', 'LOGIN', 'MENU', 'MUTE',
+    'HIDE', 'LOCK', 'DENY', 'POST', 'UNDO', 'REDO', 'MOVE', 'FIND',
+    'CALL', 'BACK', 'FULL', 'COPY', 'PASTE',
+    // Common English words that frequently appear in all-caps headings
+    'FREE', 'SALE', 'LIVE', 'WATCH', 'FINAL', 'ABOUT', 'FIRST',
+    'AFTER', 'AGAIN', 'OTHER', 'THEIR', 'THERE', 'THESE', 'THOSE',
+    'WHICH', 'WHILE', 'WOULD', 'COULD', 'EVERY', 'UNDER', 'STILL',
+    'GREAT', 'SMALL', 'LARGE', 'EARLY', 'NEVER', 'BEING', 'WHERE',
+    'SINCE', 'UNTIL', 'ABOVE', 'BELOW', 'WHOLE', 'MIGHT', 'SHALL',
+    'OFTEN', 'LATER', 'GIVEN', 'START', 'PLACE', 'POINT', 'PRESS',
+    'THINK', 'TODAY', 'TOTAL', 'VALUE', 'WORLD', 'WRITE', 'PRICE',
+    'STORE', 'CHECK', 'ENTER', 'OFFER', 'ORDER', 'POWER', 'RAISE',
+    'REACH', 'READY', 'RIGHT', 'SHORT', 'SPACE', 'STAND', 'STATE',
+    'STORY', 'STUDY', 'TABLE', 'THING', 'THREE', 'TRADE', 'USING',
+    'VIDEO', 'VOICE', 'WATER', 'YOUNG',
   ]);
+
+  // Common English suffixes — words ending in these are almost never acronyms
+  const ENGLISH_SUFFIXES = [
+    'ING', 'TION', 'SION', 'MENT', 'NESS', 'ABLE', 'IBLE',
+    'ATED', 'ALLY', 'ISED', 'IZED', 'EOUS', 'IOUS',
+  ];
 
   // ── Shared state namespace ────────────────────────────────────────────────
 
@@ -54,12 +77,22 @@
   // ── Utility ───────────────────────────────────────────────────────────────
 
   function isAcronym(word) {
-    return word.length >= 2 && word.length <= 8 && /^[A-Z]+$/.test(word) && !STOPWORDS.has(word);
+    if (word.length < 2 || word.length > 8 || !/^[A-Z]+$/.test(word)) return false;
+    if (STOPWORDS.has(word)) return false;
+    // Words ending in common English suffixes are regular words, not acronyms
+    if (word.length >= 5 && ENGLISH_SUFFIXES.some(s => word.endsWith(s))) return false;
+    return true;
   }
 
   function shouldSkipNode(node) {
     if (!node || !node.parentElement) return true;
     let el = node.parentElement;
+    // Skip text that appears uppercase due to CSS text-transform
+    try {
+      if (getComputedStyle(el).textTransform === 'uppercase') return true;
+    } catch (e) {
+      // getComputedStyle may fail for detached nodes
+    }
     while (el) {
       if (SKIP_TAGS.has(el.tagName)) return true;
       if (el.classList && el.classList.contains('act-acronym')) return true;
@@ -71,11 +104,28 @@
 
   // ── DOM scanning ──────────────────────────────────────────────────────────
 
+  /** Returns true if the text is predominantly uppercase (heading, label, etc.) */
+  function isAllCapsContext(text) {
+    let upper = 0;
+    let lower = 0;
+    for (let i = 0; i < text.length; i++) {
+      const c = text.charCodeAt(i);
+      if (c >= 65 && c <= 90) upper++;
+      else if (c >= 97 && c <= 122) lower++;
+    }
+    const total = upper + lower;
+    if (total < 8) return false; // too little text to judge
+    return upper / total > 0.7;
+  }
+
   function processTextNode(textNode) {
     if (shouldSkipNode(textNode)) return;
 
     const text = textNode.textContent;
     if (!text || text.trim().length < 2) return;
+
+    // Skip text blocks that are predominantly uppercase (headings, labels, etc.)
+    if (isAllCapsContext(text)) return;
 
     ACRONYM_REGEX.lastIndex = 0;
     const matches = [];
