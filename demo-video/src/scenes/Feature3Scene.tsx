@@ -96,7 +96,7 @@ export const Feature3Scene: React.FC = () => {
             margin: 0,
           }}
         >
-          Optional: Enable AI-Generated Definitions
+          How to Enable AI-Generated Definitions
         </h2>
       </div>
 
