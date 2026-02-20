@@ -2,7 +2,7 @@
 // Handles AI lookups, recent tracking, cache clearing, and manual popup lookups.
 // WUT lookups are now done in the content script (which has internalfb cookies).
 
-import { lookupAI } from './ai-api.js';
+import { lookupAI, getApeApiKey } from './ai-api.js';
 import { lookupWut as bgLookupWut } from './wut-api.js';
 import { cacheClear } from './cache.js';
 
@@ -67,6 +67,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // ── AI-only lookup ──────────────────────────────────────────────────────────
 
 async function handleAILookup(term, context) {
+  const hasApiKey = !!(await getApeApiKey());
   const aiDef = await lookupAI(term, context);
 
   await addToRecent(term);
@@ -76,6 +77,7 @@ async function handleAILookup(term, context) {
     source: aiDef ? 'ai' : 'none',
     definitions: [],
     aiDefinition: aiDef,
+    noApiKey: !hasApiKey,
   };
 }
 

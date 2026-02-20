@@ -88,7 +88,7 @@ function buildPrompt(term, context) {
 /**
  * Retrieve the APE API key from extension storage.
  */
-async function getApeApiKey() {
+export async function getApeApiKey() {
   try {
     const result = await chrome.storage.sync.get('apeApiKey');
     return result.apeApiKey || null;

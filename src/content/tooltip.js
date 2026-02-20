@@ -265,7 +265,7 @@
   }
 
   function renderDefinition(data) {
-    const { term, definitions, source, aiDefinition } = data;
+    const { term, definitions, source, aiDefinition, noApiKey } = data;
     const isAI = source === 'ai';
     const hasDefs = definitions && definitions.length > 0;
 
@@ -306,15 +306,22 @@
         html += `</details>`;
       }
     } else {
-      html += `
-        <div class="act-error">No definitions found.</div>
-      `;
+      if (noApiKey) {
+        html += `
+          <div class="act-error">No definitions found.<br>Add an API key in extension settings for AI-generated definitions.</div>
+        `;
+      } else {
+        html += `
+          <div class="act-error">No definitions found.</div>
+        `;
+      }
     }
 
     // Footer with WUT link
+    const wutLabel = (isAI || (!hasDefs && !isAI)) ? 'Define on WUT' : 'View on WUT';
     html += `
       <div class="act-footer">
-        <a class="act-wut-link" href="https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}" target="_blank" rel="noopener">${isAI ? 'Define on WUT' : 'View on WUT'} ${externalLinkIcon()}</a>
+        <a class="act-wut-link" href="https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}" target="_blank" rel="noopener">${wutLabel} ${externalLinkIcon()}</a>
         <button class="act-dismiss" data-term="${escapeHtml(term)}">Don&#39;t show again</button>
       </div>
     `;
