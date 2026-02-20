@@ -305,13 +305,6 @@
 
     if (window.__ACT.disabledSites.has(hostname)) return;
 
-    // Skip Google Slides — wrapping text in spans breaks Slides' CSS rendering,
-    // causing acronyms to become invisible. Slide text is SVG (already skipped)
-    // and notes are contenteditable (also skipped), so there's minimal value here.
-    if (hostname === 'docs.google.com' && /^\/presentation\b/.test(window.location.pathname)) {
-      return;
-    }
-
     injectHostStyles();
 
     // Initial scan of the full page

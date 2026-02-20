@@ -25,8 +25,7 @@
         "*://*.workplace.com/*",
         "*://*.internalfb.com/*",
         "*://*.facebook.com/*",
-        "*://*.meta.com/*",
-        "*://docs.google.com/*"
+        "*://*.meta.com/*"
       ],
       "js": [
         "content/detector.js",
@@ -48,7 +47,6 @@
     "*://*.internalfb.com/*",
     "*://*.facebook.com/*",
     "*://*.meta.com/*",
-    "*://docs.google.com/*",
     "https://api.wearables-ape.io/*"
   ]
 }
