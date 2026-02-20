@@ -11,7 +11,6 @@ import { fontFamily } from '../styles/fonts';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import { ExtensionDetailsCard } from '../components/ExtensionDetailsCard';
 import { SettingsCard } from '../components/SettingsCard';
-import { FeaturePill } from '../components/FeaturePill';
 
 const SCENE_DELAY = 30;
 
@@ -76,30 +75,11 @@ export const Feature3Scene: React.FC = () => {
     <AbsoluteFill style={{ fontFamily }}>
       <AnimatedBackground />
 
-      {/* Feature pill */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 60,
-          left: 0,
-          right: 0,
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
-        <FeaturePill
-          label="FEATURE 3"
-          showAt={0}
-          color={tokens.white}
-          bgColor={tokens.blue}
-        />
-      </div>
-
       {/* Title */}
       <div
         style={{
           position: 'absolute',
-          top: 130,
+          top: 80,
           left: 0,
           right: 0,
           textAlign: 'center' as const,
@@ -109,14 +89,14 @@ export const Feature3Scene: React.FC = () => {
       >
         <h2
           style={{
-            fontSize: 52,
+            fontSize: 48,
             fontWeight: 700,
             color: tokens.zinc950,
             letterSpacing: '-0.025em',
             margin: 0,
           }}
         >
-          Adding Your API Key in Extension Settings
+          Optional: Enable AI-Generated Definitions
         </h2>
       </div>
 
@@ -124,7 +104,7 @@ export const Feature3Scene: React.FC = () => {
       <div
         style={{
           position: 'absolute',
-          top: 205,
+          top: 160,
           left: 0,
           right: 0,
           textAlign: 'center' as const,
@@ -134,12 +114,25 @@ export const Feature3Scene: React.FC = () => {
       >
         <p
           style={{
-            fontSize: 28,
+            fontSize: 26,
             color: tokens.zinc500,
-            margin: 0,
+            margin: '0 auto',
+            maxWidth: 1200,
+            lineHeight: 1.6,
           }}
         >
-          Configure your APE API key to enable AI-generated definitions.
+          Add an APE API key to get AI definitions for acronyms not in WUT.
+        </p>
+        <p
+          style={{
+            fontSize: 22,
+            color: tokens.zinc400,
+            margin: '12px auto 0',
+            maxWidth: 1100,
+            lineHeight: 1.5,
+          }}
+        >
+          Without a key, the tooltip still works — it shows WUT entries where they exist, and returns nothing when they don't.
         </p>
       </div>
 
