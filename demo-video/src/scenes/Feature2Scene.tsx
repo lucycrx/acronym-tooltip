@@ -176,20 +176,20 @@ export const Feature2Scene: React.FC = () => {
               ]}
             />
           </div>
-
-          {/* AI tooltip within browser */}
-          <Tooltip
-            term="TEA"
-            definition={AI_DEFINITION}
-            source="ai"
-            x={120}
-            y={60}
-            showAt={76}
-            showLoading={true}
-            loadingDuration={30}
-          />
         </BrowserChrome>
       </div>
+
+      {/* AI tooltip (outside browser to avoid overflow clipping) */}
+      <Tooltip
+        term="TEA"
+        definition={AI_DEFINITION}
+        source="ai"
+        x={BROWSER_X + 144}
+        y={BROWSER_Y + 122}
+        showAt={76}
+        showLoading={true}
+        loadingDuration={30}
+      />
 
       {/* Cursor */}
       {frame >= 45 && <Cursor keyframes={cursorKeyframes} />}
