@@ -5,7 +5,7 @@ export const AnimatedBackground: React.FC = () => {
   return (
     <AbsoluteFill
       style={{
-        background: '#f3f6fc',
+        background: '#eae6e1',
         zIndex: 0,
       }}
     />
