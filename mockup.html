@@ -21,59 +21,32 @@
       --purple: #8b5cf6;
       --white: #ffffff;
       --shadow: 0 4px 24px rgba(0,0,0,0.08);
+      --card-width: 820px;
     }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--zinc100);
+      background: #d4d4d8;
       color: var(--zinc950);
       line-height: 1.5;
-    }
-
-    /* ── Hero ──────────────────────────────────────────────────────── */
-    .hero {
-      background: var(--zinc950);
-      color: var(--white);
-      text-align: center;
-      padding: 64px 24px 56px;
-    }
-    .hero-icon {
-      width: 72px;
-      height: 72px;
-      border-radius: 18px;
-      margin-bottom: 20px;
-    }
-    .hero h1 {
-      font-size: 32px;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      margin-bottom: 8px;
-    }
-    .hero p {
-      font-size: 16px;
-      color: var(--zinc400);
-      max-width: 520px;
-      margin: 0 auto;
-    }
-
-    /* ── Layout ────────────────────────────────────────────────────── */
-    .showcase {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 48px 24px 80px;
+      padding: 40px 24px;
       display: flex;
       flex-direction: column;
-      gap: 48px;
+      align-items: center;
+      gap: 40px;
     }
 
-    /* ── Feature Card ─────────────────────────────────────────────── */
-    .feature {
+    /* ── Feature Card (each is a standalone croppable image) ─────── */
+    .card {
+      width: var(--card-width);
       background: var(--white);
-      border: 1px solid var(--zinc200);
-      border-radius: 20px;
-      overflow: hidden;
+      border-radius: 24px;
+      padding: 48px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     }
-    .feature-label {
+
+    /* ── Card Header ───────────────────────────────────────────────── */
+    .card-label {
       display: inline-block;
       font-size: 11px;
       font-weight: 700;
@@ -83,30 +56,22 @@
       background: var(--zinc950);
       padding: 4px 12px;
       border-radius: 9999px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
-    .feature-label--ai {
-      background: var(--purple);
-    }
-    .feature-label--settings {
-      background: var(--blue);
-    }
-    .feature-header {
-      padding: 32px 36px 0;
-    }
-    .feature-header h2 {
-      font-size: 20px;
+    .card-label--ai { background: var(--purple); }
+    .card-label--settings { background: var(--blue); }
+
+    .card h2 {
+      font-size: 22px;
       font-weight: 700;
-      letter-spacing: -0.025em;
+      letter-spacing: -0.03em;
       margin-bottom: 6px;
     }
-    .feature-header p {
+    .card > p {
       font-size: 14px;
       color: var(--zinc500);
-      max-width: 520px;
-    }
-    .feature-body {
-      padding: 28px 36px 36px;
+      max-width: 560px;
+      margin-bottom: 28px;
     }
 
     /* ── Simulated Browser Page ────────────────────────────────────── */
@@ -309,13 +274,13 @@
       filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
     }
 
-    /* ── Annotation callout ────────────────────────────────────────── */
+    /* ── Callout ───────────────────────────────────────────────────── */
     .callout {
       display: flex;
       align-items: flex-start;
-      gap: 8px;
-      margin-top: 16px;
-      padding: 12px 16px;
+      gap: 10px;
+      margin-top: 20px;
+      padding: 14px 18px;
       background: var(--zinc50);
       border: 1px solid var(--zinc200);
       border-radius: 12px;
@@ -325,18 +290,20 @@
     }
     .callout-icon {
       flex-shrink: 0;
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      background: var(--zinc200);
+      background: var(--zinc950);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 11px;
       font-weight: 700;
-      color: var(--zinc700);
+      color: var(--white);
       margin-top: 1px;
     }
+    .callout-icon--ai { background: var(--purple); }
+    .callout-icon--settings { background: var(--blue); }
 
     /* ── Settings Mockup ───────────────────────────────────────────── */
     .sim-settings {
@@ -423,7 +390,6 @@
       border: 1px solid var(--zinc200);
       border-radius: 14px;
       overflow: hidden;
-      margin-bottom: 20px;
     }
     .sim-ext-chrome-bar {
       background: var(--zinc200);
@@ -490,7 +456,7 @@
       color: var(--blue);
     }
 
-    /* ── Highlight annotation arrow ────────────────────────────────── */
+    /* ── Annotation ────────────────────────────────────────────────── */
     .annotation {
       display: flex;
       align-items: center;
@@ -510,9 +476,6 @@
       grid-template-columns: 1fr 1fr;
       gap: 20px;
     }
-    @media (max-width: 700px) {
-      .two-col { grid-template-columns: 1fr; }
-    }
     .col-label {
       font-size: 11px;
       font-weight: 700;
@@ -526,257 +489,231 @@
 <body>
 
   <!-- ═══════════════════════════════════════════════════════════════
-       HERO
+       CARD 1: WUT Definitions on Hover
        ═══════════════════════════════════════════════════════════════ -->
-  <div class="hero">
-    <img src="icons/icon128.png" alt="Acronym Tooltip" class="hero-icon">
-    <h1>Acronym Tooltip</h1>
-    <p>Hover over acronyms on Meta internal sites to instantly see definitions from WUT and AI-generated explanations.</p>
+  <div class="card">
+    <span class="card-label">Feature 1</span>
+    <h2>Instant WUT Definitions on Hover</h2>
+    <p>Hover over any recognized acronym and a tooltip appears with the top-voted definition from WUT, plus alternative definitions.</p>
+
+    <div class="sim-page">
+      <div class="sim-chrome-bar">
+        <div class="sim-dot"></div>
+        <div class="sim-dot"></div>
+        <div class="sim-dot"></div>
+        <div class="sim-url-bar">workplace.com/groups/engineering-updates</div>
+      </div>
+      <div class="sim-content">
+        <div class="sim-post">
+          <div class="sim-post-header">
+            <div class="sim-avatar"></div>
+            <div>
+              <div class="sim-name">Alex Zhang</div>
+              <div class="sim-time">2h ago</div>
+            </div>
+          </div>
+          <div class="sim-post-body">
+            Hey team, we're rolling out a new <span class="acr acr--hover">XFN</span> review
+            process for Q2. Please check the updated <span class="acr">PSC</span> guidelines
+            before your next <span class="acr">EPD</span> sync. The new <span class="acr">OKR</span>
+            framework should help us align across orgs.
+          </div>
+        </div>
+
+        <!-- Tooltip -->
+        <div class="mock-tooltip" style="top: 24px; left: 160px;">
+          <div class="tt-header">
+            <span class="tt-term">XFN</span>
+            <span class="tt-badge">WUT</span>
+          </div>
+          <div class="tt-def">Cross-functional — referring to collaboration between different teams or disciplines.</div>
+          <hr class="tt-divider">
+          <div class="tt-other">
+            <div class="tt-other-label">Not right? See other definitions</div>
+          </div>
+          <div class="tt-footer">
+            <a class="tt-wut-link" href="#">View on WUT <svg class="tt-ext-icon" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 1.5L5.5 6.5"/><path d="M7 1.5H10.5V5"/><path d="M10.5 7.5V10A1 1 0 0 1 9.5 11H2A1 1 0 0 1 1 10V2.5A1 1 0 0 1 2 1.5H4.5"/></svg></a>
+            <button class="tt-dismiss">Don't show again</button>
+          </div>
+        </div>
+
+        <!-- Cursor -->
+        <div class="mock-cursor" style="top: 118px; left: 270px;">
+          <svg width="16" height="20" viewBox="0 0 16 20" fill="none">
+            <path d="M1 1L1 15L5.5 11L10 17L12.5 15.5L8 9.5L14 8.5L1 1Z" fill="white" stroke="#09090b" stroke-width="1.2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-icon">1</div>
+      <div>Acronyms are detected automatically and underlined with a <strong>dotted border</strong>. Hover to see the top-voted WUT definition. Click <strong>"Not right?"</strong> to see alternative meanings.</div>
+    </div>
   </div>
 
-  <div class="showcase">
+  <!-- ═══════════════════════════════════════════════════════════════
+       CARD 2: AI Fallback
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="card">
+    <span class="card-label card-label--ai">Feature 2</span>
+    <h2>AI-Generated Definitions When WUT Has No Entry</h2>
+    <p>When an acronym isn't in WUT, the extension uses AI (GPT-4o-mini via APE API) to generate a context-aware definition using surrounding text.</p>
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         FEATURE 1: WUT Definitions on Hover
-         ═══════════════════════════════════════════════════════════════ -->
-    <div class="feature">
-      <div class="feature-header">
-        <span class="feature-label">Feature 1</span>
-        <h2>Instant WUT Definitions on Hover</h2>
-        <p>Hover over any recognized acronym and a tooltip appears with the top-voted definition from WUT, plus alternative definitions.</p>
-      </div>
-      <div class="feature-body">
+    <div class="two-col">
+      <!-- With API key -->
+      <div>
+        <div class="col-label">With API key configured</div>
         <div class="sim-page">
           <div class="sim-chrome-bar">
-            <div class="sim-dot"></div>
-            <div class="sim-dot"></div>
-            <div class="sim-dot"></div>
-            <div class="sim-url-bar">workplace.com/groups/engineering-updates</div>
+            <div class="sim-dot"></div><div class="sim-dot"></div><div class="sim-dot"></div>
+            <div class="sim-url-bar">internalfb.com/wiki/eng-team</div>
           </div>
-          <div class="sim-content">
-            <div class="sim-post">
-              <div class="sim-post-header">
-                <div class="sim-avatar"></div>
-                <div>
-                  <div class="sim-name">Alex Zhang</div>
-                  <div class="sim-time">2h ago</div>
-                </div>
-              </div>
-              <div class="sim-post-body">
-                Hey team, we're rolling out a new <span class="acr acr--hover" id="xfn-anchor">XFN</span> review
-                process for Q2. Please check the updated <span class="acr">PSC</span> guidelines
-                before your next <span class="acr">EPD</span> sync. The new <span class="acr">OKR</span>
-                framework should help us align across orgs.
-              </div>
+          <div class="sim-content" style="min-height: 220px;">
+            <div class="sim-post" style="font-size: 13px; color: var(--zinc700); line-height: 1.6; max-width: 100%;">
+              ...make sure you file a <span class="acr acr--hover">TEA</span> request before proceeding with the migration...
             </div>
-
-            <!-- Tooltip positioned above "XFN" -->
-            <div class="mock-tooltip" style="top: 24px; left: 160px;">
+            <div class="mock-tooltip" style="top: 70px; left: 20px; min-width: 280px;">
               <div class="tt-header">
-                <span class="tt-term">XFN</span>
-                <span class="tt-badge">WUT</span>
+                <span class="tt-term">TEA</span>
+                <span class="tt-badge tt-badge--ai">AI-generated</span>
               </div>
-              <div class="tt-def">Cross-functional — referring to collaboration between different teams or disciplines.</div>
-              <hr class="tt-divider">
-              <div class="tt-other">
-                <div class="tt-other-label">Not right? See other definitions</div>
-              </div>
+              <div class="tt-def">Technical Execution Approval — an internal process for reviewing and approving significant engineering changes or migrations.</div>
               <div class="tt-footer">
-                <a class="tt-wut-link" href="#">View on WUT <svg class="tt-ext-icon" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 1.5L5.5 6.5"/><path d="M7 1.5H10.5V5"/><path d="M10.5 7.5V10A1 1 0 0 1 9.5 11H2A1 1 0 0 1 1 10V2.5A1 1 0 0 1 2 1.5H4.5"/></svg></a>
+                <a class="tt-wut-link" href="#">Define on WUT <svg class="tt-ext-icon" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 1.5L5.5 6.5"/><path d="M7 1.5H10.5V5"/><path d="M10.5 7.5V10A1 1 0 0 1 9.5 11H2A1 1 0 0 1 1 10V2.5A1 1 0 0 1 2 1.5H4.5"/></svg></a>
                 <button class="tt-dismiss">Don't show again</button>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
 
-            <!-- Mock cursor -->
-            <div class="mock-cursor" style="top: 118px; left: 270px;">
-              <svg width="16" height="20" viewBox="0 0 16 20" fill="none">
-                <path d="M1 1L1 15L5.5 11L10 17L12.5 15.5L8 9.5L14 8.5L1 1Z" fill="white" stroke="#09090b" stroke-width="1.2" stroke-linejoin="round"/>
+      <!-- Without API key -->
+      <div>
+        <div class="col-label">Without API key</div>
+        <div class="sim-page">
+          <div class="sim-chrome-bar">
+            <div class="sim-dot"></div><div class="sim-dot"></div><div class="sim-dot"></div>
+            <div class="sim-url-bar">internalfb.com/wiki/eng-team</div>
+          </div>
+          <div class="sim-content" style="min-height: 220px;">
+            <div class="sim-post" style="font-size: 13px; color: var(--zinc700); line-height: 1.6; max-width: 100%;">
+              ...make sure you file a <span class="acr acr--hover">TEA</span> request before proceeding with the migration...
+            </div>
+            <div class="mock-tooltip" style="top: 70px; left: 20px; min-width: 260px;">
+              <div class="tt-header">
+                <span class="tt-term">TEA</span>
+              </div>
+              <div class="tt-error">No definitions found.<br>Add an API key in extension options for AI-generated definitions.</div>
+              <div class="tt-footer">
+                <a class="tt-wut-link" href="#">Define on WUT <svg class="tt-ext-icon" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 1.5L5.5 6.5"/><path d="M7 1.5H10.5V5"/><path d="M10.5 7.5V10A1 1 0 0 1 9.5 11H2A1 1 0 0 1 1 10V2.5A1 1 0 0 1 2 1.5H4.5"/></svg></a>
+                <button class="tt-dismiss">Don't show again</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-icon callout-icon--ai">2</div>
+      <div>AI definitions show a <strong style="color: var(--purple);">purple "AI-generated" badge</strong> instead of the gray "WUT" badge. The footer link changes to <strong>"Define on WUT"</strong> so you can contribute the missing definition. Without an API key, you'll see a prompt to add one.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       CARD 3: Settings & API Key
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="card">
+    <span class="card-label card-label--settings">Feature 3</span>
+    <h2>Adding Your API Key in Extension Settings</h2>
+    <p>Configure your APE API key to enable AI-generated definitions. Access settings from Chrome's extension details page.</p>
+
+    <div class="two-col">
+      <!-- Step 1: Extension Details -->
+      <div>
+        <div class="col-label">Step 1 &mdash; Open extension options</div>
+        <div class="sim-ext-details">
+          <div class="sim-ext-chrome-bar">
+            <div class="sim-dot"></div><div class="sim-dot"></div><div class="sim-dot"></div>
+            <div class="sim-url-bar">chrome://extensions &rsaquo; Acronym Tooltip</div>
+          </div>
+          <div class="sim-ext-content">
+            <div class="sim-ext-header">
+              <div class="sim-ext-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <text x="4" y="16" font-size="11" font-weight="bold" fill="white" font-family="system-ui">Aa</text>
+                  <line x1="5" y1="19" x2="19" y2="19" stroke="#4d9ff5" stroke-width="1.5" stroke-dasharray="2 2"/>
+                </svg>
+              </div>
+              <div>
+                <div class="sim-ext-name">Acronym Tooltip</div>
+                <div class="sim-ext-version">Version 1.1.0</div>
+              </div>
+            </div>
+            <div class="sim-ext-links">
+              <div class="sim-ext-link-row">
+                <span>Site access</span>
+                <span class="sim-ext-link-arrow">&rsaquo;</span>
+              </div>
+              <div class="sim-ext-link-row sim-ext-link-row--highlight">
+                <span><strong>Extension options</strong></span>
+                <span class="sim-ext-link-arrow">&rsaquo;</span>
+              </div>
+              <div class="sim-ext-link-row">
+                <span>Details</span>
+                <span class="sim-ext-link-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="annotation" style="margin-top: 10px; justify-content: center;">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M7 1L7 10M7 10L3 6M7 10L11 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
+              Click "Extension options" to open settings
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="callout">
-          <div class="callout-icon">1</div>
-          <div>Acronyms are detected automatically and underlined with a <strong>dotted border</strong>. Hover to see the top-voted WUT definition. Click <strong>"Not right?"</strong> to see alternative meanings.</div>
+      <!-- Step 2: Settings Page -->
+      <div>
+        <div class="col-label">Step 2 &mdash; Paste your API key</div>
+        <div class="sim-settings">
+          <div class="sim-chrome-bar">
+            <div class="sim-dot"></div><div class="sim-dot"></div><div class="sim-dot"></div>
+            <div class="sim-url-bar">chrome-extension://... &rsaquo; options.html</div>
+          </div>
+          <div class="sim-settings-inner">
+            <h3>Acronym Tooltip Settings</h3>
+            <div class="sim-section" style="border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,130,251,0.08);">
+              <h4>AI Fallback (APE API)</h4>
+              <div class="desc">When no WUT definition exists, the extension uses AI to generate a definition. Get your API key from <a href="#">wearables-ape.io</a>.</div>
+              <div class="sim-input-row">
+                <input class="sim-input" type="text" value="ape-k1-a7f3...x9d2" readonly>
+                <button class="sim-btn sim-btn--primary">Save</button>
+                <button class="sim-btn sim-btn--secondary">Clear</button>
+              </div>
+              <div class="sim-status">API key saved.</div>
+            </div>
+
+            <div class="sim-section" style="opacity: 0.5;">
+              <h4>Dismissed Terms</h4>
+              <div class="desc">Terms you've dismissed won't show tooltips.</div>
+            </div>
+
+            <div class="sim-section" style="opacity: 0.5;">
+              <h4>Appearance</h4>
+              <div class="desc">Tooltip delay (ms)</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         FEATURE 2: AI Fallback
-         ═══════════════════════════════════════════════════════════════ -->
-    <div class="feature">
-      <div class="feature-header">
-        <span class="feature-label feature-label--ai">Feature 2</span>
-        <h2>AI-Generated Definitions When WUT Has No Entry</h2>
-        <p>When an acronym isn't in WUT, the extension uses AI (GPT-4o-mini via APE API) to generate a context-aware definition using surrounding text.</p>
-      </div>
-      <div class="feature-body">
-        <div class="two-col">
-
-          <!-- With API key -->
-          <div>
-            <div class="col-label">With API key configured</div>
-            <div class="sim-page">
-              <div class="sim-chrome-bar">
-                <div class="sim-dot"></div><div class="sim-dot"></div><div class="sim-dot"></div>
-                <div class="sim-url-bar">internalfb.com/wiki/eng-team</div>
-              </div>
-              <div class="sim-content" style="min-height: 220px;">
-                <div class="sim-post" style="font-size: 13px; color: var(--zinc700); line-height: 1.6; max-width: 100%;">
-                  ...make sure you file a <span class="acr acr--hover">TEA</span> request before proceeding with the migration...
-                </div>
-
-                <div class="mock-tooltip" style="top: 70px; left: 20px; min-width: 280px;">
-                  <div class="tt-header">
-                    <span class="tt-term">TEA</span>
-                    <span class="tt-badge tt-badge--ai">AI-generated</span>
-                  </div>
-                  <div class="tt-def">Technical Execution Approval — an internal process for reviewing and approving significant engineering changes or migrations.</div>
-                  <div class="tt-footer">
-                    <a class="tt-wut-link" href="#">Define on WUT <svg class="tt-ext-icon" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 1.5L5.5 6.5"/><path d="M7 1.5H10.5V5"/><path d="M10.5 7.5V10A1 1 0 0 1 9.5 11H2A1 1 0 0 1 1 10V2.5A1 1 0 0 1 2 1.5H4.5"/></svg></a>
-                    <button class="tt-dismiss">Don't show again</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Without API key -->
-          <div>
-            <div class="col-label">Without API key</div>
-            <div class="sim-page">
-              <div class="sim-chrome-bar">
-                <div class="sim-dot"></div><div class="sim-dot"></div><div class="sim-dot"></div>
-                <div class="sim-url-bar">internalfb.com/wiki/eng-team</div>
-              </div>
-              <div class="sim-content" style="min-height: 220px;">
-                <div class="sim-post" style="font-size: 13px; color: var(--zinc700); line-height: 1.6; max-width: 100%;">
-                  ...make sure you file a <span class="acr acr--hover">TEA</span> request before proceeding with the migration...
-                </div>
-
-                <div class="mock-tooltip" style="top: 70px; left: 20px; min-width: 260px;">
-                  <div class="tt-header">
-                    <span class="tt-term">TEA</span>
-                  </div>
-                  <div class="tt-error">No definitions found.<br>Add an API key in extension options for AI-generated definitions.</div>
-                  <div class="tt-footer">
-                    <a class="tt-wut-link" href="#">Define on WUT <svg class="tt-ext-icon" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 1.5L5.5 6.5"/><path d="M7 1.5H10.5V5"/><path d="M10.5 7.5V10A1 1 0 0 1 9.5 11H2A1 1 0 0 1 1 10V2.5A1 1 0 0 1 2 1.5H4.5"/></svg></a>
-                    <button class="tt-dismiss">Don't show again</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="callout">
-          <div class="callout-icon">2</div>
-          <div>AI definitions show a <strong style="color: var(--purple);">purple "AI-generated" badge</strong> instead of the gray "WUT" badge. The footer link changes to <strong>"Define on WUT"</strong> so you can contribute the missing definition. Without an API key, you'll see a prompt to add one.</div>
-        </div>
-      </div>
+    <div class="callout">
+      <div class="callout-icon callout-icon--settings">3</div>
+      <div>Navigate to <strong>chrome://extensions</strong>, find Acronym Tooltip, and click <strong>"Extension options"</strong> (or right-click the extension icon and select "Options"). Paste your APE API key from <strong>wearables-ape.io/settings/api-keys</strong> and click Save.</div>
     </div>
-
-    <!-- ═══════════════════════════════════════════════════════════════
-         FEATURE 3: Settings & API Key
-         ═══════════════════════════════════════════════════════════════ -->
-    <div class="feature">
-      <div class="feature-header">
-        <span class="feature-label feature-label--settings">Feature 3</span>
-        <h2>Adding Your API Key in Extension Settings</h2>
-        <p>Configure your APE API key to enable AI-generated definitions. Access settings from Chrome's extension details page.</p>
-      </div>
-      <div class="feature-body">
-        <div class="two-col">
-
-          <!-- Step 1: Extension Details -->
-          <div>
-            <div class="col-label">Step 1 &mdash; Open extension options</div>
-            <div class="sim-ext-details">
-              <div class="sim-ext-chrome-bar">
-                <div class="sim-dot"></div><div class="sim-dot"></div><div class="sim-dot"></div>
-                <div class="sim-url-bar">chrome://extensions &rsaquo; Acronym Tooltip</div>
-              </div>
-              <div class="sim-ext-content">
-                <div class="sim-ext-header">
-                  <div class="sim-ext-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <text x="4" y="16" font-size="11" font-weight="bold" fill="white" font-family="system-ui">Aa</text>
-                      <line x1="5" y1="19" x2="19" y2="19" stroke="#4d9ff5" stroke-width="1.5" stroke-dasharray="2 2"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <div class="sim-ext-name">Acronym Tooltip</div>
-                    <div class="sim-ext-version">Version 1.1.0</div>
-                  </div>
-                </div>
-                <div class="sim-ext-links">
-                  <div class="sim-ext-link-row">
-                    <span>Site access</span>
-                    <span class="sim-ext-link-arrow">&rsaquo;</span>
-                  </div>
-                  <div class="sim-ext-link-row sim-ext-link-row--highlight">
-                    <span><strong>Extension options</strong></span>
-                    <span class="sim-ext-link-arrow">&rsaquo;</span>
-                  </div>
-                  <div class="sim-ext-link-row">
-                    <span>Details</span>
-                    <span class="sim-ext-link-arrow">&rsaquo;</span>
-                  </div>
-                </div>
-                <div class="annotation" style="margin-top: 10px; justify-content: center;">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <path d="M7 1L7 10M7 10L3 6M7 10L11 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  Click "Extension options" to open settings
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Step 2: Settings Page -->
-          <div>
-            <div class="col-label">Step 2 &mdash; Paste your API key</div>
-            <div class="sim-settings">
-              <div class="sim-chrome-bar">
-                <div class="sim-dot"></div><div class="sim-dot"></div><div class="sim-dot"></div>
-                <div class="sim-url-bar">chrome-extension://... &rsaquo; options.html</div>
-              </div>
-              <div class="sim-settings-inner">
-                <h3>Acronym Tooltip Settings</h3>
-                <div class="sim-section" style="border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,130,251,0.08);">
-                  <h4>AI Fallback (APE API)</h4>
-                  <div class="desc">When no WUT definition exists, the extension uses AI to generate a definition. Get your API key from <a href="#">wearables-ape.io</a>.</div>
-                  <div class="sim-input-row">
-                    <input class="sim-input" type="text" value="ape-k1-a7f3...x9d2" readonly>
-                    <button class="sim-btn sim-btn--primary">Save</button>
-                    <button class="sim-btn sim-btn--secondary">Clear</button>
-                  </div>
-                  <div class="sim-status">API key saved.</div>
-                </div>
-
-                <div class="sim-section" style="opacity: 0.5;">
-                  <h4>Dismissed Terms</h4>
-                  <div class="desc">Terms you've dismissed won't show tooltips.</div>
-                </div>
-
-                <div class="sim-section" style="opacity: 0.5;">
-                  <h4>Appearance</h4>
-                  <div class="desc">Tooltip delay (ms)</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="callout">
-          <div class="callout-icon">3</div>
-          <div>Navigate to <strong>chrome://extensions</strong>, find Acronym Tooltip, and click <strong>"Extension options"</strong> (or right-click the extension icon and select "Options"). Paste your APE API key from <strong>wearables-ape.io/settings/api-keys</strong> and click Save.</div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
 </body>
