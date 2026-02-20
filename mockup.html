@@ -485,8 +485,162 @@
       margin-bottom: 10px;
     }
   </style>
+  <!-- GIF toolbar -->
+  <style>
+    #gif-toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: var(--zinc950);
+      color: var(--white);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    #gif-toolbar button {
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: var(--white);
+      color: var(--zinc950);
+      transition: opacity 200ms;
+    }
+    #gif-toolbar button:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+    #gif-status {
+      color: var(--zinc400);
+      flex: 1;
+    }
+    #gif-progress {
+      width: 120px;
+      height: 6px;
+      background: var(--zinc700);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    #gif-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--white);
+      border-radius: 3px;
+      transition: width 200ms;
+    }
+    .gif-hidden { display: none !important; }
+    body { padding-top: 56px !important; }
+  </style>
 </head>
 <body>
+  <div id="gif-toolbar">
+    <button id="gif-btn" onclick="generateGif()">Export as GIF</button>
+    <span id="gif-status"></span>
+    <div id="gif-progress" class="gif-hidden">
+      <div id="gif-progress-bar"></div>
+    </div>
+  </div>
+
+  <!-- html2canvas + gif.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
+  <script>
+    async function generateGif() {
+      const btn = document.getElementById('gif-btn');
+      const status = document.getElementById('gif-status');
+      const progress = document.getElementById('gif-progress');
+      const progressBar = document.getElementById('gif-progress-bar');
+
+      btn.disabled = true;
+      progress.classList.remove('gif-hidden');
+      progressBar.style.width = '0%';
+
+      const cards = document.querySelectorAll('.card');
+      status.textContent = 'Capturing ' + cards.length + ' cards...';
+
+      try {
+        // Capture each card
+        const canvases = [];
+        for (let i = 0; i < cards.length; i++) {
+          status.textContent = 'Capturing card ' + (i + 1) + ' of ' + cards.length + '...';
+          progressBar.style.width = ((i / cards.length) * 40) + '%';
+          const canvas = await html2canvas(cards[i], {
+            scale: 2,
+            backgroundColor: '#ffffff',
+            useCORS: true,
+            logging: false,
+          });
+          canvases.push(canvas);
+        }
+
+        // Find max dimensions
+        let maxW = 0, maxH = 0;
+        canvases.forEach(c => { maxW = Math.max(maxW, c.width); maxH = Math.max(maxH, c.height); });
+
+        status.textContent = 'Encoding GIF...';
+        progressBar.style.width = '50%';
+
+        // Create GIF with inline worker (avoids CDN worker CORS issues)
+        const workerBlob = new Blob([
+          'self.onmessage=function(e){' +
+          'importScripts("https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js");' +
+          '};'
+        ], { type: 'text/javascript' });
+
+        const gif = new GIF({
+          workers: 2,
+          quality: 10,
+          width: maxW,
+          height: maxH,
+          workerScript: 'https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js',
+        });
+
+        for (const canvas of canvases) {
+          const uniform = document.createElement('canvas');
+          uniform.width = maxW;
+          uniform.height = maxH;
+          const ctx = uniform.getContext('2d');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, maxW, maxH);
+          ctx.drawImage(canvas, Math.floor((maxW - canvas.width) / 2), 0);
+          gif.addFrame(uniform, { delay: 3000, copy: true });
+        }
+
+        gif.on('progress', function(p) {
+          progressBar.style.width = (50 + p * 50) + '%';
+          status.textContent = 'Encoding GIF... ' + Math.round(p * 100) + '%';
+        });
+
+        gif.on('finished', function(blob) {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'mockup.gif';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          const sizeKB = Math.round(blob.size / 1024);
+          status.textContent = 'Done! mockup.gif downloaded (' + sizeKB + ' KB)';
+          progressBar.style.width = '100%';
+          btn.disabled = false;
+          btn.textContent = 'Export as GIF';
+        });
+
+        gif.render();
+      } catch (err) {
+        status.textContent = 'Error: ' + err.message;
+        btn.disabled = false;
+        console.error(err);
+      }
+    }
+  </script>
 
   <!-- ═══════════════════════════════════════════════════════════════
        CARD 1: WUT Definitions on Hover
