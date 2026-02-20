@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const apiKeyInput = document.getElementById('api-key-input');
   const saveKeyBtn = document.getElementById('save-key-btn');
+  const clearKeyBtn = document.getElementById('clear-key-btn');
   const keyStatus = document.getElementById('key-status');
   const dismissedList = document.getElementById('dismissed-list');
   const tooltipDelay = document.getElementById('tooltip-delay');
@@ -36,6 +37,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       showStatus(keyStatus, 'API key saved.', 'success');
     } catch (e) {
       showStatus(keyStatus, 'Failed to save API key.', 'error');
+    }
+  });
+
+  clearKeyBtn.addEventListener('click', async () => {
+    try {
+      await chrome.storage.sync.remove('apeApiKey');
+      apiKeyInput.value = '';
+      apiKeyInput.placeholder = 'Paste your APE API key...';
+      showStatus(keyStatus, 'API key cleared.', 'success');
+    } catch (e) {
+      showStatus(keyStatus, 'Failed to clear API key.', 'error');
     }
   });
 
