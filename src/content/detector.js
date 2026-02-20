@@ -47,7 +47,7 @@
     'EDIT', 'VIEW', 'CLICK', 'CLOSE', 'SHARE', 'APPLY', 'DRAFT',
     'LEARN', 'REPLY', 'PRINT', 'RESET', 'LOGIN', 'MENU', 'MUTE',
     'HIDE', 'LOCK', 'DENY', 'POST', 'UNDO', 'REDO', 'MOVE', 'FIND',
-    'CALL', 'BACK', 'FULL', 'COPY', 'PASTE',
+    'CALL', 'BACK', 'FULL', 'COPY', 'PASTE', 'TLDR',
     // Common English words that frequently appear in all-caps headings
     'FREE', 'SALE', 'LIVE', 'WATCH', 'FINAL', 'ABOUT', 'FIRST',
     'AFTER', 'AGAIN', 'OTHER', 'THEIR', 'THERE', 'THESE', 'THOSE',
@@ -82,6 +82,14 @@
     // Words ending in common English suffixes are regular words, not acronyms
     if (word.length >= 5 && ENGLISH_SUFFIXES.some(s => word.endsWith(s))) return false;
     return true;
+  }
+
+  /** Returns true if the match is part of a "TL;DR" pattern (any case mix). */
+  function isPartOfTLDR(text, start, end) {
+    const word = text.slice(start, end);
+    if (word === 'TL') return /^;dr/i.test(text.slice(end, end + 3));
+    if (word === 'DR') return /tl;$/i.test(text.slice(Math.max(0, start - 3), start));
+    return false;
   }
 
   function shouldSkipNode(node) {
@@ -148,7 +156,8 @@
       if (
         isAcronym(match[0]) &&
         !window.__ACT.dismissedTerms.has(match[0]) &&
-        !hasAdjacentCapsWord(text, match.index, match.index + match[0].length)
+        !hasAdjacentCapsWord(text, match.index, match.index + match[0].length) &&
+        !isPartOfTLDR(text, match.index, match.index + match[0].length)
       ) {
         matches.push({ word: match[0], index: match.index });
       }
