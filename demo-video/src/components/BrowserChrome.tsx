@@ -14,7 +14,8 @@ export const BrowserChrome: React.FC<BrowserChromeProps> = ({ url, children, sty
       style={{
         background: tokens.zinc50,
         border: `1px solid ${tokens.zinc200}`,
-        borderRadius: 14,
+        borderRadius: 20,
+        boxShadow: tokens.shadow,
         overflow: 'hidden',
         ...style,
       }}

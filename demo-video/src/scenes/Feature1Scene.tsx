@@ -27,13 +27,13 @@ const EPD_POS = POST_TEXT.indexOf('EPD');
 const OKR_POS = POST_TEXT.indexOf('OKR');
 
 // Layout constants
-const BROWSER_X = 260;
-const BROWSER_Y = 340;
-const BROWSER_W = 1400;
+const BROWSER_X = 120;
+const BROWSER_Y = 290;
+const BROWSER_W = 1680;
 
 // Approximate XFN position on screen
-const XFN_SCREEN_X = BROWSER_X + 430;
-const XFN_SCREEN_Y = BROWSER_Y + 190;
+const XFN_SCREEN_X = BROWSER_X + 470;
+const XFN_SCREEN_Y = BROWSER_Y + 210;
 
 export const Feature1Scene: React.FC = () => {
   const frame = useCurrentFrame() - SCENE_DELAY;
@@ -162,9 +162,9 @@ export const Feature1Scene: React.FC = () => {
             style={{
               background: tokens.white,
               border: `1px solid ${tokens.zinc200}`,
-              borderRadius: 12,
-              padding: 24,
-              maxWidth: 700,
+              borderRadius: 16,
+              padding: 32,
+              maxWidth: 800,
             }}
           >
             {/* Post header */}
@@ -172,14 +172,14 @@ export const Feature1Scene: React.FC = () => {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 12,
-                marginBottom: 16,
+                gap: 14,
+                marginBottom: 20,
               }}
             >
               <div
                 style={{
-                  width: 44,
-                  height: 44,
+                  width: 52,
+                  height: 52,
                   borderRadius: '50%',
                   background: `linear-gradient(135deg, ${tokens.zinc300}, ${tokens.zinc400})`,
                   flexShrink: 0,
@@ -188,22 +188,22 @@ export const Feature1Scene: React.FC = () => {
               <div>
                 <div
                   style={{
-                    fontSize: 18,
+                    fontSize: 21,
                     fontWeight: 600,
                     color: tokens.zinc950,
                   }}
                 >
                   Alex Zhang
                 </div>
-                <div style={{ fontSize: 14, color: tokens.zinc400 }}>2h ago</div>
+                <div style={{ fontSize: 16, color: tokens.zinc400 }}>2h ago</div>
               </div>
             </div>
 
             {/* Post text with acronym highlights */}
             <div
               style={{
-                fontSize: 22,
-                lineHeight: 1.7,
+                fontSize: 26,
+                lineHeight: 1.75,
                 color: tokens.zinc700,
               }}
             >

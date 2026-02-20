@@ -25,9 +25,9 @@ const AI_DEFINITION =
   'Technical Execution Approval — an internal process for reviewing and approving significant engineering changes or migrations.';
 
 // Layout constants
-const BROWSER_X = 260;
-const BROWSER_Y = 340;
-const BROWSER_W = 1400;
+const BROWSER_X = 120;
+const BROWSER_Y = 290;
+const BROWSER_W = 1680;
 
 export const Feature2Scene: React.FC = () => {
   const frame = useCurrentFrame() - SCENE_DELAY;
@@ -153,9 +153,9 @@ export const Feature2Scene: React.FC = () => {
         <BrowserChrome url="internalfb.com/wiki/eng-team">
           <div
             style={{
-              fontSize: 20,
+              fontSize: 26,
               color: tokens.zinc700,
-              lineHeight: 1.7,
+              lineHeight: 1.75,
             }}
           >
             <AcronymText
