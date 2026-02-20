@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Generate Mockup GIF</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #fafafa;
+      margin: 0;
+      color: #09090b;
+    }
+    h1 { font-size: 20px; margin-bottom: 8px; }
+    p { color: #71717a; font-size: 14px; margin-bottom: 24px; }
+    button {
+      padding: 14px 32px;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background: #09090b;
+      color: #fafafa;
+      transition: background 200ms;
+    }
+    button:hover { background: #3f3f46; }
+    button:disabled { background: #a1a1aa; cursor: default; }
+    #status { margin-top: 16px; font-size: 13px; color: #71717a; }
+    #preview { margin-top: 24px; border: 1px solid #e4e4e7; border-radius: 12px; max-width: 90vw; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <h1>Mockup GIF Generator</h1>
+  <p>Click below to capture each feature card and create an animated GIF.</p>
+  <button id="generate" onclick="generateGif()">Generate GIF</button>
+  <div id="status"></div>
+  <img id="preview" class="hidden" />
+
+  <!-- Hidden iframe to render mockup -->
+  <iframe id="source" src="mockup.html" style="position:fixed;left:-9999px;top:0;width:900px;height:3000px;border:none;"></iframe>
+
+  <!-- html2canvas via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- gif.js via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+
+  <script>
+    const FRAME_DELAY = 3000; // 3s per card
+
+    async function generateGif() {
+      const btn = document.getElementById('generate');
+      const status = document.getElementById('status');
+      const preview = document.getElementById('preview');
+      btn.disabled = true;
+      status.textContent = 'Capturing cards...';
+
+      const iframe = document.getElementById('source');
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+      const cards = iframeDoc.querySelectorAll('.card');
+
+      if (!cards.length) {
+        status.textContent = 'Error: No .card elements found in mockup.html';
+        btn.disabled = false;
+        return;
+      }
+
+      // Capture each card as a canvas
+      const canvases = [];
+      let maxW = 0, maxH = 0;
+
+      for (let i = 0; i < cards.length; i++) {
+        status.textContent = `Capturing card ${i + 1} of ${cards.length}...`;
+        const canvas = await html2canvas(cards[i], {
+          scale: 2,
+          backgroundColor: '#ffffff',
+          useCORS: true,
+          logging: false,
+        });
+        canvases.push(canvas);
+        maxW = Math.max(maxW, canvas.width);
+        maxH = Math.max(maxH, canvas.height);
+      }
+
+      // Normalize all frames to same dimensions (use max)
+      status.textContent = 'Assembling GIF...';
+
+      const gif = new GIF({
+        workers: 2,
+        quality: 10,
+        width: maxW,
+        height: maxH,
+        workerScript: 'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js',
+      });
+
+      for (const canvas of canvases) {
+        // Create a uniform-size canvas
+        const uniform = document.createElement('canvas');
+        uniform.width = maxW;
+        uniform.height = maxH;
+        const ctx = uniform.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, maxW, maxH);
+        // Center the card
+        const xOff = Math.floor((maxW - canvas.width) / 2);
+        const yOff = 0;
+        ctx.drawImage(canvas, xOff, yOff);
+        gif.addFrame(uniform, { delay: FRAME_DELAY, copy: true });
+      }
+
+      gif.on('finished', function(blob) {
+        const url = URL.createObjectURL(blob);
+        // Show preview
+        preview.src = url;
+        preview.classList.remove('hidden');
+        // Auto-download
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'mockup.gif';
+        a.click();
+        const sizeKB = Math.round(blob.size / 1024);
+        status.textContent = `Done! GIF saved (${sizeKB} KB). Check your downloads.`;
+        btn.disabled = false;
+        btn.textContent = 'Regenerate GIF';
+      });
+
+      gif.on('progress', function(p) {
+        status.textContent = `Encoding GIF... ${Math.round(p * 100)}%`;
+      });
+
+      gif.render();
+    }
+  </script>
+</body>
+</html>
