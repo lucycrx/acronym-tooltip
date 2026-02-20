@@ -130,7 +130,7 @@
     }
     .act-def-row:last-child { border-bottom: none; }
     .act-def-row:hover { background: #eeeff3; }
-    .act-def-row p { font-size: 13px; color: #71717a; line-height: 1.4; }
+    .act-def-row p { font-size: 12px; color: #71717a; line-height: 1.4; }
 
 
     .act-footer {
