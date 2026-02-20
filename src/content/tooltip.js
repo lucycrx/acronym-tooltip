@@ -125,9 +125,11 @@
       padding: 8px 10px;
       margin-top: 4px;
       border-radius: 8px;
+      border-bottom: 1px solid #e4e4e7;
       transition: background-color 300ms ease-in-out;
     }
-    .act-def-row:hover { background: #f4f4f5; }
+    .act-def-row:last-child { border-bottom: none; }
+    .act-def-row:hover { background: #e4e4e7; }
     .act-def-row p { font-size: 13px; color: #71717a; line-height: 1.4; }
 
 
