@@ -101,7 +101,7 @@ export const OutroScene: React.FC = () => {
             textAlign: 'center' as const,
           }}
         >
-          Install it today
+          Try it today!
         </p>
       </div>
     </AbsoluteFill>
