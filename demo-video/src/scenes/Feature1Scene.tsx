@@ -137,7 +137,7 @@ export const Feature1Scene: React.FC = () => {
       >
         <p
           style={{
-            fontSize: 28,
+            fontSize: 34,
             color: tokens.zinc500,
             margin: 0,
           }}

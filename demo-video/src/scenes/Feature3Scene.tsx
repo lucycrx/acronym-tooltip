@@ -114,7 +114,7 @@ export const Feature3Scene: React.FC = () => {
       >
         <p
           style={{
-            fontSize: 26,
+            fontSize: 32,
             color: tokens.zinc500,
             margin: '0 auto',
             maxWidth: 1200,
@@ -125,7 +125,7 @@ export const Feature3Scene: React.FC = () => {
         </p>
         <p
           style={{
-            fontSize: 22,
+            fontSize: 28,
             color: tokens.zinc400,
             margin: '12px auto 0',
             maxWidth: 1400,
