@@ -11,9 +11,9 @@ import { OutroScene } from './scenes/OutroScene';
 
 // Scene durations (in frames at 30fps)
 const HERO_DURATION = 120; // 4s
-const FEATURE1_DURATION = 300; // 10s
-const FEATURE2_DURATION = 270; // 9s
-const FEATURE3_DURATION = 270; // 9s
+const FEATURE1_DURATION = 240; // 8s
+const FEATURE2_DURATION = 210; // 7s
+const FEATURE3_DURATION = 210; // 7s
 const OUTRO_DURATION = 120; // 4s
 
 // Transition durations
