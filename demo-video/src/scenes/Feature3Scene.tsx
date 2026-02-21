@@ -128,7 +128,7 @@ export const Feature3Scene: React.FC = () => {
             fontSize: 28,
             color: tokens.zinc400,
             margin: '12px auto 0',
-            maxWidth: 1400,
+            whiteSpace: 'nowrap' as const,
             lineHeight: 1.5,
           }}
         >
