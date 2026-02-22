@@ -5,11 +5,11 @@ import { fontFamily } from './styles/fonts';
 import { AppIcon } from './components/AppIcon';
 
 const POST_TEXT =
-  "We're rolling out a new XFN review process for Q2. Check the updated PSC guidelines before your next EPD sync.";
+  "Heads up — MAISA is rolling out a new workflow for VAN requests. If your team uses UMP for monitoring, check the updated guide.";
 
-const XFN_POS = POST_TEXT.indexOf('XFN');
-const PSC_POS = POST_TEXT.indexOf('PSC');
-const EPD_POS = POST_TEXT.indexOf('EPD');
+const MAISA_POS = POST_TEXT.indexOf('MAISA');
+const VAN_POS = POST_TEXT.indexOf('VAN');
+const UMP_POS = POST_TEXT.indexOf('UMP');
 
 export const HeaderImage: React.FC = () => {
   return (
@@ -175,9 +175,9 @@ export const HeaderImage: React.FC = () => {
                 }}
               >
                 {renderTextWithAcronyms(POST_TEXT, [
-                  { word: 'XFN', startIndex: XFN_POS, hover: true },
-                  { word: 'PSC', startIndex: PSC_POS },
-                  { word: 'EPD', startIndex: EPD_POS },
+                  { word: 'MAISA', startIndex: MAISA_POS, hover: true },
+                  { word: 'VAN', startIndex: VAN_POS },
+                  { word: 'UMP', startIndex: UMP_POS },
                 ])}
               </div>
             </div>
@@ -217,7 +217,7 @@ export const HeaderImage: React.FC = () => {
                     color: tokens.zinc950,
                   }}
                 >
-                  XFN
+                  MAISA
                 </span>
                 <span
                   style={{
@@ -241,8 +241,7 @@ export const HeaderImage: React.FC = () => {
                   color: tokens.zinc950,
                 }}
               >
-                Cross-functional — referring to collaboration between different
-                teams or disciplines.
+                Meta AI Support Assistant
               </div>
 
               {/* Footer */}
@@ -311,7 +310,7 @@ export const HeaderImage: React.FC = () => {
               xmlns="http://www.w3.org/2000/svg"
               style={{
                 position: 'absolute',
-                left: 220,
+                left: 100,
                 top: 108,
                 zIndex: 20,
                 filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.15))',
