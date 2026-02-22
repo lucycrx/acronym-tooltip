@@ -16,7 +16,7 @@ export const HeaderImage: React.FC = () => {
     <AbsoluteFill
       style={{
         fontFamily,
-        background: tokens.zinc950,
+        background: '#f3f6fc',
       }}
     >
       {/* Left side — branding */}
@@ -34,12 +34,14 @@ export const HeaderImage: React.FC = () => {
           padding: '0 48px',
         }}
       >
-        <AppIcon size={100} frame={40} />
+        <div style={{ filter: 'drop-shadow(0 4px 20px rgba(0,0,0,0.12))' }}>
+          <AppIcon size={100} frame={40} />
+        </div>
         <h1
           style={{
             fontSize: 44,
             fontWeight: 700,
-            color: tokens.white,
+            color: tokens.zinc950,
             letterSpacing: '-0.03em',
             margin: '20px 0 0',
             textAlign: 'center' as const,
@@ -50,7 +52,7 @@ export const HeaderImage: React.FC = () => {
         <p
           style={{
             fontSize: 18,
-            color: tokens.zinc400,
+            color: tokens.zinc500,
             margin: '10px 0 0',
             textAlign: 'center' as const,
             maxWidth: 380,
@@ -80,7 +82,7 @@ export const HeaderImage: React.FC = () => {
             background: tokens.zinc50,
             borderRadius: 16,
             overflow: 'hidden',
-            boxShadow: '0 8px 40px rgba(0,0,0,0.3)',
+            boxShadow: '0 8px 40px rgba(0,0,0,0.1)',
           }}
         >
           {/* Chrome bar */}
