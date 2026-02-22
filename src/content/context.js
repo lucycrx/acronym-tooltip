@@ -7,12 +7,12 @@
   const MAX_CONTEXT_LENGTH = 500;
 
   /**
-   * Extract context around a given acronym span element.
+   * Extract context around a given element (e.g. the parent of an acronym text node).
    * Returns { surroundingText: string, pageSource: string }
    */
-  function extractContext(acronymSpan) {
+  function extractContext(element) {
     const pageSource = getPageSource();
-    const surroundingText = getSurroundingText(acronymSpan);
+    const surroundingText = getSurroundingText(element);
     return { surroundingText, pageSource };
   }
 
@@ -87,15 +87,15 @@
   }
 
   /**
-   * Get the text surrounding the acronym span for context.
+   * Get the text surrounding the element for context.
    * Walks up to the nearest block-level container and extracts its text.
    */
-  function getSurroundingText(acronymSpan) {
-    if (!acronymSpan) return '';
+  function getSurroundingText(element) {
+    if (!element) return '';
 
     // Walk up to find the nearest meaningful container
     const blockTags = new Set(['P', 'DIV', 'ARTICLE', 'SECTION', 'LI', 'TD', 'BLOCKQUOTE', 'SPAN']);
-    let container = acronymSpan.parentElement;
+    let container = element.parentElement;
     let depth = 0;
 
     while (container && depth < 5) {
@@ -110,7 +110,7 @@
     }
 
     // Fallback: try Workplace post body
-    const postBody = acronymSpan.closest(
+    const postBody = element.closest(
       '[data-ad-preview="message"], ' +
       '[data-testid="post-message"], ' +
       '.userContent, ' +
@@ -120,8 +120,8 @@
       return truncate(postBody.innerText || postBody.textContent || '', MAX_CONTEXT_LENGTH);
     }
 
-    // Last resort: grab some text around the acronym from the parent
-    const parent = acronymSpan.parentElement;
+    // Last resort: grab some text around the element from the parent
+    const parent = element.parentElement;
     if (parent) {
       return truncate(parent.innerText || parent.textContent || '', MAX_CONTEXT_LENGTH);
     }

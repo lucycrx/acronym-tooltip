@@ -1,5 +1,7 @@
 // Acronym Tooltip — Acronym Detector (Content Script)
-// Scans the DOM for acronyms, wraps them in spans, and watches for new content.
+// Scans the DOM for acronyms, highlights them via CSS Custom Highlight API,
+// and watches for new content. Does NOT modify the DOM structure to avoid
+// breaking React/framework-managed pages.
 
 (function () {
   'use strict';
@@ -74,6 +76,15 @@
   window.__ACT.dismissedTerms = new Set();
   window.__ACT.disabledSites = new Set();
 
+  // Map of Range objects keyed by a unique id, for hover detection
+  // Each entry: { range: Range, term: string, textNode: Node }
+  /** @type {Array<{range: Range, term: string, textNode: Node}>} */
+  const acronymRanges = [];
+  window.__ACT.acronymRanges = acronymRanges;
+
+  // CSS Custom Highlight for underlines
+  let highlightObj = null;
+
   // ── Utility ───────────────────────────────────────────────────────────────
 
   function isAcronym(word) {
@@ -94,22 +105,14 @@
 
   /**
    * Returns true if a short all-caps word (2–3 chars) appears to be a person's
-   * name initials rather than an acronym. Detected via adjacent title-case words:
-   *   "JD Smith"  → initials + last name  → skip
-   *   "Sarah JD"  → first name + initials → skip
-   *   "the API docs" → lowercase neighbors  → keep
+   * name initials rather than an acronym.
    */
   function isLikelyName(text, matchStart, matchEnd) {
     if (matchEnd - matchStart > 3) return false;
-
-    // Forward: "JD Smith" — initials followed by a title-case word
     if (/^\s[A-Z][a-z]{2,}/.test(text.slice(matchEnd, matchEnd + 20))) return true;
-
-    // Backward: "Sarah JD" — title-case word preceding the initials
     const before = text.slice(Math.max(0, matchStart - 20), matchStart);
     const prev = /([A-Z][a-z]{2,})\s$/.exec(before);
     if (prev && !STOPWORDS.has(prev[1].toUpperCase())) return true;
-
     return false;
   }
 
@@ -124,14 +127,13 @@
     }
     while (el) {
       if (SKIP_TAGS.has(el.tagName)) return true;
-      if (el.classList && el.classList.contains('act-acronym')) return true;
       if (el.hasAttribute && el.hasAttribute('contenteditable')) return true;
       el = el.parentElement;
     }
     return false;
   }
 
-  // ── DOM scanning ──────────────────────────────────────────────────────────
+  // ── DOM scanning (non-destructive) ──────────────────────────────────────
 
   /** Returns true if the text is predominantly uppercase (heading, label, etc.) */
   function isAllCapsContext(text) {
@@ -143,16 +145,10 @@
       else if (c >= 97 && c <= 122) lower++;
     }
     const total = upper + lower;
-    if (total < 8) return false; // too little text to judge
+    if (total < 8) return false;
     return upper / total > 0.7;
   }
 
-  /**
-   * Returns true if the matched word has an adjacent all-caps word (2+ letters).
-   * Two or more consecutive all-caps words indicate a heading or emphasis block,
-   * not standalone acronyms. Real acronyms appear as isolated uppercase words
-   * within mixed-case text, like "The NASA program launched today."
-   */
   function hasAdjacentCapsWord(text, matchStart, matchEnd) {
     const before = text.slice(0, matchStart);
     if (/\b[A-Z]{2,}\b\s*$/.test(before)) return true;
@@ -161,18 +157,20 @@
     return false;
   }
 
+  // Track which text nodes we've already processed to avoid duplicate ranges
+  let processedNodes = new WeakSet();
+
   function processTextNode(textNode) {
     if (shouldSkipNode(textNode)) return;
+    if (processedNodes.has(textNode)) return;
 
     const text = textNode.textContent;
     if (!text || text.trim().length < 2) return;
-
-    // Skip text blocks that are predominantly uppercase (headings, labels, etc.)
     if (isAllCapsContext(text)) return;
 
     ACRONYM_REGEX.lastIndex = 0;
-    const matches = [];
     let match;
+    let found = false;
     while ((match = ACRONYM_REGEX.exec(text)) !== null) {
       if (
         isAcronym(match[0]) &&
@@ -181,36 +179,22 @@
         !isPartOfTLDR(text, match.index, match.index + match[0].length) &&
         !isLikelyName(text, match.index, match.index + match[0].length)
       ) {
-        matches.push({ word: match[0], index: match.index });
+        // Create a Range covering this acronym in the text node
+        try {
+          const range = document.createRange();
+          range.setStart(textNode, match.index);
+          range.setEnd(textNode, match.index + match[0].length);
+          acronymRanges.push({ range, term: match[0], textNode });
+          found = true;
+        } catch (e) {
+          // Range creation can fail if offsets are invalid
+        }
       }
     }
 
-    if (matches.length === 0) return;
-
-    // Build replacement fragment
-    const frag = document.createDocumentFragment();
-    let lastIndex = 0;
-
-    for (const m of matches) {
-      // Text before the match
-      if (m.index > lastIndex) {
-        frag.appendChild(document.createTextNode(text.slice(lastIndex, m.index)));
-      }
-      // Wrapped acronym span
-      const span = document.createElement('span');
-      span.className = 'act-acronym';
-      span.dataset.term = m.word;
-      span.textContent = m.word;
-      frag.appendChild(span);
-      lastIndex = m.index + m.word.length;
+    if (found) {
+      processedNodes.add(textNode);
     }
-
-    // Remaining text
-    if (lastIndex < text.length) {
-      frag.appendChild(document.createTextNode(text.slice(lastIndex)));
-    }
-
-    textNode.parentNode.replaceChild(frag, textNode);
   }
 
   function scanSubtree(root) {
@@ -221,7 +205,6 @@
       },
     });
 
-    // Collect text nodes first (modifying DOM during walk is unsafe)
     const textNodes = [];
     while (walker.nextNode()) {
       textNodes.push(walker.currentNode);
@@ -230,26 +213,99 @@
     for (const tn of textNodes) {
       processTextNode(tn);
     }
+
+    updateHighlight();
+  }
+
+  // ── CSS Custom Highlight API ────────────────────────────────────────────
+
+  function updateHighlight() {
+    if (!CSS.highlights) return;
+
+    // Clean out stale ranges (detached nodes)
+    for (let i = acronymRanges.length - 1; i >= 0; i--) {
+      if (!document.contains(acronymRanges[i].textNode)) {
+        processedNodes.delete(acronymRanges[i].textNode);
+        acronymRanges.splice(i, 1);
+      }
+    }
+
+    const ranges = acronymRanges.map(entry => entry.range);
+    highlightObj = new Highlight(...ranges);
+    CSS.highlights.set('act-acronym', highlightObj);
   }
 
   // ── Host page styles ──────────────────────────────────────────────────────
+
+  /** Clear all state and rescan the page from scratch. */
+  function rescanAll() {
+    acronymRanges.length = 0;
+    processedNodes = new WeakSet();
+    scanSubtree(document.body);
+  }
 
   function injectHostStyles() {
     if (document.getElementById('act-host-styles')) return;
     const style = document.createElement('style');
     style.id = 'act-host-styles';
-    style.textContent = `
-      .act-acronym {
-        color: inherit !important;
-        border-bottom: 1px dotted #a1a1aa;
-        cursor: help;
-        transition: border-color 200ms ease-in-out;
-      }
-      .act-acronym:hover {
-        border-bottom-color: #3f3f46;
-      }
-    `;
+
+    if (CSS.highlights) {
+      // Use CSS Custom Highlight API — no DOM modifications needed
+      style.textContent = `
+        ::highlight(act-acronym) {
+          text-decoration: underline dotted #a1a1aa;
+          text-underline-offset: 3px;
+          cursor: help;
+        }
+      `;
+    }
+
     document.head.appendChild(style);
+  }
+
+  // ── Hover detection via mousemove + caretRangeFromPoint ─────────────────
+
+  let lastHoverTerm = null;
+  let lastHoverElement = null;
+
+  /**
+   * Given a mouse event, find if it's hovering over an acronym range.
+   * Returns { term, range, textNode } or null.
+   */
+  function findAcronymAtPoint(x, y) {
+    // Use caretRangeFromPoint (Chrome) or caretPositionFromPoint (Firefox)
+    let caretRange;
+    if (document.caretRangeFromPoint) {
+      caretRange = document.caretRangeFromPoint(x, y);
+    } else if (document.caretPositionFromPoint) {
+      const pos = document.caretPositionFromPoint(x, y);
+      if (pos && pos.offsetNode) {
+        caretRange = document.createRange();
+        caretRange.setStart(pos.offsetNode, pos.offset);
+        caretRange.setEnd(pos.offsetNode, pos.offset);
+      }
+    }
+
+    if (!caretRange || caretRange.startContainer.nodeType !== Node.TEXT_NODE) {
+      return null;
+    }
+
+    const textNode = caretRange.startContainer;
+    const offset = caretRange.startOffset;
+
+    // Find if this offset falls within any of our acronym ranges on this text node
+    for (const entry of acronymRanges) {
+      if (entry.textNode !== textNode) continue;
+      try {
+        if (offset >= entry.range.startOffset && offset <= entry.range.endOffset) {
+          return entry;
+        }
+      } catch (e) {
+        // Range may be invalid if DOM changed
+      }
+    }
+
+    return null;
   }
 
   // ── MutationObserver ──────────────────────────────────────────────────────
@@ -264,6 +320,15 @@
           pendingNodes.add(node);
         } else if (node.nodeType === Node.ELEMENT_NODE) {
           pendingNodes.add(node);
+        }
+      }
+      // Clean up ranges for removed nodes
+      for (const node of mutation.removedNodes) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          processedNodes.delete(node);
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          // Removed elements may contain text nodes we tracked
+          processedNodes.delete(node);
         }
       }
     }
@@ -284,11 +349,19 @@
         scanSubtree(node);
       }
     }
+
+    updateHighlight();
   }
 
   // ── Initialization ────────────────────────────────────────────────────────
 
   async function init() {
+    // Check for CSS Custom Highlight API support
+    if (!CSS.highlights) {
+      console.warn('[AcronymTooltip] CSS Custom Highlight API not supported. Acronym detection disabled.');
+      return;
+    }
+
     // Check if disabled for this site
     const hostname = window.location.hostname;
     try {
@@ -319,7 +392,10 @@
 
     // Expose for other content scripts
     window.__ACT.scanSubtree = scanSubtree;
+    window.__ACT.updateHighlight = updateHighlight;
+    window.__ACT.rescanAll = rescanAll;
     window.__ACT.observer = observer;
+    window.__ACT.findAcronymAtPoint = findAcronymAtPoint;
   }
 
   // Wait for DOM

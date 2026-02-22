@@ -1,5 +1,6 @@
 // Acronym Tooltip — Tooltip Renderer (Content Script)
-// Renders a Shadow DOM tooltip on hover over .act-acronym spans.
+// Renders a Shadow DOM tooltip on hover over acronym-highlighted text.
+// Uses mousemove + caretRangeFromPoint to detect acronyms without DOM spans.
 
 (function () {
   'use strict';
@@ -15,6 +16,7 @@
   let showTimer = null;
   let hideTimer = null;
   let currentTerm = null;
+  let currentAnchorRange = null; // The Range of the acronym being shown
 
   // ── Tooltip CSS (inlined to avoid module deps) ────────────────────────────
 
@@ -219,12 +221,11 @@
 
   // ── Positioning ───────────────────────────────────────────────────────────
 
-  function positionTooltip(anchorSpan) {
-    const rect = anchorSpan.getBoundingClientRect();
+  function positionTooltipFromRange(range) {
+    const rect = range.getBoundingClientRect();
     const scrollX = window.scrollX;
     const scrollY = window.scrollY;
 
-    // Position above the term by default
     tooltipHost.style.position = 'absolute';
 
     // Temporarily make visible to measure
@@ -393,26 +394,26 @@
 
   // ── Show / Hide ───────────────────────────────────────────────────────────
 
-  function showTooltip(anchorSpan) {
-    const term = anchorSpan.dataset.term;
+  function showTooltip(term, range, textNode) {
     if (!term) return;
 
     clearTimeout(hideTimer);
     ensureTooltipHost();
 
     currentTerm = term;
+    currentAnchorRange = range;
     renderLoading(term);
-    positionTooltip(anchorSpan);
+    positionTooltipFromRange(range);
 
     // Fade in
     requestAnimationFrame(() => {
       tooltipEl.classList.add('act-visible');
     });
 
-    // Try WUT lookup directly from content script (has cookies),
-    // then fall back to service worker for AI if no WUT result.
+    // Build a synthetic element-like object for context extraction
+    const contextEl = textNode.parentElement;
     const context = window.__ACT.extractContext
-      ? window.__ACT.extractContext(anchorSpan)
+      ? window.__ACT.extractContext(contextEl)
       : { surroundingText: '', pageSource: '' };
 
     lookupTerm(term, context).then((response) => {
@@ -425,11 +426,11 @@
         renderError(term, 'No response from extension.');
       }
       // Re-position after content changes
-      positionTooltip(anchorSpan);
+      positionTooltipFromRange(range);
     }).catch(() => {
       if (currentTerm !== term) return;
       renderError(term, 'Lookup failed.');
-      positionTooltip(anchorSpan);
+      positionTooltipFromRange(range);
     });
   }
 
@@ -440,6 +441,7 @@
       tooltipEl.classList.remove('act-visible');
     }
     currentTerm = null;
+    currentAnchorRange = null;
   }
 
   function scheduleHide() {
@@ -447,24 +449,43 @@
     hideTimer = setTimeout(hideTooltip, HIDE_DELAY);
   }
 
-  // ── Event delegation ──────────────────────────────────────────────────────
+  // ── Event delegation via mousemove ─────────────────────────────────────
 
-  document.body.addEventListener('mouseenter', (e) => {
-    const span = e.target.closest ? e.target.closest('.act-acronym') : null;
-    if (!span) return;
+  let pendingShowEntry = null;
 
-    clearTimeout(hideTimer);
-    clearTimeout(showTimer);
-    showTimer = setTimeout(() => showTooltip(span), SHOW_DELAY);
-  }, true);
+  document.body.addEventListener('mousemove', (e) => {
+    if (!window.__ACT.findAcronymAtPoint) return;
 
-  document.body.addEventListener('mouseleave', (e) => {
-    const span = e.target.closest ? e.target.closest('.act-acronym') : null;
-    if (!span) return;
+    const entry = window.__ACT.findAcronymAtPoint(e.clientX, e.clientY);
 
-    clearTimeout(showTimer);
-    scheduleHide();
-  }, true);
+    if (entry) {
+      // Hovering over an acronym
+      if (currentTerm === entry.term && currentAnchorRange === entry.range) {
+        // Already showing this exact acronym
+        clearTimeout(hideTimer);
+        return;
+      }
+      if (pendingShowEntry === entry) {
+        // Already scheduled
+        return;
+      }
+
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
+      pendingShowEntry = entry;
+      showTimer = setTimeout(() => {
+        pendingShowEntry = null;
+        showTooltip(entry.term, entry.range, entry.textNode);
+      }, SHOW_DELAY);
+    } else {
+      // Not over an acronym
+      pendingShowEntry = null;
+      clearTimeout(showTimer);
+      if (currentTerm) {
+        scheduleHide();
+      }
+    }
+  }, { passive: true });
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 

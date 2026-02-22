@@ -23,20 +23,27 @@
   async function reEnableTerm(term) {
     window.__ACT.dismissedTerms.delete(term);
     await saveDismissedTerms();
-    // Re-scan the page to pick up the term again
-    if (window.__ACT.scanSubtree) {
-      window.__ACT.scanSubtree(document.body);
+    // Full rescan to pick up the term again (clears processedNodes)
+    if (window.__ACT.rescanAll) {
+      window.__ACT.rescanAll();
     }
   }
 
   /**
-   * Remove all .act-acronym spans for a given term, replacing with plain text.
+   * Remove all highlight ranges for a given term.
    */
   function removeHighlightsForTerm(term) {
-    const spans = document.querySelectorAll(`.act-acronym[data-term="${term}"]`);
-    for (const span of spans) {
-      const textNode = document.createTextNode(span.textContent);
-      span.parentNode.replaceChild(textNode, span);
+    const ranges = window.__ACT.acronymRanges;
+    if (!ranges) return;
+
+    for (let i = ranges.length - 1; i >= 0; i--) {
+      if (ranges[i].term === term) {
+        ranges.splice(i, 1);
+      }
+    }
+
+    if (window.__ACT.updateHighlight) {
+      window.__ACT.updateHighlight();
     }
   }
 
