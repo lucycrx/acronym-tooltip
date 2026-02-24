@@ -17,7 +17,6 @@ const ACT_TOOLTIP_STYLES = `
 
   .act-tooltip {
     pointer-events: auto;
-    position: relative;
     background: #fafafa;
     border: 1px solid #e4e4e7;
     border-radius: 16px;
@@ -30,14 +29,7 @@ const ACT_TOOLTIP_STYLES = `
     opacity: 0;
     transform: translateY(4px);
     transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
-    overflow: visible;
-  }
-
-  .act-tooltip::before {
-    content: '';
-    position: absolute;
-    inset: -20px;
-    z-index: -1;
+    overflow: hidden;
   }
 
   .act-tooltip.act-visible {

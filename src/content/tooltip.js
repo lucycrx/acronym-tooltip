@@ -31,7 +31,6 @@
 
     .act-tooltip {
       pointer-events: auto;
-      position: relative;
       background: #fafafa;
       border: 1px solid #e4e4e7;
       border-radius: 16px;
@@ -44,13 +43,7 @@
       opacity: 0;
       transform: translateY(4px);
       transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
-      overflow: visible;
-    }
-    .act-tooltip::before {
-      content: '';
-      position: absolute;
-      inset: -20px;
-      z-index: -1;
+      overflow: hidden;
     }
     .act-tooltip.act-visible {
       opacity: 1;
@@ -456,6 +449,21 @@
     hideTimer = setTimeout(hideTooltip, HIDE_DELAY);
   }
 
+  // Check if the mouse is within a padded zone around the tooltip.
+  // This creates a virtual "bridge" between the acronym and the tooltip,
+  // allowing the cursor to travel across the gap without triggering a hide.
+  function isMouseNearTooltip(x, y) {
+    if (!tooltipEl) return false;
+    const rect = tooltipEl.getBoundingClientRect();
+    const pad = 20;
+    return (
+      x >= rect.left - pad &&
+      x <= rect.right + pad &&
+      y >= rect.top - pad &&
+      y <= rect.bottom + pad
+    );
+  }
+
   // ── Event delegation via mousemove ─────────────────────────────────────
 
   let pendingShowEntry = null;
@@ -485,11 +493,16 @@
         showTooltip(entry.term, entry.range, entry.textNode);
       }, SHOW_DELAY);
     } else {
-      // Not over an acronym
+      // Not over an acronym — but check if mouse is near the tooltip
       pendingShowEntry = null;
       clearTimeout(showTimer);
       if (currentTerm) {
-        scheduleHide();
+        if (isMouseNearTooltip(e.clientX, e.clientY)) {
+          // Mouse is in the bridge zone between acronym and tooltip, keep it open
+          clearTimeout(hideTimer);
+        } else {
+          scheduleHide();
+        }
       }
     }
   }, { passive: true });
