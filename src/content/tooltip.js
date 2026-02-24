@@ -8,7 +8,7 @@
   window.__ACT = window.__ACT || {};
 
   const SHOW_DELAY = 200;
-  const HIDE_DELAY = 300;
+  const HIDE_DELAY = 400;
 
   let tooltipHost = null;   // The DOM element that hosts the Shadow DOM
   let shadowRoot = null;     // The Shadow DOM root
@@ -31,6 +31,7 @@
 
     .act-tooltip {
       pointer-events: auto;
+      position: relative;
       background: #fafafa;
       border: 1px solid #e4e4e7;
       border-radius: 16px;
@@ -43,7 +44,13 @@
       opacity: 0;
       transform: translateY(4px);
       transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
-      overflow: hidden;
+      overflow: visible;
+    }
+    .act-tooltip::before {
+      content: '';
+      position: absolute;
+      inset: -20px;
+      z-index: -1;
     }
     .act-tooltip.act-visible {
       opacity: 1;
