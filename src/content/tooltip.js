@@ -357,7 +357,7 @@
 
   // ── Two-tier lookup: WUT (content script) then AI (service worker) ──────
 
-  async function lookupTerm(term, context) {
+  async function lookupTerm(term, textNode) {
     // Tier 1: WUT lookup from content script (has internalfb cookies)
     if (window.__ACT.lookupWut) {
       try {
@@ -377,7 +377,12 @@
       }
     }
 
-    // Tier 2: AI fallback via service worker (needs APE API key from storage)
+    // Tier 2: AI fallback — extract context lazily, only when needed
+    const contextEl = textNode.parentElement;
+    const context = window.__ACT.extractContext
+      ? window.__ACT.extractContext(contextEl)
+      : { surroundingText: '', pageSource: '' };
+
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage(
         { type: 'aiLookup', term, context },
@@ -410,13 +415,7 @@
       tooltipEl.classList.add('act-visible');
     });
 
-    // Build a synthetic element-like object for context extraction
-    const contextEl = textNode.parentElement;
-    const context = window.__ACT.extractContext
-      ? window.__ACT.extractContext(contextEl)
-      : { surroundingText: '', pageSource: '' };
-
-    lookupTerm(term, context).then((response) => {
+    lookupTerm(term, textNode).then((response) => {
       if (currentTerm !== term) return; // stale response
       if (response && response.error) {
         renderError(term, response.error);
