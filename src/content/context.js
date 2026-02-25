@@ -100,7 +100,7 @@
 
     while (container && depth < 5) {
       if (blockTags.has(container.tagName)) {
-        const text = container.innerText || container.textContent || '';
+        const text = container.textContent || '';
         if (text.length > 30) {
           return truncate(text, MAX_CONTEXT_LENGTH);
         }
@@ -117,13 +117,13 @@
       '[dir="auto"]'
     );
     if (postBody) {
-      return truncate(postBody.innerText || postBody.textContent || '', MAX_CONTEXT_LENGTH);
+      return truncate(postBody.textContent || '', MAX_CONTEXT_LENGTH);
     }
 
     // Last resort: grab some text around the element from the parent
     const parent = element.parentElement;
     if (parent) {
-      return truncate(parent.innerText || parent.textContent || '', MAX_CONTEXT_LENGTH);
+      return truncate(parent.textContent || '', MAX_CONTEXT_LENGTH);
     }
 
     return '';
