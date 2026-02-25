@@ -82,6 +82,10 @@
   const acronymRanges = [];
   window.__ACT.acronymRanges = acronymRanges;
 
+  // Parallel index: Map<Node, Array<entry>> for O(1) lookup in findAcronymAtPoint
+  /** @type {Map<Node, Array<{range: Range, term: string, textNode: Node}>>} */
+  const rangesByNode = new Map();
+
   // CSS Custom Highlight for underlines
   let highlightObj = null;
 
@@ -184,7 +188,15 @@
           const range = document.createRange();
           range.setStart(textNode, match.index);
           range.setEnd(textNode, match.index + match[0].length);
-          acronymRanges.push({ range, term: match[0], textNode });
+          const entry = { range, term: match[0], textNode };
+          acronymRanges.push(entry);
+          // Also index by text node for fast hover lookup
+          let nodeEntries = rangesByNode.get(textNode);
+          if (!nodeEntries) {
+            nodeEntries = [];
+            rangesByNode.set(textNode, nodeEntries);
+          }
+          nodeEntries.push(entry);
           found = true;
         } catch (e) {
           // Range creation can fail if offsets are invalid
@@ -225,7 +237,9 @@
     // Clean out stale ranges (detached nodes)
     for (let i = acronymRanges.length - 1; i >= 0; i--) {
       if (!document.contains(acronymRanges[i].textNode)) {
-        processedNodes.delete(acronymRanges[i].textNode);
+        const node = acronymRanges[i].textNode;
+        processedNodes.delete(node);
+        rangesByNode.delete(node);
         acronymRanges.splice(i, 1);
       }
     }
@@ -240,6 +254,7 @@
   /** Clear all state and rescan the page from scratch. */
   function rescanAll() {
     acronymRanges.length = 0;
+    rangesByNode.clear();
     processedNodes = new WeakSet();
     scanSubtree(document.body);
   }
@@ -293,9 +308,11 @@
     const textNode = caretRange.startContainer;
     const offset = caretRange.startOffset;
 
-    // Find if this offset falls within any of our acronym ranges on this text node
-    for (const entry of acronymRanges) {
-      if (entry.textNode !== textNode) continue;
+    // O(1) lookup by text node, then O(k) scan where k is acronyms in that node
+    const entries = rangesByNode.get(textNode);
+    if (!entries) return null;
+
+    for (const entry of entries) {
       try {
         if (offset >= entry.range.startOffset && offset <= entry.range.endOffset) {
           return entry;
