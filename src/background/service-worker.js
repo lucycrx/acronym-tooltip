@@ -67,8 +67,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // ── AI-only lookup ──────────────────────────────────────────────────────────
 
 async function handleAILookup(term, context) {
-  const hasApiKey = !!(await getApeApiKey());
-  const aiDef = await lookupAI(term, context);
+  const apiKey = await getApeApiKey();
+  const aiDef = await lookupAI(term, context, apiKey);
 
   await addToRecent(term);
 
@@ -77,7 +77,7 @@ async function handleAILookup(term, context) {
     source: aiDef ? 'ai' : 'none',
     definitions: [],
     aiDefinition: aiDef,
-    noApiKey: !hasApiKey,
+    noApiKey: !apiKey,
   };
 }
 

@@ -8,21 +8,27 @@ import { cacheGet, cacheSet } from './cache.js';
  * Generate an AI definition for a term using the APE API.
  * @param {string} term - The acronym to define
  * @param {{ surroundingText: string, pageSource: string }} context - Page context
+ * @param {string|null} [apiKey] - Pre-fetched API key; if omitted, reads from storage
  * @returns {Promise<string|null>} The AI-generated definition, or null on failure
  */
-export async function lookupAI(term, context) {
+export async function lookupAI(term, context, apiKey) {
   // Check cache
   const cacheKey = `ai:${term}`;
   const cached = await cacheGet(cacheKey);
   if (cached) return cached;
 
-  const apiKey = await getApeApiKey();
+  if (apiKey === undefined) {
+    apiKey = await getApeApiKey();
+  }
   if (!apiKey) {
     return null; // No API key configured
   }
 
   try {
     const prompt = buildPrompt(term, context);
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15_000);
 
     const resp = await fetch('https://api.wearables-ape.io/models/v1/chat/completions', {
       method: 'POST',
@@ -45,7 +51,10 @@ export async function lookupAI(term, context) {
         max_tokens: 150,
         temperature: 0.3,
       }),
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!resp.ok) {
       console.warn('[AcronymTooltip] APE API error:', resp.status);
