@@ -355,46 +355,47 @@
     `;
   }
 
-  // ── Two-tier lookup: WUT (content script) then AI (service worker) ──────
+  // ── Two-tier lookup: WUT and AI run concurrently ──────────────────────
 
   async function lookupTerm(term, textNode) {
-    // Tier 1: WUT lookup from content script (has internalfb cookies)
-    if (window.__ACT.lookupWut) {
-      try {
-        const wutDefs = await window.__ACT.lookupWut(term);
-        if (wutDefs && wutDefs.length > 0) {
-          // Track the lookup in the service worker
-          chrome.runtime.sendMessage({ type: 'trackRecent', term });
-          return {
-            term,
-            source: 'wut',
-            definitions: wutDefs,
-            aiDefinition: null,
-          };
-        }
-      } catch (e) {
-        console.warn('[AcronymTooltip] Content-script WUT lookup failed:', e);
-      }
-    }
-
-    // Tier 2: AI fallback — extract context lazily, only when needed
+    // Extract context upfront (cheap DOM read, needed if AI path wins)
     const contextEl = textNode.parentElement;
     const context = window.__ACT.extractContext
       ? window.__ACT.extractContext(contextEl)
       : { surroundingText: '', pageSource: '' };
 
-    return new Promise((resolve, reject) => {
+    // Fire WUT and AI lookups concurrently
+    const wutPromise = window.__ACT.lookupWut
+      ? window.__ACT.lookupWut(term).catch(() => [])
+      : Promise.resolve([]);
+
+    const aiPromise = new Promise((resolve) => {
       chrome.runtime.sendMessage(
         { type: 'aiLookup', term, context },
         (response) => {
           if (chrome.runtime.lastError) {
-            reject(new Error('Extension error'));
-            return;
+            resolve(null);
+          } else {
+            resolve(response);
           }
-          resolve(response);
         }
       );
     });
+
+    // Prefer WUT results (authoritative source)
+    const wutDefs = await wutPromise;
+    if (wutDefs && wutDefs.length > 0) {
+      chrome.runtime.sendMessage({ type: 'trackRecent', term });
+      return {
+        term,
+        source: 'wut',
+        definitions: wutDefs,
+        aiDefinition: null,
+      };
+    }
+
+    // WUT had nothing — AI is already in flight, just await it
+    return aiPromise;
   }
 
   // ── Show / Hide ───────────────────────────────────────────────────────────

@@ -20,10 +20,16 @@ export async function lookupWut(term) {
   }
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
     const resp = await fetch(
       `https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}`,
-      { credentials: 'include' },
+      { credentials: 'include', signal: controller.signal },
     );
+
+    clearTimeout(timeoutId);
+
     if (!resp.ok) {
       console.warn('[AcronymTooltip][BG-WUT] WUT page fetch failed:', resp.status);
       return [];
