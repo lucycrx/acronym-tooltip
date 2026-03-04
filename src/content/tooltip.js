@@ -507,6 +507,14 @@
     }
   }, { passive: true });
 
+  // Hide tooltip on scroll — mousemove doesn't fire during scroll,
+  // so the tooltip can get stuck if the user scrolls away.
+  window.addEventListener('scroll', () => {
+    if (currentTerm) {
+      hideTooltip();
+    }
+  }, { passive: true, capture: true });
+
   // ── Helpers ───────────────────────────────────────────────────────────────
 
   function escapeHtml(str) {
