@@ -134,6 +134,13 @@
     .act-def-row:hover { background: #eeeff3; }
     .act-def-row p { font-size: 12px; color: #71717a; line-height: 1.4; }
 
+    .act-def-link {
+      color: #0082FB;
+      text-decoration: underline;
+      word-break: break-all;
+    }
+    .act-def-link:hover { color: #006ad4; }
+
 
     .act-footer {
       border-top: 1px solid #e4e4e7;
@@ -280,14 +287,14 @@
     if (isAI && aiDefinition) {
       html += `
         <div class="act-primary-def">
-          <p class="act-def-text">${escapeHtml(aiDefinition)}</p>
+          <p class="act-def-text">${linkifyUrls(escapeHtml(aiDefinition))}</p>
         </div>
       `;
     } else if (hasDefs) {
       const primary = definitions[0];
       html += `
         <div class="act-primary-def">
-          <p class="act-def-text">${escapeHtml(primary.definition)}</p>
+          <p class="act-def-text">${linkifyUrls(escapeHtml(primary.definition))}</p>
         </div>
       `;
 
@@ -300,7 +307,7 @@
         for (const def of others) {
           html += `
             <div class="act-def-row">
-              <p>${escapeHtml(def.definition)}</p>
+              <p>${linkifyUrls(escapeHtml(def.definition))}</p>
             </div>
           `;
         }
@@ -521,6 +528,28 @@
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
+  }
+
+  // Convert plain-text URLs in already-escaped HTML into clickable links.
+  // Must be called AFTER escapeHtml so the text is XSS-safe first.
+  function linkifyUrls(escapedHtml) {
+    // In escaped HTML, & appears as &amp;, so we match that as part of URLs
+    return escapedHtml.replace(
+      /https?:\/\/(?:[^\s&]|&amp;)+/g,
+      (match) => {
+        // Strip trailing punctuation unlikely to be part of the URL
+        let url = match;
+        let suffix = '';
+        const trailingMatch = url.match(/[.,;:!)]+$/);
+        if (trailingMatch) {
+          suffix = trailingMatch[0];
+          url = url.slice(0, -suffix.length);
+        }
+        // Unescape &amp; back to & for the href value
+        const href = url.replace(/&amp;/g, '&');
+        return `<a href="${href}" target="_blank" rel="noopener" class="act-def-link">${url}</a>${suffix}`;
+      }
+    );
   }
 
   function externalLinkIcon() {
