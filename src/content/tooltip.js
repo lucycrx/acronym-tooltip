@@ -351,10 +351,10 @@
     }
 
     // Footer with WUT link
-    const wutLabel = (isAI || (!hasDefs && !isAI)) ? 'Define on WUT' : 'View on WUT';
+    const wutLabel = (isAI || (!hasDefs && !isAI)) ? 'Define on WUTx' : 'View on WUTx';
     html += `
       <div class="act-footer">
-        <a class="act-wut-link" href="https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}" target="_blank" rel="noopener">${wutLabel} ${externalLinkIcon()}</a>
+        <a class="act-wut-link" href="https://www.internalfb.com/intern/wutX/?word=${encodeURIComponent(term)}" target="_blank" rel="noopener">${wutLabel} ${externalLinkIcon()}</a>
         <button class="act-dismiss" data-term="${escapeHtml(term)}">Don&#39;t show again</button>
       </div>
     `;
@@ -383,7 +383,7 @@
       </div>
       <div class="act-error">${escapeHtml(message || 'Failed to load definition.')}</div>
       <div class="act-footer">
-        <a class="act-wut-link" href="https://www.internalfb.com/intern/wut/word/?word=${encodeURIComponent(term)}" target="_blank" rel="noopener">Try on WUT ${externalLinkIcon()}</a>
+        <a class="act-wut-link" href="https://www.internalfb.com/intern/wutX/?word=${encodeURIComponent(term)}" target="_blank" rel="noopener">Try on WUTx ${externalLinkIcon()}</a>
       </div>
     `;
   }
