@@ -76,6 +76,21 @@
       color: #8b5cf6;
       background: none;
     }
+    .act-close {
+      margin-left: auto;
+      border: none;
+      background: transparent;
+      color: #a1a1aa;
+      font-family: inherit;
+      font-size: 16px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0 2px;
+      transition: color 150ms ease-in-out;
+      flex-shrink: 0;
+    }
+    .act-close:hover { color: #3f3f46; }
+
     .act-dismiss {
       border-radius: 9999px;
       border: 1px solid #d4d4d8;
@@ -224,6 +239,14 @@
     tooltipEl.addEventListener('mouseleave', () => {
       scheduleHide();
     });
+
+    // Close button (event delegation — works across all render states)
+    tooltipEl.addEventListener('click', (e) => {
+      if (e.target.closest('.act-close')) {
+        e.stopPropagation();
+        hideTooltip();
+      }
+    });
   }
 
   // ── Positioning ───────────────────────────────────────────────────────────
@@ -264,6 +287,7 @@
     tooltipEl.innerHTML = `
       <div class="act-header">
         <span class="act-term">${escapeHtml(term)}</span>
+        <button class="act-close" aria-label="Close">&times;</button>
       </div>
       <div class="act-loading">
         <div class="act-spinner"></div>
@@ -281,6 +305,7 @@
       <div class="act-header">
         <span class="act-term">${escapeHtml(term)}</span>
         <span class="act-badge ${isAI ? 'act-badge--ai' : ''}">${isAI ? 'AI-generated' : 'WUT'}</span>
+        <button class="act-close" aria-label="Close">&times;</button>
       </div>
     `;
 
@@ -354,6 +379,7 @@
     tooltipEl.innerHTML = `
       <div class="act-header">
         <span class="act-term">${escapeHtml(term)}</span>
+        <button class="act-close" aria-label="Close">&times;</button>
       </div>
       <div class="act-error">${escapeHtml(message || 'Failed to load definition.')}</div>
       <div class="act-footer">
